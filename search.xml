@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Gallery目录问题</title>
+    <url>/2021/10/20/Gallery%E7%9B%AE%E5%BD%95%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>今天想给博客配置一下相册的页面，本来一切顺利，本地和github网页都可以正常显示界面，但一到vercel页就报错。。。通过源码找到对应链接显示找不到文件</p>
+<p><strong>检查路径为 博客根目录\source\图库名\相册名.md</strong></p>
+<p><strong>后来将相册目录改为 博客根目录\source\图库名\相册名\index.md</strong></p>
+<p>问题解决，各页面都正常显示</p>
+<p>注意：此时引用相册的链接仍为 图库名\相册名（如下）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% galleryGroup &#x27;OH MY GIRL&#x27; &#x27;关于OH MY GIRL的图片&#x27; &#x27;/Galle/ohmygirl&#x27; https://i.loli.net/2019/12/25/hOqbQ3BIwa6KWpo.jpg %&#125;</span><br></pre></td></tr></table></figure>
+<p>好家伙</p>
+<p>这就和顶部栏一样直接生成了一个page页呗，想想也合理，越想越合理，不知道自己一开始是怎么想的直接把一个md文件往上怼，关键是本地运行和github页还能正常运行，让我一度以为是vercel出问题了。。。。</p>
+]]></content>
+      <tags>
+        <tag>记录</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>butterfly使用记录（一直在更新）</title>
+    <url>/2021/10/12/butterfly%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<p> 刚开始建设博客，很多功能都不明白，记录一下常用的代码。（没有特殊说明均为主题配置文件下修改）</p>
+<h1 id="美化相关"><a href="#美化相关" class="headerlink" title="美化相关"></a>美化相关</h1><p><strong>修改网站背景：background: url(/mysource/mainbg.png))</strong></p>
+<p>【mysource是在themes\butterfly\source下建立的文件夹用来存储个人资源，直接放在source下更新butterfly时可能被覆盖】</p>
+<p>（若使用网络链接，需要用 url(网址) 格式）</p>
+<p><strong>修改顶部图占比：index_top_img_height</strong></p>
+<p><strong>修改主页顶部图：index_img</strong></p>
+<p>（若使用网络连接，直接添加网址即可）</p>
+<p><strong>菜单子页面透明：archive_img: rgba(255,255,255,0.2)</strong></p>
+<p>（也可以改成其他图片，直接写链接即可；）</p>
+<p>其中tags页和category页需要在各自md文件中修改</p>
+<p><strong>打字效果（色彩，抖动）activate_power_mode</strong></p>
+<p><strong>鼠标点击效果：Mouse click effects</strong></p>
+<p><strong>背景动效：canvas_nest</strong></p>
+<p><strong>字体：<a href="https://akilar.top/posts/ebf20e02/">Custom Beautify | Akilar の糖果屋</a></strong></p>
+<p>这里面还有很多魔改美化内容</p>
+<p><strong>卡片背景透明化：<a href="https://www.cnblogs.com/MoYu-zc/p/14397889.html">Hexo之更换背景及透明度 - MoYu-zc - 博客园 (cnblogs.com)</a></strong></p>
+<p>这里订正一下文章里css引用可以直接在主题配置文件里面进行，不需要另外新建一个butterfly.yml</p>
+<p>意思就是直接把</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/css/mycss.css&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>插到主题配置文件的inject里</p>
+<h1 id="功能相关"><a href="#功能相关" class="headerlink" title="功能相关"></a>功能相关</h1><p><strong>添加顶部轮播图：<a href="https://akilar.top/posts/8e1264d1/">Swiper Bar | Akilarの糖果屋</a></strong></p>
+<p>在博文配置项添加   swiper_index: 1</p>
+<p><strong>评论区：gitalk（多种方式可选）</strong></p>
+<p>注意：gitalk配置到butterfly中，repo填  仓库名.github.io</p>
+<p><strong>主题分类磁贴：参考<a href="https://akilar.top/posts/a9131002/">Butterfly主题美化日记 | Akilarの糖果屋</a></strong></p>
+<p><strong>vercel提供加速：<a href="https://vercel.com">Dashboard – Vercel</a></strong></p>
+<p>（一开始遇到了vercel不能和github同步的问题，此时应该到vercel项目中setting-git-Production Branch中检查默认分支是否为master（或自己设置的默认主分支））</p>
+<p><strong>说说配置：建议参考<a href="https://blog.csdn.net/cungudafa/article/details/105938885">(82条消息) hexo（butterfly）添加说说页面（Artitalk可在线发布）_cungudafa的博客-CSDN博客</a></strong></p>
+<p>真的太折磨了，按照官方文档来做不知道为什么修改不了页面显示（会直接单独建立一个html），感觉默认的很丑。。。。于是按照上文大佬的教程直接在md文件里配置说说了。。。。</p>
+<p><strong>时钟：<a href="https://akilar.top/posts/4e39cf4a/">Butterfly主题美化日记 | Akilarの糖果屋</a></strong></p>
+<p>出奇的，没出现任何问题就搞好了。。。。</p>
+<p><strong>图床：<a href="https://picx.xpoet.cn/#/config">图床配置 | PicX 图床神器 (xpoet.cn)</a>网页里有教程，实际就是用github</strong></p>
+<p><strong>桌宠（大概是功能？）：见下一篇博客</strong></p>
+<h1 id="底部栏透明化"><a href="#底部栏透明化" class="headerlink" title="底部栏透明化"></a>底部栏透明化</h1><p>初始底部栏是蓝色的，更改网页背景后显得很突兀，难受我很久了却不知道怎么改。。。。</p>
+<p>解决方法：博客根目录\themes\butterfly\source\css_layout\footer.stly 将 background: $light-blue注释掉即可透明化，也可以改成其他颜色</p>
+<h1 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h1>]]></content>
+      <categories>
+        <category>记录</category>
+      </categories>
+      <tags>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>butterfly外挂标签备忘</title>
+    <url>/2021/10/22/butterfly%E5%A4%96%E6%8C%82%E6%A0%87%E7%AD%BE%E5%A4%87%E5%BF%98/</url>
+    <content><![CDATA[<p><strong>教程参考：</strong></p>
+<div class="tag link"><a class="link-card" title="Tag Plugins Plus" href="https://akilar.top/posts/615e2dec/"><div class="left"><img src="https://cdn.jsdelivr.net/gh/Akilarlxh/akilarlxh.github.io/img/siteicon/favicon.ico"/></div><div class="right"><p class="text">Tag Plugins Plus</p><p class="url">https://akilar.top/posts/615e2dec/</p></div></a></div>
+<h2 id="链接卡片"><a href="#链接卡片" class="headerlink" title="链接卡片"></a>链接卡片</h2><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&#123;% link 标题, 链接, 图片链接（可选） %&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="行内文本样式"><a href="#行内文本样式" class="headerlink" title="行内文本样式"></a>行内文本样式</h2><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">1.</span> 带 &#123;% u 下划线 %&#125; 的文本</span><br><span class="line"><span class="bullet">2.</span> 带 &#123;% emp 着重号 %&#125; 的文本</span><br><span class="line"><span class="bullet">3.</span> 带 &#123;% wavy 波浪线 %&#125; 的文本</span><br><span class="line"><span class="bullet">4.</span> 带 &#123;% del 删除线 %&#125; 的文本</span><br><span class="line"><span class="bullet">5.</span> 键盘样式的文本 &#123;% kbd command %&#125; + &#123;% kbd D %&#125;</span><br><span class="line"><span class="bullet">6.</span> 密码样式的文本：&#123;% psw 这里没有验证码 %&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="分栏"><a href="#分栏" class="headerlink" title="分栏"></a>分栏</h2><div class="tabs" id="test3"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#test3-1">标签语法</button></li><li class="tab"><button type="button" data-href="#test3-2">参数</button></li><li class="tab"><button type="button" data-href="#test3-3">示例</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="test3-1"><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&#123;% tabs Unique name, [index] %&#125;</span><br><span class="line">&lt;!-- tab [Tab caption] [@icon] --&gt;</span><br><span class="line">Any content (support inline tags too).</span><br><span class="line">&lt;!-- endtab --&gt;</span><br><span class="line">&#123;% endtabs %&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="test3-2"><p><strong>Unique name</strong>:：分栏名</p>
+<p><strong>index</strong>：默认显示第几栏内容，-1都不显示，不指定就默认为1</p>
+<p><strong>Tab caption</strong>：分栏标题</p>
+<p><strong>@icon</strong>：图标，如 @fas fa-bomb</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="test3-3"><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&#123;% tabs test1 %&#125;</span><br><span class="line">&lt;!-- tab --&gt;</span><br><span class="line"><span class="strong">**This is Tab 1.**</span></span><br><span class="line">&lt;!-- endtab --&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- tab --&gt;</span><br><span class="line"><span class="strong">**This is Tab 2.**</span></span><br><span class="line">&lt;!-- endtab --&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- tab --&gt;</span><br><span class="line"><span class="strong">**This is Tab 3.**</span></span><br><span class="line">&lt;!-- endtab --&gt;</span><br><span class="line">&#123;% endtabs %&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div></div>
+<h2 id="折叠框"><a href="#折叠框" class="headerlink" title="折叠框"></a>折叠框</h2><div class="tabs" id="test1"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#test1-1">语法</button></li><li class="tab"><button type="button" data-href="#test1-2">预览</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="test1-1"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% folding 参数（可选）, 标题 %&#125;</span><br><span class="line">![](图片链接)</span><br><span class="line">内容</span><br><span class="line">&#123;% endfolding %&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="test1-2"><details blue><summary> 标题 </summary>
+              <div class='content'>
+              <details cyan><summary> 后面有惊喜 </summary>              <div class='content'>              <details green><summary> 标题 </summary>              <div class='content'>              <details yellow><summary> 标题 </summary>              <div class='content'>              <details red><summary> 标题 </summary>              <div class='content'>              <p>真想不到你居然全都打开了</p><p>惊喜在这里, <a href="https://www.bilibili.com/video/BV1GJ411x7h7/?spm_id_from=333.788.recommend_more_video.-1">https://www.bilibili.com/video/BV1GJ411x7h7/?spm_id_from=333.788.recommend_more_video.-1</a> </p>              </div>            </details>              </div>            </details>              </div>            </details>              </div>            </details>
+              </div>
+            </details><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div></div>
+<h2 id="诗词"><a href="#诗词" class="headerlink" title="诗词"></a>诗词</h2><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&#123;% poem [title],[author] %&#125;</span><br><span class="line">诗词内容</span><br><span class="line">&#123;% endpoem %&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="进度条"><a href="#进度条" class="headerlink" title="进度条"></a>进度条</h2><div class="tabs" id="示例"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#示例-1">示例</button></li><li class="tab"><button type="button" data-href="#示例-2">预览</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="示例-1"><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&#123;% progress 10 red 进度条样式预览 %&#125;</span><br><span class="line">&#123;% progress 30 yellow 进度条样式预览 %&#125;</span><br><span class="line">&#123;% progress 50 green 进度条样式预览 %&#125;</span><br><span class="line">&#123;% progress 70 cyan 进度条样式预览 %&#125;</span><br><span class="line">&#123;% progress 90 blue 进度条样式预览 %&#125;</span><br><span class="line">&#123;% progress 100 gray 进度条样式预览 %&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="示例-2"><div class="progress"><div class="progress-bar-animated progress-bar progress-bar-striped bg-red"  style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"><p>进度条样式预览</p></div></div>
+<div class="progress"><div class="progress-bar-animated progress-bar progress-bar-striped bg-yellow"  style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"><p>进度条样式预览</p></div></div>
+<div class="progress"><div class="progress-bar-animated progress-bar progress-bar-striped bg-green"  style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><p>进度条样式预览</p></div></div>
+<div class="progress"><div class="progress-bar-animated progress-bar progress-bar-striped bg-cyan"  style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"><p>进度条样式预览</p></div></div>
+<div class="progress"><div class="progress-bar-animated progress-bar progress-bar-striped bg-blue"  style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"><p>进度条样式预览</p></div></div>
+<div class="progress"><div class="progress-bar-animated progress-bar progress-bar-striped bg-gray"  style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"><p>进度条样式预览</p></div></div><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div></div>
+<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><div class="tabs" id="test1"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#test1-1">语法</button></li><li class="tab"><button type="button" data-href="#test1-2">预览</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="test1-1"><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&#123;% nota [label] , [text] %&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="test1-2"><p><span class='nota' data-nota='可以看到注解内容出现在顶栏（text内容）'>把鼠标移动到我上面试试（label内容）</span></p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div></div>
+<h2 id="行内文本样式-1"><a href="#行内文本样式-1" class="headerlink" title="行内文本样式"></a><strong>行内文本样式</strong></h2><div class="tabs" id="test1"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#test1-1">示例</button></li><li class="tab"><button type="button" data-href="#test1-2">预览</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="test1-1"><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">1.</span> 带 &#123;% u 下划线 %&#125; 的文本</span><br><span class="line"><span class="bullet">2.</span> 带 &#123;% emp 着重号 %&#125; 的文本</span><br><span class="line"><span class="bullet">3.</span> 带 &#123;% wavy 波浪线 %&#125; 的文本</span><br><span class="line"><span class="bullet">4.</span> 带 &#123;% del 删除线 %&#125; 的文本</span><br><span class="line"><span class="bullet">5.</span> 键盘样式的文本 &#123;% kbd command %&#125; + &#123;% kbd D %&#125;</span><br><span class="line"><span class="bullet">6.</span> 密码样式的文本：&#123;% psw 这里没有验证码 %&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="test1-2"><ol>
+<li>带 <u>下划线</u> 的文本</li>
+<li>带 <emp>着重号</emp> 的文本</li>
+<li>带 <wavy>波浪线</wavy> 的文本</li>
+<li>带 <del>删除线</del> 的文本</li>
+<li>键盘样式的文本 <kbd>command</kbd> + <kbd>D</kbd></li>
+<li>密码样式的文本：<psw>这里没有验证码</psw></li>
+</ol><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div></div>
+<h2 id="行内（段落）文本"><a href="#行内（段落）文本" class="headerlink" title="行内（段落）文本"></a>行内（段落）文本</h2><div class="tabs" id="test1"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#test1-1">示例</button></li><li class="tab"><button type="button" data-href="#test1-2">预览</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="test1-1"><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">-</span> 彩色文字</span><br><span class="line">&#123;% span red, 红色 %&#125;、&#123;% span yellow, 黄色 %&#125;</span><br><span class="line">&#123;% span green, 绿色 %&#125;、&#123;% span cyan, 青色 %&#125;</span><br><span class="line">&#123;% span blue, 蓝色 %&#125;、&#123;% span gray, 灰色 %&#125;。</span><br><span class="line"><span class="bullet">-</span> 超大号文字</span><br><span class="line">&#123;% span center logo large, Volantis %&#125;</span><br><span class="line">&#123;% span center small, A Wonderful Theme for Hexo %&#125;</span><br></pre></td></tr></table></figure>
+<p>段落文本只需将 span 改为 p 标签即可</p><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="test1-2"><ul>
+<li>彩色文字<br><span class='p red'>红色</span>、<span class='p yellow'>黄色</span><br><span class='p green'>绿色</span>、<span class='p cyan'>青色</span><br><span class='p blue'>蓝色</span>、<span class='p gray'>灰色</span>。</li>
+<li>超大号文字<br><span class='p center logo large'>Volantis</span><br><span class='p center small'>A Wonderful Theme for Hexo</span></li>
+</ul><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div></div>
+<h2 id="note标签"><a href="#note标签" class="headerlink" title="note标签"></a>note标签</h2><div class="tabs" id="test1"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#test1-1">预览</button></li><li class="tab"><button type="button" data-href="#test1-2">语法</button></li><li class="tab"><button type="button" data-href="#test1-3">示例</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="test1-1"><details blue><summary> 第一种 </summary>
+              <div class='content'>
+              <div class="note simple"><p>默认 提示块标签</p></div><div class="note default simple"><p>default 提示块标签</p></div><div class="note primary simple"><p>primary 提示块标签</p></div><div class="note success simple"><p>success 提示块标签</p></div><div class="note info simple"><p>info 提示块标签</p></div><div class="note warning simple"><p>warning 提示块标签</p></div><div class="note danger simple"><p>danger 提示块标签</p></div>
+              </div>
+            </details>
+
+<details green><summary> 第二种 </summary>
+              <div class='content'>
+              <div class="note icon simple"><i class="note-icon fab fa-cc-visa"></i><p>你是刷 Visa 还是 UnionPay</p></div><div class="note blue icon simple"><i class="note-icon fas fa-bullhorn"></i><p>2021年快到了….</p></div><div class="note pink icon simple"><i class="note-icon fas fa-car-crash"></i><p>小心开车 安全至上</p></div><div class="note red icon simple"><i class="note-icon fas fa-fan"></i><p>这是三片呢？还是四片？</p></div><div class="note orange icon simple"><i class="note-icon fas fa-battery-half"></i><p>你是刷 Visa 还是 UnionPay</p></div><div class="note purple icon simple"><i class="note-icon far fa-hand-scissors"></i><p>剪刀石头布</p></div><div class="note green icon simple"><i class="note-icon fab fa-internet-explorer"></i><p>前端最讨厌的浏览器</p></div>
+              </div>
+            </details><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="test1-2"><details blue><summary> 第一种 </summary>
+              <div class='content'>
+              <figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&#123;% note [class] [no-icon] [style] %&#125;</span><br><span class="line">Any content (support inline tags too.io).</span><br><span class="line">&#123;% endnote %&#125;</span><br></pre></td></tr></table></figure><p><strong>class</strong>：图标，default / primary / success / info / warning / danger</p><p><strong>no-icon</strong>：不显示图标</p><p><strong>style</strong>：（边框）样式，simple/modern/flat/disabled</p>
+              </div>
+            </details>
+
+<details green><summary> 第二种 </summary>
+              <div class='content'>
+              <figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&#123;% note [color] [icon] [style] %&#125;</span><br><span class="line">Any content (support inline tags too.io).</span><br><span class="line">&#123;% endnote %&#125;</span><br></pre></td></tr></table></figure><p><strong>class</strong>：配色  default / blue / pink / red / purple / orange / green</p><p><strong>style</strong>：（边框）样式，simple/modern/flat/disabled</p>
+              </div>
+            </details><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="test1-3"><details blue><summary> 第一种 </summary>
+              <div class='content'>
+              <figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&#123;% note simple %&#125;默认 提示块标签&#123;% endnote %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% note default simple %&#125;default 提示块标签&#123;% endnote %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% note primary simple %&#125;primary 提示块标签&#123;% endnote %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% note success simple %&#125;success 提示块标签&#123;% endnote %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% note info simple %&#125;info 提示块标签&#123;% endnote %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% note warning simple %&#125;warning 提示块标签&#123;% endnote %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% note danger simple %&#125;danger 提示块标签&#123;% endnote %&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+              </div>
+            </details>
+
+<details green><summary> 第二种 </summary>
+              <div class='content'>
+
+              </div>
+            </details><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div></div>
+<h2 id="上标标签"><a href="#上标标签" class="headerlink" title="上标标签"></a>上标标签</h2><div class="tabs" id="test1"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#test1-1">示例</button></li><li class="tab"><button type="button" data-href="#test1-2">预览</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="test1-1"><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&#123;% tip %&#125;默认情况&#123;% endtip %&#125;</span><br><span class="line">&#123;% tip success %&#125;success&#123;% endtip %&#125;</span><br><span class="line">&#123;% tip error %&#125;error&#123;% endtip %&#125;</span><br><span class="line">&#123;% tip warning %&#125;warning&#123;% endtip %&#125;</span><br><span class="line">&#123;% tip bolt %&#125;bolt&#123;% endtip %&#125;</span><br><span class="line">&#123;% tip ban %&#125;ban&#123;% endtip %&#125;</span><br><span class="line">&#123;% tip home %&#125;home&#123;% endtip %&#125;</span><br><span class="line">&#123;% tip sync %&#125;sync&#123;% endtip %&#125;</span><br><span class="line">&#123;% tip cogs %&#125;cogs&#123;% endtip %&#125;</span><br><span class="line">&#123;% tip key %&#125;key&#123;% endtip %&#125;</span><br><span class="line">&#123;% tip bell %&#125;bell&#123;% endtip %&#125;</span><br><span class="line">&#123;% tip fa-atom %&#125;自定义font awesome图标&#123;% endtip %&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="test1-2"><div class="tip "><p>默认情况</p>
+</div>
+<div class="tip success"><p>success</p>
+</div>
+<div class="tip error"><p>error</p>
+</div>
+<div class="tip warning"><p>warning</p>
+</div>
+<div class="tip bolt"><p>bolt</p>
+</div>
+<div class="tip ban"><p>ban</p>
+</div>
+<div class="tip home"><p>home</p>
+</div>
+<div class="tip sync"><p>sync</p>
+</div>
+<div class="tip cogs"><p>cogs</p>
+</div>
+<div class="tip key"><p>key</p>
+</div>
+<div class="tip bell"><p>bell</p>
+</div>
+<div class="tip fa-atom"><p>自定义font awesome图标</p>
+</div><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div></div>
+<h2 id="复（单）选列表"><a href="#复（单）选列表" class="headerlink" title="复（单）选列表"></a>复（单）选列表</h2><div class="tabs" id="test1"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#test1-1">示例</button></li><li class="tab"><button type="button" data-href="#test1-2">预览</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="test1-1"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% checkbox 纯文本测试 %&#125;</span><br><span class="line">&#123;% checkbox checked, 支持简单的 [markdown](https://guides.github.com/features/mastering-markdown/) 语法 %&#125;</span><br><span class="line">&#123;% checkbox red, 支持自定义颜色 %&#125;</span><br><span class="line">&#123;% checkbox green checked, 绿色 + 默认选中 %&#125;</span><br><span class="line">&#123;% checkbox yellow checked, 黄色 + 默认选中 %&#125;</span><br><span class="line">&#123;% checkbox cyan checked, 青色 + 默认选中 %&#125;</span><br><span class="line">&#123;% checkbox blue checked, 蓝色 + 默认选中 %&#125;</span><br><span class="line">&#123;% checkbox plus green checked, 增加 %&#125;</span><br><span class="line">&#123;% checkbox minus yellow checked, 减少 %&#125;</span><br><span class="line">&#123;% checkbox times red checked, 叉 %&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>checked</strong>：选中状态</p>
+<div class="tip "><p><strong>单选列表即将 checkbox 改为 radio 标签，且单选列表没有样式属性</strong></p>
+</div><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div><div class="tab-item-content" id="test1-2"><div class='checkbox'><input type="checkbox" />
+            <p>纯文本测试</p>
+            </div>
+<div class='checkbox checked'><input type="checkbox" checked="checked"/>
+            <p>支持简单的 <a href="https://guides.github.com/features/mastering-markdown/">markdown</a> 语法</p>
+            </div>
+<div class='checkbox red'><input type="checkbox" />
+            <p>支持自定义颜色</p>
+            </div>
+<div class='checkbox green checked'><input type="checkbox" checked="checked"/>
+            <p>绿色 + 默认选中</p>
+            </div>
+<div class='checkbox yellow checked'><input type="checkbox" checked="checked"/>
+            <p>黄色 + 默认选中</p>
+            </div>
+<div class='checkbox cyan checked'><input type="checkbox" checked="checked"/>
+            <p>青色 + 默认选中</p>
+            </div>
+<div class='checkbox blue checked'><input type="checkbox" checked="checked"/>
+            <p>蓝色 + 默认选中</p>
+            </div>
+<div class='checkbox plus green checked'><input type="checkbox" checked="checked"/>
+            <p>增加</p>
+            </div>
+<div class='checkbox minus yellow checked'><input type="checkbox" checked="checked"/>
+            <p>减少</p>
+            </div>
+<div class='checkbox times red checked'><input type="checkbox" checked="checked"/>
+            <p>叉</p>
+            </div><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div></div>
+<h2 id="影音"><a href="#影音" class="headerlink" title="影音"></a>影音</h2><div class="tabs" id="test1"><ul class="nav-tabs"><li class="tab active"><button type="button" data-href="#test1-1">示例</button></li></ul><div class="tab-contents"><div class="tab-item-content active" id="test1-1"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% audio https://github.com/volantis-x/volantis-docs/releases/download/assets/Lumia1020.mp3 %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% video https://github.com/volantis-x/volantis-docs/releases/download/assets/IMG_0341.mov %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% videos, 2 %&#125;（50%宽度，4%为25%宽度）</span><br><span class="line">&#123;% video https://github.com/volantis-x/volantis-docs/releases/download/assets/IMG_0341.mov %&#125;</span><br><span class="line">&#123;% video https://github.com/volantis-x/volantis-docs/releases/download/assets/IMG_0341.mov %&#125;</span><br><span class="line">&#123;% video https://github.com/volantis-x/volantis-docs/releases/download/assets/IMG_0341.mov %&#125;</span><br><span class="line">&#123;% video https://github.com/volantis-x/volantis-docs/releases/download/assets/IMG_0341.mov %&#125;</span><br><span class="line">&#123;% endvideos %&#125;</span><br></pre></td></tr></table></figure><button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div></div>
+]]></content>
+      <tags>
+        <tag>记录</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>butterfly配置valine/twikoo评论区不能正常显示的问题</title>
+    <url>/2021/10/17/butterfly%E9%85%8D%E7%BD%AEvaline-twikoo%E8%AF%84%E8%AE%BA%E5%8C%BA%E4%B8%8D%E8%83%BDc%E6%AD%A3%E5%B8%B8%E6%98%BE%E7%A4%BA%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>今天想再配置一个评论区（gitalk有时候实在是太慢了），但按照教程配置完毕之后总是不能正常显示</p>
+<img src="/2021/10/17/butterfly%E9%85%8D%E7%BD%AEvaline-twikoo%E8%AF%84%E8%AE%BA%E5%8C%BA%E4%B8%8D%E8%83%BDc%E6%AD%A3%E5%B8%B8%E6%98%BE%E7%A4%BA%E7%9A%84%E9%97%AE%E9%A2%98/2.jpg" class="" title="这是一张图片">
+<p>在网上找不到类似的案例，折腾了一下午都没有结果。。。</p>
+<p>最后发现原因是在butterfly中引用评论区的首字母要大写（如图）</p>
+<img src="/2021/10/17/butterfly%E9%85%8D%E7%BD%AEvaline-twikoo%E8%AF%84%E8%AE%BA%E5%8C%BA%E4%B8%8D%E8%83%BDc%E6%AD%A3%E5%B8%B8%E6%98%BE%E7%A4%BA%E7%9A%84%E9%97%AE%E9%A2%98/1.jpg" class="" title="这是一张图片">
+<p>修改之后顺利解决。</p>
+<p>如果出现类似问题，也要考虑是不是功能调用错误。</p>
+<p><strong>好吧，果然还是我太菜了。</strong></p>
+]]></content>
+      <categories>
+        <category>记录</category>
+      </categories>
+      <tags>
+        <tag>记录</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客建设日志</title>
+    <url>/2021/10/21/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E8%AE%BE%E6%97%A5%E5%BF%97/</url>
+    <content><![CDATA[<p>记录一下搭建的过程，大部分参考的文章可以在butterfly使用记录找到</p>
+<p>…….</p>
+<p>2021/10/19：加入音乐，电影功能</p>
+<p>2021/10/20：加入图库功能</p>
+<p>2021/10/21：创建图床，顶部轮播文章，改了字体和动态标题</p>
+<p>2021/10/22：外挂标签，添加P站日榜</p>
+<p>2021/10/23：添加搜索框，优化了底部栏（至少比以前好了），取消了顶部文章轮播</p>
+]]></content>
+      <tags>
+        <tag>记录</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客添加Pixiv日榜</title>
+    <url>/2021/10/22/%E5%8D%9A%E5%AE%A2%E6%B7%BB%E5%8A%A0Pixiv%E6%97%A5%E6%A6%9C/</url>
+    <content><![CDATA[<p>今天逛大佬博客看见这个功能，自己也想整一个，但是添加的过程中发现日榜的窗口不是固定的，可能是主题更新的缘故吧，需要对旧的代码做一些改动，以下是我的配置步骤。（参考文章：<a href="https://blog.hclonely.com/posts/57bd67ce/">HCLonely Blog - Hexo 博客美化</a>）</p>
+<ol>
+<li><p>在 <code>themes\Butterfly\layout\includes\widget</code> 文件夹新建 <code>card_pixiv.pug</code> 文件，文件内容如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.card-widget.card-pixiv</span><br><span class="line">  .card-content</span><br><span class="line">    .item-headline</span><br><span class="line">      i.fa.fa-image(aria-hidden=&quot;true&quot;)</span><br><span class="line">      span= _p(&#x27;aside.card_pixiv&#x27;)</span><br><span class="line">    iframe(src=&quot;https://cloud.mokeyjay.com/pixiv&quot; frameborder=&quot;0&quot; style=&quot;width:99%;height:380px;margin:0;&quot;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编辑 <code>themes\Butterfly\layout\includes\widget\index.pug</code> 文件,</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">       if showToc</span><br><span class="line">         include ./card_post_toc.pug</span><br><span class="line">       !=partial(&#x27;includes/widget/card_recent_post&#x27;, &#123;&#125;, &#123;cache: true&#125;)</span><br><span class="line">       !=partial(&#x27;includes/widget/card_ad&#x27;, &#123;&#125;, &#123;cache: true&#125;)</span><br><span class="line"> else</span><br><span class="line">   //- page</span><br><span class="line">   !=partial(&#x27;includes/widget/card_author&#x27;, &#123;&#125;, &#123;cache: true&#125;)</span><br><span class="line">   !=partial(&#x27;includes/widget/card_announcement&#x27;, &#123;&#125;, &#123;cache: true&#125;)</span><br><span class="line">   !=partial(&#x27;includes/widget/card_top_self&#x27;, &#123;&#125;, &#123;cache: true&#125;)  </span><br><span class="line">+  !=partial(&#x27;includes/widget/card_pixiv.pug&#x27;, &#123;&#125;, &#123;cache: true&#125;)    #添加这行代码</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编辑 <code>_config.butterfly.yml</code> 文件，在 <code>card_webinfo</code> 下面添加一行 <code>card_pixiv: true</code></p>
+</li>
+<li><p>编辑 <code>themes\Butterfly\languages\zh-CN.yml</code> 文件 (请根据你的网站语言选择)，找到 <code>card_announcement: 公告</code> , 在下面添加一行 <code>card_pixiv: Pixiv日榜Top50</code>(后面的文本可自定义)</p>
+</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>记录</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>看板娘配置过程中的一些问题</title>
+    <url>/2021/10/13/%E7%9C%8B%E6%9D%BF%E5%A8%98%E9%85%8D%E7%BD%AE%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p><strong>插件配置参考大佬文章   <a href="https://akilar.top/posts/5b8f515f/">Live2d Widget | Akilarの糖果屋</a></strong></p>
+<h1>获取插件问题</h1>
+
+<p>根据教程下载插件时报错，显示如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">found XX vulnerabilities (X low, X moderate, X high) in 2770 scanned packages</span><br><span class="line">  run `npm audit fix` to fix 1 of them.</span><br><span class="line">  XX vulnerabilities require semver-major dependency updates.</span><br><span class="line">  XXX vulnerabilities require manual review. See the full report for details.</span><br></pre></td></tr></table></figure>
+<p>根据提示执行npm audit fix 依然无法完成下载</p>
+<p>网上查阅得知解决方案如下：</p>
+<ol>
+<li>淘宝镜像源会自动修复，然后下载相关依赖包。</li>
+<li>使用<code>nrm use taobao</code>，<code>nrm</code>如果没有安装，就使用<code>npm i -g nrm</code>，然后再使用<code>nrm use taobao</code></li>
+<li>再使用<code>npm i</code> 安装一遍所有依赖包，这时候没下载的会自动下载，问题解决。</li>
+</ol>
+<h1>文件修改</h1>
+
+<p>根据教程修改 autoload.js 文件时无法打开，提示‘return’语句在函数之外。</p>
+<p>网上查询乱七八糟，后来发现系统自带打开js文件的工具是based script host</p>
+<p>解决方案：使用记事本打开文件</p>
+]]></content>
+      <tags>
+        <tag>记录</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>First Blog</title>
+    <url>/2021/10/11/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<img src="/2021/10/11/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/135.jpg" class="" title="这是一张图片">
+<p>这里是测试功能的地方</p>
+<details ><summary> 查看图片测试 </summary>
+              <div class='content'>
+              <p><img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper/abstract/41F215B9-261F-48B4-80B5-4E86E165259E.jpeg" alt=""></p>
+              </div>
+            </details>
+<div class="hide-toggle" style="border: 1px solid cyan"><div class="hide-button toggle-title" style="background-color: cyan;"><i class="fas fa-caret-right fa-fw"></i><span>折叠框测试</span></div>
+    <div class="hide-content"><p><img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper/abstract/41F215B9-261F-48B4-80B5-4E86E165259E.jpeg" alt=""></p>
+</div></div>]]></content>
+      <categories>
+        <category>博客类</category>
+      </categories>
+      <tags>
+        <tag>这是标签</tag>
+      </tags>
+  </entry>
+</search>
