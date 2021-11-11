@@ -52,9 +52,11 @@
 <p>出奇的，没出现任何问题就搞好了。。。。</p>
 <p><strong>图床：<a href="https://picx.xpoet.cn/#/config">图床配置 | PicX 图床神器 (xpoet.cn)</a>网页里有教程，实际就是用github</strong></p>
 <p><strong>桌宠（大概是功能？）：见下一篇博客</strong></p>
+<p><strong>各界面的透明度设置</strong>：配置路径：Blog\themes\butterfly\source\css\mycss.css</p>
+<p>参考教程：<a href="https://yl1010code.gitee.io/2021/10/04/Butterfly%E9%80%8F%E6%98%8E%E8%83%8C%E6%99%AF%E8%AE%BE%E7%BD%AE/">Butterfly 透明背景设置 | LY’s Blog (gitee.io)</a></p>
 <h1 id="底部栏透明化"><a href="#底部栏透明化" class="headerlink" title="底部栏透明化"></a>底部栏透明化</h1><p>初始底部栏是蓝色的，更改网页背景后显得很突兀，难受我很久了却不知道怎么改。。。。</p>
 <p>解决方法：博客根目录\themes\butterfly\source\css_layout\footer.stly 将 background: $light-blue注释掉即可透明化，也可以改成其他颜色</p>
-<h1 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h1>]]></content>
+]]></content>
       <categories>
         <category>记录</category>
       </categories>
@@ -213,26 +215,6 @@
       </tags>
   </entry>
   <entry>
-    <title>First Blog</title>
-    <url>/2021/10/11/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<img src="/2021/10/11/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/135.jpg" class="" title="这是一张图片">
-<p>这里是测试功能的地方</p>
-<details ><summary> 查看图片测试 </summary>
-              <div class='content'>
-              <p><img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper/abstract/41F215B9-261F-48B4-80B5-4E86E165259E.jpeg" alt=""></p>
-              </div>
-            </details>
-<div class="hide-toggle" style="border: 1px solid cyan"><div class="hide-button toggle-title" style="background-color: cyan;"><i class="fas fa-caret-right fa-fw"></i><span>折叠框测试</span></div>
-    <div class="hide-content"><p><img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper/abstract/41F215B9-261F-48B4-80B5-4E86E165259E.jpeg" alt=""></p>
-</div></div>]]></content>
-      <categories>
-        <category>博客类</category>
-      </categories>
-      <tags>
-        <tag>这是标签</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>二叉树（非）递归遍历</title>
     <url>/2021/11/11/%E4%BA%8C%E5%8F%89%E6%A0%91%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86/</url>
     <content><![CDATA[<h2 id="实验要求"><a href="#实验要求" class="headerlink" title="实验要求"></a>实验要求</h2><p>\1. 建立二叉树后，利用相应遍历算法求出该二叉树的高度并显示；</p>
@@ -257,6 +239,28 @@
 <p>2021/10/21：创建图床，顶部轮播文章，改了字体和动态标题</p>
 <p>2021/10/22：外挂标签，添加P站日榜</p>
 <p>2021/10/23：添加搜索框，优化了底部栏（至少比以前好了），取消了顶部文章轮播。发现黑夜模式出问题了，说说功能需要刷新一次才显示。</p>
+<p>2021/11/11：修改各页面的透明度</p>
+]]></content>
+      <tags>
+        <tag>记录</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客添加Pixiv日榜</title>
+    <url>/2021/10/22/%E5%8D%9A%E5%AE%A2%E6%B7%BB%E5%8A%A0Pixiv%E6%97%A5%E6%A6%9C/</url>
+    <content><![CDATA[<p>今天逛大佬博客看见这个功能，自己也想整一个，但是添加的过程中发现日榜的窗口不是固定的，可能是主题更新的缘故吧，需要对旧的代码做一些改动，以下是我的配置步骤。（参考文章：<a href="https://blog.hclonely.com/posts/57bd67ce/">HCLonely Blog - Hexo 博客美化</a>）</p>
+<ol>
+<li><p>在 <code>themes\Butterfly\layout\includes\widget</code> 文件夹新建 <code>card_pixiv.pug</code> 文件，文件内容如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.card-widget.card-pixiv</span><br><span class="line">  .card-content</span><br><span class="line">    .item-headline</span><br><span class="line">      i.fa.fa-image(aria-hidden=&quot;true&quot;)</span><br><span class="line">      span= _p(&#x27;aside.card_pixiv&#x27;)</span><br><span class="line">    iframe(src=&quot;https://cloud.mokeyjay.com/pixiv&quot; frameborder=&quot;0&quot; style=&quot;width:99%;height:380px;margin:0;&quot;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编辑 <code>themes\Butterfly\layout\includes\widget\index.pug</code> 文件,</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">       if showToc</span><br><span class="line">         include ./card_post_toc.pug</span><br><span class="line">       !=partial(&#x27;includes/widget/card_recent_post&#x27;, &#123;&#125;, &#123;cache: true&#125;)</span><br><span class="line">       !=partial(&#x27;includes/widget/card_ad&#x27;, &#123;&#125;, &#123;cache: true&#125;)</span><br><span class="line"> else</span><br><span class="line">   //- page</span><br><span class="line">   !=partial(&#x27;includes/widget/card_author&#x27;, &#123;&#125;, &#123;cache: true&#125;)</span><br><span class="line">   !=partial(&#x27;includes/widget/card_announcement&#x27;, &#123;&#125;, &#123;cache: true&#125;)</span><br><span class="line">   !=partial(&#x27;includes/widget/card_top_self&#x27;, &#123;&#125;, &#123;cache: true&#125;)  </span><br><span class="line">+  !=partial(&#x27;includes/widget/card_pixiv.pug&#x27;, &#123;&#125;, &#123;cache: true&#125;)    #添加这行代码</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编辑 <code>_config.butterfly.yml</code> 文件，在 <code>card_webinfo</code> 下面添加一行 <code>card_pixiv: true</code></p>
+</li>
+<li><p>编辑 <code>themes\Butterfly\languages\zh-CN.yml</code> 文件 (请根据你的网站语言选择)，找到 <code>card_announcement: 公告</code> , 在下面添加一行 <code>card_pixiv: Pixiv日榜Top50</code>(后面的文本可自定义)</p>
+</li>
+</ol>
 ]]></content>
       <tags>
         <tag>记录</tag>
@@ -288,24 +292,23 @@
       </tags>
   </entry>
   <entry>
-    <title>博客添加Pixiv日榜</title>
-    <url>/2021/10/22/%E5%8D%9A%E5%AE%A2%E6%B7%BB%E5%8A%A0Pixiv%E6%97%A5%E6%A6%9C/</url>
-    <content><![CDATA[<p>今天逛大佬博客看见这个功能，自己也想整一个，但是添加的过程中发现日榜的窗口不是固定的，可能是主题更新的缘故吧，需要对旧的代码做一些改动，以下是我的配置步骤。（参考文章：<a href="https://blog.hclonely.com/posts/57bd67ce/">HCLonely Blog - Hexo 博客美化</a>）</p>
-<ol>
-<li><p>在 <code>themes\Butterfly\layout\includes\widget</code> 文件夹新建 <code>card_pixiv.pug</code> 文件，文件内容如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.card-widget.card-pixiv</span><br><span class="line">  .card-content</span><br><span class="line">    .item-headline</span><br><span class="line">      i.fa.fa-image(aria-hidden=&quot;true&quot;)</span><br><span class="line">      span= _p(&#x27;aside.card_pixiv&#x27;)</span><br><span class="line">    iframe(src=&quot;https://cloud.mokeyjay.com/pixiv&quot; frameborder=&quot;0&quot; style=&quot;width:99%;height:380px;margin:0;&quot;)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编辑 <code>themes\Butterfly\layout\includes\widget\index.pug</code> 文件,</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">       if showToc</span><br><span class="line">         include ./card_post_toc.pug</span><br><span class="line">       !=partial(&#x27;includes/widget/card_recent_post&#x27;, &#123;&#125;, &#123;cache: true&#125;)</span><br><span class="line">       !=partial(&#x27;includes/widget/card_ad&#x27;, &#123;&#125;, &#123;cache: true&#125;)</span><br><span class="line"> else</span><br><span class="line">   //- page</span><br><span class="line">   !=partial(&#x27;includes/widget/card_author&#x27;, &#123;&#125;, &#123;cache: true&#125;)</span><br><span class="line">   !=partial(&#x27;includes/widget/card_announcement&#x27;, &#123;&#125;, &#123;cache: true&#125;)</span><br><span class="line">   !=partial(&#x27;includes/widget/card_top_self&#x27;, &#123;&#125;, &#123;cache: true&#125;)  </span><br><span class="line">+  !=partial(&#x27;includes/widget/card_pixiv.pug&#x27;, &#123;&#125;, &#123;cache: true&#125;)    #添加这行代码</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编辑 <code>_config.butterfly.yml</code> 文件，在 <code>card_webinfo</code> 下面添加一行 <code>card_pixiv: true</code></p>
-</li>
-<li><p>编辑 <code>themes\Butterfly\languages\zh-CN.yml</code> 文件 (请根据你的网站语言选择)，找到 <code>card_announcement: 公告</code> , 在下面添加一行 <code>card_pixiv: Pixiv日榜Top50</code>(后面的文本可自定义)</p>
-</li>
-</ol>
-]]></content>
+    <title>First Blog</title>
+    <url>/2021/10/11/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<img src="/2021/10/11/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/135.jpg" class="" title="这是一张图片">
+<p>这里是测试功能的地方</p>
+<details ><summary> 查看图片测试 </summary>
+              <div class='content'>
+              <p><img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper/abstract/41F215B9-261F-48B4-80B5-4E86E165259E.jpeg" alt=""></p>
+              </div>
+            </details>
+<div class="hide-toggle" style="border: 1px solid cyan"><div class="hide-button toggle-title" style="background-color: cyan;"><i class="fas fa-caret-right fa-fw"></i><span>折叠框测试</span></div>
+    <div class="hide-content"><p><img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper/abstract/41F215B9-261F-48B4-80B5-4E86E165259E.jpeg" alt=""></p>
+</div></div>]]></content>
+      <categories>
+        <category>博客类</category>
+      </categories>
       <tags>
-        <tag>记录</tag>
+        <tag>这是标签</tag>
       </tags>
   </entry>
 </search>
