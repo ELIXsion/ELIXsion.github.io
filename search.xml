@@ -17,6 +17,54 @@
       </tags>
   </entry>
   <entry>
+    <title>butterfly使用记录（一直在更新）</title>
+    <url>/2021/10/12/butterfly%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<p> 刚开始建设博客，很多功能都不明白，记录一下常用的代码。（没有特殊说明均为主题配置文件下修改）</p>
+<h1 id="美化相关"><a href="#美化相关" class="headerlink" title="美化相关"></a>美化相关</h1><p><strong>修改网站背景：background: url(/mysource/mainbg.png))</strong></p>
+<p>【mysource是在themes\butterfly\source下建立的文件夹用来存储个人资源，直接放在source下更新butterfly时可能被覆盖】</p>
+<p>（若使用网络链接，需要用 url(网址) 格式）</p>
+<p><strong>修改顶部图占比：index_top_img_height</strong></p>
+<p><strong>修改主页顶部图：index_img</strong></p>
+<p>（若使用网络连接，直接添加网址即可）</p>
+<p><strong>菜单子页面透明：archive_img: rgba(255,255,255,0.2)</strong></p>
+<p>（也可以改成其他图片，直接写链接即可；）</p>
+<p>其中tags页和category页需要在各自md文件中修改</p>
+<p><strong>打字效果（色彩，抖动）activate_power_mode</strong></p>
+<p><strong>鼠标点击效果：Mouse click effects</strong></p>
+<p><strong>背景动效：canvas_nest</strong></p>
+<p><strong>字体：<a href="https://akilar.top/posts/ebf20e02/">Custom Beautify | Akilar の糖果屋</a></strong></p>
+<p>这里面还有很多魔改美化内容</p>
+<p><strong>卡片背景透明化：<a href="https://www.cnblogs.com/MoYu-zc/p/14397889.html">Hexo之更换背景及透明度 - MoYu-zc - 博客园 (cnblogs.com)</a></strong></p>
+<p>这里订正一下文章里css引用可以直接在主题配置文件里面进行，不需要另外新建一个butterfly.yml</p>
+<p>意思就是直接把</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/css/mycss.css&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>插到主题配置文件的inject里</p>
+<h1 id="功能相关"><a href="#功能相关" class="headerlink" title="功能相关"></a>功能相关</h1><p><strong>添加顶部轮播图：<a href="https://akilar.top/posts/8e1264d1/">Swiper Bar | Akilarの糖果屋</a></strong></p>
+<p>在博文配置项添加   swiper_index: 1</p>
+<p><strong>评论区：gitalk（多种方式可选）</strong></p>
+<p>注意：gitalk配置到butterfly中，repo填  仓库名.github.io</p>
+<p><strong>主题分类磁贴：参考<a href="https://akilar.top/posts/a9131002/">Butterfly主题美化日记 | Akilarの糖果屋</a></strong></p>
+<p><strong>vercel提供加速：<a href="https://vercel.com">Dashboard – Vercel</a></strong></p>
+<p>（一开始遇到了vercel不能和github同步的问题，此时应该到vercel项目中setting-git-Production Branch中检查默认分支是否为master（或自己设置的默认主分支））</p>
+<p><strong>说说配置：建议参考<a href="https://blog.csdn.net/cungudafa/article/details/105938885">(82条消息) hexo（butterfly）添加说说页面（Artitalk可在线发布）_cungudafa的博客-CSDN博客</a></strong></p>
+<p>真的太折磨了，按照官方文档来做不知道为什么修改不了页面显示（会直接单独建立一个html），感觉默认的很丑。。。。于是按照上文大佬的教程直接在md文件里配置说说了。。。。</p>
+<p><strong>时钟：<a href="https://akilar.top/posts/4e39cf4a/">Butterfly主题美化日记 | Akilarの糖果屋</a></strong></p>
+<p>出奇的，没出现任何问题就搞好了。。。。</p>
+<p><strong>图床：<a href="https://picx.xpoet.cn/#/config">图床配置 | PicX 图床神器 (xpoet.cn)</a>网页里有教程，实际就是用github</strong></p>
+<p><strong>桌宠（大概是功能？）：见下一篇博客</strong></p>
+<p><strong>各界面的透明度设置</strong>：配置路径：Blog\themes\butterfly\source\css\mycss.css</p>
+<p>参考教程：<a href="https://yl1010code.gitee.io/2021/10/04/Butterfly%E9%80%8F%E6%98%8E%E8%83%8C%E6%99%AF%E8%AE%BE%E7%BD%AE/">Butterfly 透明背景设置 | LY’s Blog (gitee.io)</a></p>
+<h1 id="底部栏透明化"><a href="#底部栏透明化" class="headerlink" title="底部栏透明化"></a>底部栏透明化</h1><p>初始底部栏是蓝色的，更改网页背景后显得很突兀，难受我很久了却不知道怎么改。。。。</p>
+<p>解决方法：博客根目录\themes\butterfly\source\css_layout\footer.stly 将 background: $light-blue注释掉即可透明化，也可以改成其他颜色</p>
+]]></content>
+      <categories>
+        <category>记录</category>
+      </categories>
+      <tags>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>butterfly外挂标签备忘</title>
     <url>/2021/10/22/butterfly%E5%A4%96%E6%8C%82%E6%A0%87%E7%AD%BE%E5%A4%87%E5%BF%98/</url>
     <content><![CDATA[<p><strong>教程参考：</strong></p>
@@ -145,54 +193,6 @@
 ]]></content>
       <tags>
         <tag>记录</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>butterfly使用记录（一直在更新）</title>
-    <url>/2021/10/12/butterfly%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<p> 刚开始建设博客，很多功能都不明白，记录一下常用的代码。（没有特殊说明均为主题配置文件下修改）</p>
-<h1 id="美化相关"><a href="#美化相关" class="headerlink" title="美化相关"></a>美化相关</h1><p><strong>修改网站背景：background: url(/mysource/mainbg.png))</strong></p>
-<p>【mysource是在themes\butterfly\source下建立的文件夹用来存储个人资源，直接放在source下更新butterfly时可能被覆盖】</p>
-<p>（若使用网络链接，需要用 url(网址) 格式）</p>
-<p><strong>修改顶部图占比：index_top_img_height</strong></p>
-<p><strong>修改主页顶部图：index_img</strong></p>
-<p>（若使用网络连接，直接添加网址即可）</p>
-<p><strong>菜单子页面透明：archive_img: rgba(255,255,255,0.2)</strong></p>
-<p>（也可以改成其他图片，直接写链接即可；）</p>
-<p>其中tags页和category页需要在各自md文件中修改</p>
-<p><strong>打字效果（色彩，抖动）activate_power_mode</strong></p>
-<p><strong>鼠标点击效果：Mouse click effects</strong></p>
-<p><strong>背景动效：canvas_nest</strong></p>
-<p><strong>字体：<a href="https://akilar.top/posts/ebf20e02/">Custom Beautify | Akilar の糖果屋</a></strong></p>
-<p>这里面还有很多魔改美化内容</p>
-<p><strong>卡片背景透明化：<a href="https://www.cnblogs.com/MoYu-zc/p/14397889.html">Hexo之更换背景及透明度 - MoYu-zc - 博客园 (cnblogs.com)</a></strong></p>
-<p>这里订正一下文章里css引用可以直接在主题配置文件里面进行，不需要另外新建一个butterfly.yml</p>
-<p>意思就是直接把</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/css/mycss.css&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>插到主题配置文件的inject里</p>
-<h1 id="功能相关"><a href="#功能相关" class="headerlink" title="功能相关"></a>功能相关</h1><p><strong>添加顶部轮播图：<a href="https://akilar.top/posts/8e1264d1/">Swiper Bar | Akilarの糖果屋</a></strong></p>
-<p>在博文配置项添加   swiper_index: 1</p>
-<p><strong>评论区：gitalk（多种方式可选）</strong></p>
-<p>注意：gitalk配置到butterfly中，repo填  仓库名.github.io</p>
-<p><strong>主题分类磁贴：参考<a href="https://akilar.top/posts/a9131002/">Butterfly主题美化日记 | Akilarの糖果屋</a></strong></p>
-<p><strong>vercel提供加速：<a href="https://vercel.com">Dashboard – Vercel</a></strong></p>
-<p>（一开始遇到了vercel不能和github同步的问题，此时应该到vercel项目中setting-git-Production Branch中检查默认分支是否为master（或自己设置的默认主分支））</p>
-<p><strong>说说配置：建议参考<a href="https://blog.csdn.net/cungudafa/article/details/105938885">(82条消息) hexo（butterfly）添加说说页面（Artitalk可在线发布）_cungudafa的博客-CSDN博客</a></strong></p>
-<p>真的太折磨了，按照官方文档来做不知道为什么修改不了页面显示（会直接单独建立一个html），感觉默认的很丑。。。。于是按照上文大佬的教程直接在md文件里配置说说了。。。。</p>
-<p><strong>时钟：<a href="https://akilar.top/posts/4e39cf4a/">Butterfly主题美化日记 | Akilarの糖果屋</a></strong></p>
-<p>出奇的，没出现任何问题就搞好了。。。。</p>
-<p><strong>图床：<a href="https://picx.xpoet.cn/#/config">图床配置 | PicX 图床神器 (xpoet.cn)</a>网页里有教程，实际就是用github</strong></p>
-<p><strong>桌宠（大概是功能？）：见下一篇博客</strong></p>
-<p><strong>各界面的透明度设置</strong>：配置路径：Blog\themes\butterfly\source\css\mycss.css</p>
-<p>参考教程：<a href="https://yl1010code.gitee.io/2021/10/04/Butterfly%E9%80%8F%E6%98%8E%E8%83%8C%E6%99%AF%E8%AE%BE%E7%BD%AE/">Butterfly 透明背景设置 | LY’s Blog (gitee.io)</a></p>
-<h1 id="底部栏透明化"><a href="#底部栏透明化" class="headerlink" title="底部栏透明化"></a>底部栏透明化</h1><p>初始底部栏是蓝色的，更改网页背景后显得很突兀，难受我很久了却不知道怎么改。。。。</p>
-<p>解决方法：博客根目录\themes\butterfly\source\css_layout\footer.stly 将 background: $light-blue注释掉即可透明化，也可以改成其他颜色</p>
-]]></content>
-      <categories>
-        <category>记录</category>
-      </categories>
-      <tags>
-        <tag>工具</tag>
       </tags>
   </entry>
   <entry>
