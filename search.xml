@@ -275,6 +275,31 @@
       </tags>
   </entry>
   <entry>
+    <title>看板娘配置过程中的一些问题</title>
+    <url>/2021/10/13/%E7%9C%8B%E6%9D%BF%E5%A8%98%E9%85%8D%E7%BD%AE%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p><strong>插件配置参考大佬文章   <a href="https://akilar.top/posts/5b8f515f/">Live2d Widget | Akilarの糖果屋</a></strong></p>
+<h1>获取插件问题</h1>
+
+<p>根据教程下载插件时报错，显示如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">found XX vulnerabilities (X low, X moderate, X high) in 2770 scanned packages</span><br><span class="line">  run `npm audit fix` to fix 1 of them.</span><br><span class="line">  XX vulnerabilities require semver-major dependency updates.</span><br><span class="line">  XXX vulnerabilities require manual review. See the full report for details.</span><br></pre></td></tr></table></figure>
+<p>根据提示执行npm audit fix 依然无法完成下载</p>
+<p>网上查阅得知解决方案如下：</p>
+<ol>
+<li>淘宝镜像源会自动修复，然后下载相关依赖包。</li>
+<li>使用<code>nrm use taobao</code>，<code>nrm</code>如果没有安装，就使用<code>npm i -g nrm</code>，然后再使用<code>nrm use taobao</code></li>
+<li>再使用<code>npm i</code> 安装一遍所有依赖包，这时候没下载的会自动下载，问题解决。</li>
+</ol>
+<h1>文件修改</h1>
+
+<p>根据教程修改 autoload.js 文件时无法打开，提示‘return’语句在函数之外。</p>
+<p>网上查询乱七八糟，后来发现系统自带打开js文件的工具是based script host</p>
+<p>解决方案：使用记事本打开文件</p>
+]]></content>
+      <tags>
+        <tag>记录</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>First Blog</title>
     <url>/2021/10/11/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/</url>
     <content><![CDATA[<img src="/2021/10/11/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/135.jpg" class="" title="这是一张图片">
@@ -299,31 +324,6 @@
       </categories>
       <tags>
         <tag>这是标签</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>看板娘配置过程中的一些问题</title>
-    <url>/2021/10/13/%E7%9C%8B%E6%9D%BF%E5%A8%98%E9%85%8D%E7%BD%AE%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p><strong>插件配置参考大佬文章   <a href="https://akilar.top/posts/5b8f515f/">Live2d Widget | Akilarの糖果屋</a></strong></p>
-<h1>获取插件问题</h1>
-
-<p>根据教程下载插件时报错，显示如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">found XX vulnerabilities (X low, X moderate, X high) in 2770 scanned packages</span><br><span class="line">  run `npm audit fix` to fix 1 of them.</span><br><span class="line">  XX vulnerabilities require semver-major dependency updates.</span><br><span class="line">  XXX vulnerabilities require manual review. See the full report for details.</span><br></pre></td></tr></table></figure>
-<p>根据提示执行npm audit fix 依然无法完成下载</p>
-<p>网上查阅得知解决方案如下：</p>
-<ol>
-<li>淘宝镜像源会自动修复，然后下载相关依赖包。</li>
-<li>使用<code>nrm use taobao</code>，<code>nrm</code>如果没有安装，就使用<code>npm i -g nrm</code>，然后再使用<code>nrm use taobao</code></li>
-<li>再使用<code>npm i</code> 安装一遍所有依赖包，这时候没下载的会自动下载，问题解决。</li>
-</ol>
-<h1>文件修改</h1>
-
-<p>根据教程修改 autoload.js 文件时无法打开，提示‘return’语句在函数之外。</p>
-<p>网上查询乱七八糟，后来发现系统自带打开js文件的工具是based script host</p>
-<p>解决方案：使用记事本打开文件</p>
-]]></content>
-      <tags>
-        <tag>记录</tag>
       </tags>
   </entry>
 </search>
