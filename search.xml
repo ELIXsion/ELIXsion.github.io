@@ -40,6 +40,9 @@
               <p>文章里css引用可以直接在主题配置文件里面进行，不需要另外新建一个butterfly.yml</p><p>意思就是直接把</p><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/css/mycss.css&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure><p>插到主题配置文件的inject里</p>
               </div>
             </details>
+<p>版权板块美化：<a href="https://www.nesxc.com/post/hexocc.html">butterfly版权美化教程 | 小N博客 (nesxc.com)</a></p>
+<p>使用新字体：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">font</span> <span class="attr">face</span>=<span class="string">&quot;新字体文件名（无需后缀）&quot;</span>&gt;</span></span><span class="xml"><span class="tag">&lt;/<span class="name">font</span>&gt;</span></span>  //直接在markdown中使用</span><br></pre></td></tr></table></figure>
 <h1 id="功能相关"><a href="#功能相关" class="headerlink" title="功能相关"></a>功能相关</h1><p><strong>添加顶部轮播图：<a href="https://akilar.top/posts/8e1264d1/">Swiper Bar | Akilarの糖果屋</a></strong></p>
 <p>在博文配置项添加   swiper_index: 1</p>
 <p><strong>评论区：gitalk（多种方式可选）</strong></p>
@@ -244,6 +247,7 @@
 <p>2021/11/11：修改各页面的透明度</p>
 <p>2021/11/14：部分优化，尝试做点美化最后回归默认。。。</p>
 <p>2021//11/16：添加导航页面，虽然目前只有这一个站点。修复了说说头像问题</p>
+<p>2020/12/26：美化版权信息板块，引入新字体</p>
 ]]></content>
       <tags>
         <tag>记录</tag>
@@ -275,6 +279,12 @@
     <url>/2021/10/11/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/</url>
     <content><![CDATA[<img src="/2021/10/11/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/135.jpg" class="" title="这是一张图片">
 <p>这里是测试功能的地方</p>
+<font face="Candyhome">测试字体</font>
+
+<font face="shufa">测试字体</font>
+
+<font face="Candyhome">测试字体</font>
+
 <details ><summary> 查看图片测试 </summary>
               <div class='content'>
               <p><img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper/abstract/41F215B9-261F-48B4-80B5-4E86E165259E.jpeg" alt=""></p>
@@ -282,7 +292,8 @@
             </details>
 <div class="hide-toggle" style="border: 1px solid cyan"><div class="hide-button toggle-title" style="background-color: cyan;"><i class="fas fa-caret-right fa-fw"></i><span>折叠框测试</span></div>
     <div class="hide-content"><p><img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper/abstract/41F215B9-261F-48B4-80B5-4E86E165259E.jpeg" alt=""></p>
-</div></div>]]></content>
+</div></div>
+]]></content>
       <categories>
         <category>博客类</category>
       </categories>
