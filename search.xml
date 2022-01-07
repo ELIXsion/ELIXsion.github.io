@@ -56,16 +56,16 @@
 <h2 id="思路与实践"><a href="#思路与实践" class="headerlink" title="思路与实践"></a>思路与实践</h2><p>研究微博源码的时候发现意外的简单（并不是），以为用requests就可以轻松爬取，但爬取之后却返回了一个错误的源码</p>
 <p><img src="https://cdn.jsdelivr.net/gh/ELIXsion/pictureck@master/pictureck/image.7l0785oyuyg0.webp" alt=""></p>
 <p>大概是微博的身份识别系统吧，经过测试发现在网页滞留几秒之后才能正常进入，于是使用selenium进行操作（requests应该也能做到，以后研究）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Askurl</span>(<span class="params">url</span>):</span></span><br><span class="line">    s = Service(<span class="string">r&quot;E:\python\PyCharm Community Edition 2021.3.1\plugins\python-ce\helpers\typeshed\stubs\selenium\selenium\webdriver\chrome\chromedriver.exe&quot;</span>)</span><br><span class="line">    driver = webdriver.Chrome(service=s)</span><br><span class="line">    driver.get(url)</span><br><span class="line">    time.sleep(<span class="number">6</span>)<span class="comment">#等待六秒</span></span><br><span class="line">    text = driver.page_source</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Askurl</span>(<span class="params">url</span>):</span></span><br><span class="line">    s = Service(<span class="string">r&quot;E:\python\PyCharm Community Edition 2021.3.1\plugins\python-ce\helpers\typeshed\stubs\selenium\selenium\webdriver\chrome\chromedriver.exe&quot;</span>)</span><br><span class="line">    option = webdriver.ChromeOptions()</span><br><span class="line">    option.add_argument(<span class="string">&#x27;headless&#x27;</span>)  <span class="comment"># 设置option，隐藏弹出的窗口</span></span><br><span class="line">    driver = webdriver.Chrome(service=s,options=option)</span><br><span class="line">    driver.get(url)</span><br><span class="line">    <span class="comment">#这一段可以直接改为time.sleep(6)</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;请等待.....&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">7</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="built_in">str</span>(i) +<span class="string">&quot;/6&quot;</span>)</span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    text = driver.page_source</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></table></figure>
 <p>可以正常获取源码</p>
 <p>通过tkinter添加一个选择框，分别对应三个榜单</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">jh</span>():</span></span><br><span class="line">    root = Tk()</span><br><span class="line">    v = IntVar()</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">selection</span>():</span><span class="comment">#根据返回值不同获取不同的榜单网页</span></span><br><span class="line">        se = <span class="built_in">str</span>(v.get())</span><br><span class="line">        <span class="keyword">if</span> se==<span class="number">1</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> se==<span class="number">2</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=socialevent&#x27;</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=entrank&#x27;</span></span><br><span class="line">        <span class="built_in">print</span>(url)</span><br><span class="line">        Gtedata(url)</span><br><span class="line">        root.destroy()</span><br><span class="line">    Language = [(<span class="string">&#x27;热搜榜&#x27;</span>, <span class="number">1</span>),</span><br><span class="line">                (<span class="string">&#x27;要闻榜&#x27;</span>, <span class="number">2</span>),</span><br><span class="line">                (<span class="string">&#x27;文娱榜&#x27;</span>, <span class="number">3</span>),</span><br><span class="line">                ]<span class="comment">#设置元组作为按钮的参数，前面是名字，后面是ID</span></span><br><span class="line">    <span class="keyword">for</span> lang, num <span class="keyword">in</span> Language:</span><br><span class="line">        b = Radiobutton(root, text=lang, variable=v, value=num, indicatoron=<span class="literal">False</span>, padx=<span class="number">30</span>, pady=<span class="number">3</span>,command=selection)</span><br><span class="line">        l = Label(root, textvariable=v)</span><br><span class="line">        b.pack(anchor=W, fill=X)</span><br><span class="line">    mainloop()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">jh</span>():</span></span><br><span class="line">    root = Tk()</span><br><span class="line">    v = IntVar()</span><br><span class="line">    root.geometry(<span class="string">&#x27;300x100&#x27;</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">selection</span>():</span></span><br><span class="line">        se = <span class="built_in">str</span>(v.get())</span><br><span class="line">        url = <span class="string">&#x27;link&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> se==<span class="string">&#x27;1&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/&#x27;</span></span><br><span class="line">        <span class="keyword">elif</span> se==<span class="string">&#x27;2&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=socialevent&#x27;</span></span><br><span class="line">        <span class="keyword">elif</span> se==<span class="string">&#x27;3&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=entrank&#x27;</span></span><br><span class="line">        Gtedata(url)</span><br><span class="line">        root.destroy()</span><br><span class="line">    Language = [(<span class="string">&#x27;热搜榜&#x27;</span>, <span class="number">1</span>),</span><br><span class="line">                (<span class="string">&#x27;要闻榜&#x27;</span>, <span class="number">2</span>),</span><br><span class="line">                (<span class="string">&#x27;文娱榜&#x27;</span>, <span class="number">3</span>),</span><br><span class="line">                ]</span><br><span class="line">    <span class="keyword">for</span> lang, num <span class="keyword">in</span> Language:</span><br><span class="line">        b = Radiobutton(root, text=lang, variable=v, value=num, indicatoron=<span class="literal">False</span>, padx=<span class="number">30</span>, pady=<span class="number">3</span>,command=selection)</span><br><span class="line">        l = Label(root, textvariable=v)</span><br><span class="line">        b.pack(anchor=W, fill=X)</span><br><span class="line">    mainloop()</span><br></pre></td></tr></table></figure>
 <h4 id="运行结果："><a href="#运行结果：" class="headerlink" title="运行结果："></a>运行结果：</h4><p><img src="https://cdn.jsdelivr.net/gh/ELIXsion/pictureck@master/pictureck/image.5fobt0rnwzg0.webp" alt=""></p>
 <p><img src="https://cdn.jsdelivr.net/gh/ELIXsion/pictureck@master/pictureck/image.73tne83k3ng0.webp" alt=""></p>
 <p>附源码：</p>
 <details class="folding-tag" cyan><summary> 点击展开 </summary>
               <div class='content'>
-              <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.chrome.service <span class="keyword">import</span> Service</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Askurl</span>(<span class="params">url</span>):</span></span><br><span class="line">    s = Service(<span class="string">r&quot;E:\python\PyCharm Community Edition 2021.3.1\plugins\python-ce\helpers\typeshed\stubs\selenium\selenium\webdriver\chrome\chromedriver.exe&quot;</span>)</span><br><span class="line">    driver = webdriver.Chrome(service=s)</span><br><span class="line">    driver.get(url)</span><br><span class="line">    time.sleep(<span class="number">6</span>)</span><br><span class="line">    text = driver.page_source</span><br><span class="line">    <span class="keyword">return</span> text</span><br><span class="line"></span><br><span class="line">datalist = []</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Gtedata</span>(<span class="params">url</span>):</span></span><br><span class="line">    Findtitle = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&quot;&gt;(.*?)&lt;/a&gt;&#x27;</span>)</span><br><span class="line">    Findlink = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;a href=&quot;(.*?)&quot; target=&quot;_blank&quot;&gt;&#x27;</span>)</span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    html=Askurl(url)</span><br><span class="line">    soup=BeautifulSoup(html,<span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> soup.find_all(<span class="string">&#x27;td&#x27;</span>,class_=<span class="string">&quot;td-02&quot;</span>):</span><br><span class="line">        data = []</span><br><span class="line">        item = <span class="built_in">str</span>(item)</span><br><span class="line"></span><br><span class="line">        title = re.findall(Findtitle, item)[<span class="number">0</span>]</span><br><span class="line">        data.append(title)</span><br><span class="line"></span><br><span class="line">        slink = re.findall(Findlink,item)[<span class="number">0</span>]</span><br><span class="line">        link = <span class="string">&#x27;https://s.weibo.com&#x27;</span> + <span class="built_in">str</span>(slink)</span><br><span class="line">        data.append(link)</span><br><span class="line"></span><br><span class="line">        datalist.append(data)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#输出测试</span></span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> datalist:</span><br><span class="line">        <span class="built_in">print</span>(index)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">jh</span>():</span></span><br><span class="line">    root = Tk()</span><br><span class="line">    v = IntVar()</span><br><span class="line">    root.geometry(<span class="string">&#x27;300x100&#x27;</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">selection</span>():</span></span><br><span class="line">        se = <span class="built_in">str</span>(v.get())</span><br><span class="line">        <span class="keyword">if</span> se==<span class="number">1</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> se==<span class="number">2</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=socialevent&#x27;</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=entrank&#x27;</span></span><br><span class="line">        <span class="built_in">print</span>(url)</span><br><span class="line">        Gtedata(url)</span><br><span class="line">        root.destroy()</span><br><span class="line">    Language = [(<span class="string">&#x27;热搜榜&#x27;</span>, <span class="number">1</span>),</span><br><span class="line">                (<span class="string">&#x27;要闻榜&#x27;</span>, <span class="number">2</span>),</span><br><span class="line">                (<span class="string">&#x27;文娱榜&#x27;</span>, <span class="number">3</span>),</span><br><span class="line">                ]</span><br><span class="line">    <span class="keyword">for</span> lang, num <span class="keyword">in</span> Language:</span><br><span class="line">        b = Radiobutton(root, text=lang, variable=v, value=num, indicatoron=<span class="literal">False</span>, padx=<span class="number">30</span>, pady=<span class="number">3</span>,command=selection)</span><br><span class="line">        l = Label(root, textvariable=v)</span><br><span class="line">        b.pack(anchor=W, fill=X)</span><br><span class="line">    mainloop()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    jh()</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+              <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.chrome.service <span class="keyword">import</span> Service</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Askurl</span>(<span class="params">url</span>):</span></span><br><span class="line">    s = Service(<span class="string">r&quot;E:\python\PyCharm Community Edition 2021.3.1\plugins\python-ce\helpers\typeshed\stubs\selenium\selenium\webdriver\chrome\chromedriver.exe&quot;</span>)</span><br><span class="line">    option = webdriver.ChromeOptions()</span><br><span class="line">    option.add_argument(<span class="string">&#x27;headless&#x27;</span>)  <span class="comment"># 设置option</span></span><br><span class="line">    driver = webdriver.Chrome(service=s,options=option)</span><br><span class="line">    driver.get(url)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;请等待.....&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">7</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="built_in">str</span>(i) +<span class="string">&quot;/6&quot;</span>)</span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line">    text = driver.page_source</span><br><span class="line">    <span class="keyword">return</span> text</span><br><span class="line"></span><br><span class="line">datalist = []</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Gtedata</span>(<span class="params">url</span>):</span></span><br><span class="line">    Findtitle = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&quot;&gt;(.*?)&lt;/a&gt;&#x27;</span>)</span><br><span class="line">    Findlink = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;a href=&quot;(.*?)&quot; target=&quot;_blank&quot;&gt;&#x27;</span>)</span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    html=Askurl(url)</span><br><span class="line">    <span class="built_in">print</span>(html)</span><br><span class="line">    soup=BeautifulSoup(html,<span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> soup.find_all(<span class="string">&#x27;td&#x27;</span>,class_=<span class="string">&quot;td-02&quot;</span>):</span><br><span class="line">        data = []</span><br><span class="line">        item = <span class="built_in">str</span>(item)</span><br><span class="line"></span><br><span class="line">        title = re.findall(Findtitle, item)[<span class="number">0</span>]</span><br><span class="line">        data.append(title)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> re.findall(Findlink,item):</span><br><span class="line">            slink = re.findall(Findlink, item)[<span class="number">0</span>]</span><br><span class="line">            link = <span class="string">&#x27;https://s.weibo.com&#x27;</span> + <span class="built_in">str</span>(slink)</span><br><span class="line">            data.append(link)</span><br><span class="line"></span><br><span class="line">        datalist.append(data)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#输出测试</span></span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> datalist:</span><br><span class="line">        <span class="built_in">print</span>(index)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">jh</span>():</span></span><br><span class="line">    root = Tk()</span><br><span class="line">    v = IntVar()</span><br><span class="line">    root.geometry(<span class="string">&#x27;300x100&#x27;</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">selection</span>():</span></span><br><span class="line">        se = <span class="built_in">str</span>(v.get())</span><br><span class="line">        url = <span class="string">&#x27;link&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> se==<span class="string">&#x27;1&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/&#x27;</span></span><br><span class="line">        <span class="keyword">elif</span> se==<span class="string">&#x27;2&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=socialevent&#x27;</span></span><br><span class="line">        <span class="keyword">elif</span> se==<span class="string">&#x27;3&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=entrank&#x27;</span></span><br><span class="line">        Gtedata(url)</span><br><span class="line">        root.destroy()</span><br><span class="line">    Language = [(<span class="string">&#x27;热搜榜&#x27;</span>, <span class="number">1</span>),</span><br><span class="line">                (<span class="string">&#x27;要闻榜&#x27;</span>, <span class="number">2</span>),</span><br><span class="line">                (<span class="string">&#x27;文娱榜&#x27;</span>, <span class="number">3</span>),</span><br><span class="line">                ]</span><br><span class="line">    <span class="keyword">for</span> lang, num <span class="keyword">in</span> Language:</span><br><span class="line">        b = Radiobutton(root, text=lang, variable=v, value=num, indicatoron=<span class="literal">False</span>, padx=<span class="number">30</span>, pady=<span class="number">3</span>,command=selection)</span><br><span class="line">        l = Label(root, textvariable=v)</span><br><span class="line">        b.pack(anchor=W, fill=X)</span><br><span class="line">    mainloop()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    jh()</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
               </div>
             </details>]]></content>
       <categories>
@@ -448,7 +448,28 @@
               <div class='content'>
               <ul><li>haha</li><li>hehe</li></ul>
               </div>
-            </details>]]></content>
+            </details>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>表头</th>
+<th>表头</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单元格</td>
+<td>单元格</td>
+</tr>
+<tr>
+<td>单元格</td>
+<td>单元格</td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
       <categories>
         <category>博客类</category>
       </categories>
@@ -546,6 +567,267 @@
 ]]></content>
       <tags>
         <tag>诗词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python学习记录之文件写入</title>
+    <url>/2022/01/07/Python%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B9%8B%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>算是整了个活吧，先爬取人民网的新闻排行榜，再写入到md文件里面，按照博客的格式样式进行编辑，可以直接作为博客文件发表。整体没有什么难度，就当练手了。</p>
+<h3 id="直接上源码"><a href="#直接上源码" class="headerlink" title="直接上源码"></a>直接上源码</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- codeing = utf-8 -*-</span></span><br><span class="line"><span class="comment"># @time:2021/12/31  12:44</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> xlwt</span><br><span class="line"><span class="keyword">import</span> sqlite3  <span class="comment">#进行SQlite数据库操作</span></span><br><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.chrome.service <span class="keyword">import</span> Service</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Askurl</span>(<span class="params">url</span>):</span></span><br><span class="line">    head = &#123;</span><br><span class="line">        <span class="string">&quot;User-Agent&quot;</span>: <span class="string">&quot;Mozilla / 5.0(Windows NT 10.0;Win64;x64) AppleWebKit / 537.36(KHTML, likeGecko) Chrome / 92.0.4515.107Safari / 537.36Edg / 92.0.902.55&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">    req = requests.get(url=url, headers=head)</span><br><span class="line">    response = req.content.decode(<span class="string">&quot;gbk&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> response</span><br><span class="line"></span><br><span class="line">datalist = []</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Gtedata</span>(<span class="params">url</span>):</span></span><br><span class="line">    Findtitle = re.<span class="built_in">compile</span>(<span class="string">r&#x27;.html&quot;&gt;(.*?)&lt;/a&gt;&#x27;</span>)</span><br><span class="line">    Findlink = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;a class=&quot;anavy&quot; href=&quot;(.*?)&quot;&gt;&#x27;</span>)</span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    html=Askurl(url)</span><br><span class="line">    <span class="comment"># print(html)</span></span><br><span class="line">    soup=BeautifulSoup(html,<span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line">    index = soup.find_all(<span class="string">&#x27;table&#x27;</span>,width=<span class="string">&quot;712&quot;</span>)</span><br><span class="line">    fg = <span class="built_in">str</span>(index[<span class="number">0</span>]).split(<span class="string">&#x27;&lt;/tr&gt;&#x27;</span>)</span><br><span class="line">    fg = fg[<span class="number">1</span>:]</span><br><span class="line">    fg = fg[:(<span class="built_in">len</span>(fg)-<span class="number">1</span>)]       <span class="comment">#删除元组首尾元素，在这里面是无用信息</span></span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> fg:</span><br><span class="line">        <span class="comment"># print(item)</span></span><br><span class="line">        data = []</span><br><span class="line">        item = <span class="built_in">str</span>(item)</span><br><span class="line">        <span class="keyword">if</span> re.findall(Findtitle, item):</span><br><span class="line">            title = re.findall(Findtitle, item)[<span class="number">0</span>]</span><br><span class="line">            title = <span class="built_in">str</span>(title).replace(<span class="string">&#x27;\xa0&#x27;</span>,<span class="string">&#x27; &#x27;</span>).replace(<span class="string">&#x27;|&#x27;</span>,<span class="string">&#x27;--&#x27;</span>)</span><br><span class="line">            data.append(title)</span><br><span class="line"></span><br><span class="line">            slink = re.findall(Findlink,item)[<span class="number">0</span>]</span><br><span class="line">            link = <span class="built_in">str</span>(slink)</span><br><span class="line">            data.append(link)</span><br><span class="line"></span><br><span class="line">            datalist.append(data)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#输出测试</span></span><br><span class="line">    <span class="comment"># for index in datalist:</span></span><br><span class="line">        <span class="comment"># print(index)</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">wirtexx</span>():</span></span><br><span class="line">    tit = []</span><br><span class="line">    link = []</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> datalist:</span><br><span class="line">        tit.append(item[<span class="number">0</span>])</span><br><span class="line">        link.append(item[<span class="number">1</span>])</span><br><span class="line">    zh = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(tit)-<span class="number">1</span>):</span><br><span class="line">        a = <span class="string">&#x27;| &#x27;</span> +<span class="built_in">str</span>(tit[i]) + <span class="string">&#x27; | &#x27;</span> + <span class="built_in">str</span>(link[i]) + <span class="string">&#x27; |&#x27;</span></span><br><span class="line">        zh.append(a)</span><br><span class="line"></span><br><span class="line">    f = <span class="built_in">open</span>(<span class="string">&quot;rmw.md&quot;</span>, <span class="string">&quot;a&quot;</span>,encoding=<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">    f.write(<span class="string">&#x27;&#x27;&#x27;---</span></span><br><span class="line"><span class="string">title: 新闻</span></span><br><span class="line"><span class="string">date: 2022-01-05 20:21:09</span></span><br><span class="line"><span class="string">tags: </span></span><br><span class="line"><span class="string">- 新闻</span></span><br><span class="line"><span class="string">- python</span></span><br><span class="line"><span class="string">categories: python</span></span><br><span class="line"><span class="string">cover: https://cdn.jsdelivr.net/gh/ELIXsion/pictureck@master/pictureck/炮姐.28izrer0hq4g.webp</span></span><br><span class="line"><span class="string">top_img: https://cdn.jsdelivr.net/gh/ELIXsion/pictureck@master/pictureck/炮姐.28izrer0hq4g.webp</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">---</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>)</span><br><span class="line">    f.write(<span class="string">&#x27;| 标题 | 链接 |&#x27;</span>+<span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>+<span class="string">&#x27;|  ----  | ----  |&#x27;</span>+<span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> zh:</span><br><span class="line">        f.write(item+ <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>)</span><br><span class="line">    f.close()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 追加后，打开并读取该文件：</span></span><br><span class="line">    f = <span class="built_in">open</span>(<span class="string">&quot;rmw.md&quot;</span>, <span class="string">&quot;r&quot;</span>,encoding=<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(f.read())</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    baseurl=<span class="string">&quot;http://news.people.com.cn/GB/28053/index.html&quot;</span></span><br><span class="line">    Gtedata(baseurl)</span><br><span class="line">    wirtexx()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>记录</tag>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>新闻</title>
+    <url>/2022/01/05/rmw/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>标题</th>
+<th>链接</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>大江奔涌绘宏图</td>
+<td><a href="http://politics.people.com.cn/n1/2022/0105/c1001-32323985.html">http://politics.people.com.cn/n1/2022/0105/c1001-32323985.html</a></td>
+</tr>
+<tr>
+<td>《壬寅年》特种邮票今日首发</td>
+<td><a href="http://ent.people.com.cn/n1/2022/0105/c1012-32324705.html">http://ent.people.com.cn/n1/2022/0105/c1012-32324705.html</a></td>
+</tr>
+<tr>
+<td>北京冬奥会倒计时一个月—这些冬奥项目你都get了吗？</td>
+<td><a href="http://ent.people.com.cn/n1/2022/0105/c1012-32324181.html">http://ent.people.com.cn/n1/2022/0105/c1012-32324181.html</a></td>
+</tr>
+<tr>
+<td>民航局对多个入境航班发出熔断指令 要求11家航司做好机票退改等工作</td>
+<td><a href="http://ent.people.com.cn/n1/2022/0105/c1012-32324452.html">http://ent.people.com.cn/n1/2022/0105/c1012-32324452.html</a></td>
+</tr>
+<tr>
+<td>北京冬奥会倒计时一个月—中国已获173个参赛席位</td>
+<td><a href="http://ent.people.com.cn/n1/2022/0105/c1012-32324204.html">http://ent.people.com.cn/n1/2022/0105/c1012-32324204.html</a></td>
+</tr>
+<tr>
+<td>人民网评：向算法“技术霸凌”说不</td>
+<td><a href="http://opinion.people.com.cn/n1/2022/0105/c223228-32324462.html">http://opinion.people.com.cn/n1/2022/0105/c223228-32324462.html</a></td>
+</tr>
+<tr>
+<td>元旦各省份旅游收入排行出炉：“旅游+”新玩法点亮寒冬</td>
+<td><a href="http://ent.people.com.cn/n1/2022/0105/c1012-32324571.html">http://ent.people.com.cn/n1/2022/0105/c1012-32324571.html</a></td>
+</tr>
+<tr>
+<td>“民之所忧，我必念之；民之所盼，我必行之”（人民论坛）</td>
+<td><a href="http://opinion.people.com.cn/n1/2022/0105/c1003-32323996.html">http://opinion.people.com.cn/n1/2022/0105/c1003-32323996.html</a></td>
+</tr>
+<tr>
+<td>福建厦门：新机场项目全面开工</td>
+<td><a href="http://pic.people.com.cn/n1/2022/0105/c1016-32324132.html">http://pic.people.com.cn/n1/2022/0105/c1016-32324132.html</a></td>
+</tr>
+<tr>
+<td>习近平签署中央军委2022年1号命令 向全军发布开训动员令</td>
+<td><a href="http://military.people.com.cn/n1/2022/0105/c1011-32324463.html">http://military.people.com.cn/n1/2022/0105/c1011-32324463.html</a></td>
+</tr>
+<tr>
+<td>《改变中国的力量》之人民至上篇：让每一双手都成为致富之手</td>
+<td><a href="http://theory.people.com.cn/n1/2022/0105/c40531-32324284.html">http://theory.people.com.cn/n1/2022/0105/c40531-32324284.html</a></td>
+</tr>
+<tr>
+<td>持续深入学习宣传党的十九届六中全会精神 激励干部群众满怀信心奋进新征程建功新时代</td>
+<td><a href="http://cpc.people.com.cn/n1/2022/0105/c64094-32324091.html">http://cpc.people.com.cn/n1/2022/0105/c64094-32324091.html</a></td>
+</tr>
+<tr>
+<td>坚决制止借“网红儿童”牟利（人民时评）</td>
+<td><a href="http://opinion.people.com.cn/n1/2022/0105/c1003-32324002.html">http://opinion.people.com.cn/n1/2022/0105/c1003-32324002.html</a></td>
+</tr>
+<tr>
+<td>书写构建人类命运共同体的新篇章</td>
+<td><a href="http://opinion.people.com.cn/n1/2022/0105/c1003-32323983.html">http://opinion.people.com.cn/n1/2022/0105/c1003-32323983.html</a></td>
+</tr>
+<tr>
+<td>深刻认识“两个确立”的重要意义</td>
+<td><a href="http://dangjian.people.com.cn/n1/2022/0105/c117092-32324387.html">http://dangjian.people.com.cn/n1/2022/0105/c117092-32324387.html</a></td>
+</tr>
+<tr>
+<td>贵州余庆：椪柑喜获丰收</td>
+<td><a href="http://pic.people.com.cn/n1/2022/0105/c1016-32324417.html">http://pic.people.com.cn/n1/2022/0105/c1016-32324417.html</a></td>
+</tr>
+<tr>
+<td>习近平在北京考察2022年冬奥会、冬残奥会筹办备赛工作</td>
+<td><a href="http://pic.people.com.cn/n1/2022/0105/c426981-32324707.html">http://pic.people.com.cn/n1/2022/0105/c426981-32324707.html</a></td>
+</tr>
+<tr>
+<td>西安：中医药助力新冠肺炎预防救治</td>
+<td><a href="http://pic.people.com.cn/n1/2022/0105/c1016-32324119.html">http://pic.people.com.cn/n1/2022/0105/c1016-32324119.html</a></td>
+</tr>
+<tr>
+<td>为维持“白富美”人设 挪用公款近千万</td>
+<td><a href="http://fanfu.people.com.cn/n1/2022/0105/c64371-32324354.html">http://fanfu.people.com.cn/n1/2022/0105/c64371-32324354.html</a></td>
+</tr>
+<tr>
+<td>人民网评：进一步保障网络安全和数据安全</td>
+<td><a href="http://opinion.people.com.cn/n1/2022/0105/c223228-32324079.html">http://opinion.people.com.cn/n1/2022/0105/c223228-32324079.html</a></td>
+</tr>
+<tr>
+<td>关于2016-2020年全国党史和文献部门优秀科研成果拟获奖名单的公示</td>
+<td><a href="http://www.dswxyjy.org.cn/n1/2022/0105/c427276-32324771.html">http://www.dswxyjy.org.cn/n1/2022/0105/c427276-32324771.html</a></td>
+</tr>
+<tr>
+<td>着力打造政治过硬具备领导现代化建设能力的领导班子和干部队伍</td>
+<td><a href="http://renshi.people.com.cn/n1/2022/0105/c139617-32324357.html">http://renshi.people.com.cn/n1/2022/0105/c139617-32324357.html</a></td>
+</tr>
+<tr>
+<td>持续深入学习宣传党的十九届六中全会精神 激励干部群众满怀信心奋进新征程建功新时代</td>
+<td><a href="http://dangshi.people.com.cn/n1/2022/0105/c436975-32324105.html">http://dangshi.people.com.cn/n1/2022/0105/c436975-32324105.html</a></td>
+</tr>
+<tr>
+<td>《壬寅年》特种邮票发行</td>
+<td><a href="http://pic.people.com.cn/n1/2022/0105/c1016-32324619.html">http://pic.people.com.cn/n1/2022/0105/c1016-32324619.html</a></td>
+</tr>
+<tr>
+<td>中国共产党纪律检查委员会工作条例</td>
+<td><a href="http://politics.people.com.cn/n1/2022/0105/c1001-32323981.html">http://politics.people.com.cn/n1/2022/0105/c1001-32323981.html</a></td>
+</tr>
+<tr>
+<td>中国共产党纪律检查委员会工作条例</td>
+<td><a href="http://politics.people.com.cn/n1/2022/0105/c1001-32323997.html">http://politics.people.com.cn/n1/2022/0105/c1001-32323997.html</a></td>
+</tr>
+<tr>
+<td>三堂会审 — 纵容涉黑组织哪些情形为“情节严重” 从广西梧州市人大常委会原委员朱钢案说起</td>
+<td><a href="http://fanfu.people.com.cn/n1/2022/0105/c64371-32324348.html">http://fanfu.people.com.cn/n1/2022/0105/c64371-32324348.html</a></td>
+</tr>
+<tr>
+<td>美国新冠肺炎确诊5680万 上周平均每天672名儿童住院治疗</td>
+<td><a href="http://world.people.com.cn/n1/2022/0105/c1002-32324133.html">http://world.people.com.cn/n1/2022/0105/c1002-32324133.html</a></td>
+</tr>
+<tr>
+<td>让“躺平”者无处遁形</td>
+<td><a href="http://renshi.people.com.cn/n1/2022/0105/c139617-32324366.html">http://renshi.people.com.cn/n1/2022/0105/c139617-32324366.html</a></td>
+</tr>
+<tr>
+<td>深入贯彻习近平总书记重要讲话重要指示精神 巩固拓展党史学习教育成果 为吉林振兴注入新动能</td>
+<td><a href="http://dangshi.people.com.cn/n1/2022/0105/c436975-32324532.html">http://dangshi.people.com.cn/n1/2022/0105/c436975-32324532.html</a></td>
+</tr>
+<tr>
+<td>外交部：立陶宛认识到错误是正确的一步</td>
+<td><a href="http://world.people.com.cn/n1/2022/0105/c1002-32324814.html">http://world.people.com.cn/n1/2022/0105/c1002-32324814.html</a></td>
+</tr>
+<tr>
+<td>礼赞百年风华 谱写时代新篇</td>
+<td><a href="http://dangshi.people.com.cn/n1/2022/0105/c436975-32324102.html">http://dangshi.people.com.cn/n1/2022/0105/c436975-32324102.html</a></td>
+</tr>
+<tr>
+<td>向全军发布开训动员令</td>
+<td><a href="http://cpc.people.com.cn/n1/2022/0105/c64094-32324070.html">http://cpc.people.com.cn/n1/2022/0105/c64094-32324070.html</a></td>
+</tr>
+<tr>
+<td>持续深入学习宣传党的十九届六中全会精神 激励干部群众满怀信心奋进新征程建功新时代</td>
+<td><a href="http://politics.people.com.cn/n1/2022/0105/c1001-32323994.html">http://politics.people.com.cn/n1/2022/0105/c1001-32323994.html</a></td>
+</tr>
+<tr>
+<td>这个五年规划关系“米袋子”“菜篮子”“水缸子”安全</td>
+<td><a href="http://finance.people.com.cn/n1/2022/0105/c1004-32324371.html">http://finance.people.com.cn/n1/2022/0105/c1004-32324371.html</a></td>
+</tr>
+<tr>
+<td>世界同期待——写在北京冬奥会开幕倒计时一个月之际</td>
+<td><a href="http://pic.people.com.cn/n1/2022/0105/c1016-32324331.html">http://pic.people.com.cn/n1/2022/0105/c1016-32324331.html</a></td>
+</tr>
+<tr>
+<td>罗永：数次生死交锋 始终冲在救援第一线</td>
+<td><a href="http://society.people.com.cn/n1/2022/0105/c1008-32324267.html">http://society.people.com.cn/n1/2022/0105/c1008-32324267.html</a></td>
+</tr>
+<tr>
+<td>土耳其伊沙克帕夏宫冬日静美</td>
+<td><a href="http://world.people.com.cn/n1/2022/0105/c1002-32324121.html">http://world.people.com.cn/n1/2022/0105/c1002-32324121.html</a></td>
+</tr>
+<tr>
+<td>践行全过程民主 基层治理添活力（“牢记初心使命 走好新的赶考路”大家谈）</td>
+<td><a href="http://politics.people.com.cn/n1/2022/0105/c1001-32324019.html">http://politics.people.com.cn/n1/2022/0105/c1001-32324019.html</a></td>
+</tr>
+<tr>
+<td>不吸烟的人也会得肺癌？这一致病元凶千万要注意</td>
+<td><a href="http://lxjk.people.cn/n1/2022/0105/c404177-32324218.html">http://lxjk.people.cn/n1/2022/0105/c404177-32324218.html</a></td>
+</tr>
+<tr>
+<td>2022年首次普高学业水平合格性考试今天开考</td>
+<td><a href="http://edu.people.com.cn/n1/2022/0105/c1006-32324253.html">http://edu.people.com.cn/n1/2022/0105/c1006-32324253.html</a></td>
+</tr>
+<tr>
+<td>美国俄亥俄州日出风光美如画</td>
+<td><a href="http://world.people.com.cn/n1/2022/0105/c1002-32324151.html">http://world.people.com.cn/n1/2022/0105/c1002-32324151.html</a></td>
+</tr>
+<tr>
+<td>新修订科技进步法迎来哪些重大变化</td>
+<td><a href="http://finance.people.com.cn/n1/2022/0105/c1004-32324427.html">http://finance.people.com.cn/n1/2022/0105/c1004-32324427.html</a></td>
+</tr>
+<tr>
+<td>礼赞百年风华 谱写时代新篇</td>
+<td><a href="http://politics.people.com.cn/n1/2022/0105/c1001-32323982.html">http://politics.people.com.cn/n1/2022/0105/c1001-32323982.html</a></td>
+</tr>
+<tr>
+<td>书写新时代重大课题的优异答卷</td>
+<td><a href="http://theory.people.com.cn/n1/2022/0105/c40531-32324142.html">http://theory.people.com.cn/n1/2022/0105/c40531-32324142.html</a></td>
+</tr>
+<tr>
+<td>北京冬奥会火炬开始在黑龙江省进行展示</td>
+<td><a href="http://pic.people.com.cn/n1/2022/0105/c1016-32324823.html">http://pic.people.com.cn/n1/2022/0105/c1016-32324823.html</a></td>
+</tr>
+<tr>
+<td>“中国经济具有巨大发展空间”</td>
+<td><a href="http://world.people.com.cn/n1/2022/0105/c1002-32323991.html">http://world.people.com.cn/n1/2022/0105/c1002-32323991.html</a></td>
+</tr>
+<tr>
+<td>网商银行：签约涉农县区数量占全国总数近一半</td>
+<td><a href="http://finance.people.com.cn/n1/2022/0105/c1004-32324740.html">http://finance.people.com.cn/n1/2022/0105/c1004-32324740.html</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>新闻</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python学习记录之根据关键词筛选（json爬取）</title>
+    <url>/2022/01/07/Python%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B9%8B%E6%A0%B9%E6%8D%AE%E5%85%B3%E9%94%AE%E8%AF%8D%E7%AD%9B%E9%80%89%EF%BC%88json%E7%88%AC%E5%8F%96%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前几天研究人民网新闻排行榜时发现了一篇文章，当时感觉讲的内容挺多没细看，今天再翻出来感觉讲的特别详细，对于新手的我真是受益匪浅，也解答了我的很多疑惑，主要是爬取网页的json信息，各种头信息的用处，反爬机制和应对办法等等。附链接：<a href="https://blog.csdn.net/wenxuhonghe/article/details/113730696">(133条消息) Python爬虫实战 | 人民网爬虫 根据关键词筛选新闻文章<em>亮出锋芒，剑指苍穹-CSDN博客</em>人民网爬虫</a></p>
+<h2 id="思路及实践"><a href="#思路及实践" class="headerlink" title="思路及实践"></a>思路及实践</h2><p>在搜索界面进行搜索，得到的页面源码中找不到所需信息，在调试—网络中的文件发现所需信息</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ELIXsion/pictureck@master/pictureck/image.22xtxih5die8.webp" alt=""></p>
+<h4 id="获取json源码"><a href="#获取json源码" class="headerlink" title="获取json源码"></a>获取json源码</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fetchUrl</span>(<span class="params">url, kw, page</span>):</span></span><br><span class="line">    <span class="comment"># 请求头</span></span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">&quot;Accept&quot;</span>: <span class="string">&quot;application/json, text/plain, */*&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json;charset=UTF-8&quot;</span>,</span><br><span class="line">        <span class="string">&quot;User-Agent&quot;</span>: <span class="string">&quot;Mozilla / 5.0(Windows NT 10.0;Win64;x64) AppleWebKit / 537.36(KHTML, likeGecko) Chrome / 92.0.4515.107Safari / 537.36Edg / 92.0.902.55&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Referer&quot;</span>: <span class="string">&quot;http://search.people.cn/&quot;</span>,          <span class="comment">#访问来源</span></span><br><span class="line">        <span class="string">&quot;Cookie&quot;</span>: <span class="string">&quot;__jsluid_h = 42549df2735923361d7d5862a7faf64f;sso_c = 0;sfr = 1&quot;</span>,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 请求参数</span></span><br><span class="line">    payloads = &#123;</span><br><span class="line">        <span class="string">&quot;endTime&quot;</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="string">&quot;hasContent&quot;</span>: <span class="literal">True</span>,</span><br><span class="line">        <span class="string">&quot;hasTitle&quot;</span>: <span class="literal">True</span>,</span><br><span class="line">        <span class="string">&quot;isFuzzy&quot;</span>: <span class="literal">True</span>,</span><br><span class="line">        <span class="string">&quot;key&quot;</span>: kw,</span><br><span class="line">        <span class="string">&quot;limit&quot;</span>: <span class="number">10</span>,</span><br><span class="line">        <span class="string">&quot;page&quot;</span>: page,</span><br><span class="line">        <span class="string">&quot;sortType&quot;</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="string">&quot;startTime&quot;</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="string">&quot;type&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 发起 post 请求</span></span><br><span class="line">    r = requests.post(url, headers=headers, data=json.dumps(payloads))</span><br><span class="line">    <span class="keyword">return</span> r.json()</span><br></pre></td></tr></table></figure>
+<p>各项参数均可以在调试中的头部文件中找到，<strong>注意Referer必须要填写，否则会被服务器识别为黑客攻击，无法获取源码</strong>。</p>
+<div class="note info simple"><p>Request URL：也就是请求的链接。爬虫请求的 url 填啥是要看这里，不要只知道去浏览器的地址栏里复制网址。<br>Request Method：请求方法，有 GET 和 POST 两种，爬虫代码里用 requests.get() 还是 requests.post() 要与这里保持一致，否则可能无法正确获取数据。<br>Request Headers：请求头，服务器会根据这个来判断是谁在访问网站，一般情况下，你需要设置爬虫请求头中的 User-Agent （有的网站可能需要判断 Accept ，Cookie ，Referer，Host 等，根据具体情况设置），来将爬虫伪装成正常的浏览器用户，防止被反爬机制拦截。<br>Request Payload：请求参数，服务器会根据这些参数，来确定返回哪些数据给你，比如说，页码，关键词，等等，找到这些参数的规律，就可以通过构造这些参数，来直接向服务器获取数据了。</p>
+</div>
+<h4 id="解析json"><a href="#解析json" class="headerlink" title="解析json"></a>解析json</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parseJson</span>(<span class="params">jsonObj</span>):</span></span><br><span class="line">    <span class="comment"># 解析数据</span></span><br><span class="line">    records = jsonObj[<span class="string">&quot;data&quot;</span>][<span class="string">&quot;records&quot;</span>];</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> records:</span><br><span class="line">        <span class="comment"># 这里示例解析了几条，其他数据项如末尾所示，有需要自行解析</span></span><br><span class="line">        pid = item[<span class="string">&quot;id&quot;</span>]</span><br><span class="line">        belongsName = item[<span class="string">&quot;belongsName&quot;</span>]</span><br><span class="line">        content = BeautifulSoup(item[<span class="string">&quot;content&quot;</span>], <span class="string">&quot;html.parser&quot;</span>).text</span><br><span class="line">        displayTime = time.strftime(<span class="string">&quot;%Y-%m-%d %H:%M:%S&quot;</span>, time.localtime(item[<span class="string">&quot;displayTime&quot;</span>] / <span class="number">1000</span>))        <span class="comment">#未处理数据样式:1641429799000</span></span><br><span class="line">        title = BeautifulSoup(item[<span class="string">&quot;title&quot;</span>], <span class="string">&quot;html.parser&quot;</span>).text</span><br><span class="line">        url = item[<span class="string">&quot;url&quot;</span>]</span><br><span class="line">        <span class="keyword">yield</span> [[pid, title, displayTime, belongsName, content, url]]</span><br><span class="line"></span><br><span class="line">    <span class="comment">#     datalist.append([[pid, title, displayTime, belongsName, content, url]])     #上面yield函数可等效于此代码（datalist需要先声明）</span></span><br><span class="line">    <span class="comment"># return datalist</span></span><br></pre></td></tr></table></figure>
+<p>以上各种参数可在调试界面中找到，本例中原数据：</p>
+<details class="folding-tag" blue><summary> 点击展开 </summary>
+              <div class='content'>
+              <figure class="highlight html"><table><tr><td class="code"><pre><span class="line">&#123;author: &quot;本报记者 汪文正&quot;, belongsName: &quot;#滚动新闻#社会#陕西频道#&quot;, belongsId: &quot;[&quot;337341&quot;,&quot;378296&quot;,&quot;186331&quot;]&quot;,…&#125;</span><br><span class="line">author: &quot;本报记者 汪文正&quot;</span><br><span class="line">belongsId: &quot;[\&quot;337341\&quot;,\&quot;378296\&quot;,\&quot;186331\&quot;]&quot;</span><br><span class="line">belongsName: &quot;#滚动新闻#社会#陕西频道#&quot;</span><br><span class="line">content: &quot;岁末年初，多家快递企业宣布2022年“<span class="tag">&lt;<span class="name">em</span>&gt;</span>春节<span class="tag">&lt;/<span class="name">em</span>&gt;</span>不打烊”，满足春节期间的快递寄递需求。对消费者特别是广大“就地过年”群体而言，这无疑是一个好消息。也有人好奇，快递服务<span class="tag">&lt;<span class="name">em</span>&gt;</span>春节<span class="tag">&lt;/<span class="name">em</span>&gt;</span>不停转，相关承诺如何落实？近期，多家快递公司明确，2022年<span class="tag">&lt;<span class="name">em</span>&gt;</span>春节<span class="tag">&lt;/<span class="name">em</span>&gt;</span>“不打烊”以满足节日期间消费者寄递需求。2021年12月14日，德邦快递率先宣布“<span class="tag">&lt;<span class="name">em</span>&gt;</span>春节<span class="tag">&lt;/<span class="name">em</span>&gt;</span>不休”，为年货等物资顺畅流通提供快递服务。服务质量不降低  尽管部分快递企业宣布“<span class="tag">&lt;<span class="name">em</span>&gt;</span>春节<span class="tag">&lt;/<span class="name">em</span>&gt;</span>不打烊”，但随着<span class="tag">&lt;<span class="name">em</span>&gt;</span>春节<span class="tag">&lt;/<span class="name">em</span>&gt;</span>临近和部分网点快递员提前返乡，不少消费者担心快递服务质量下滑。  “最近快递在路上消耗的时间更长了。杨达卿分析，随着中国劳动力红利退潮及一线城市生活成本提高，满足“<span class="tag">&lt;<span class="name">em</span>&gt;</span>春节<span class="tag">&lt;/<span class="name">em</span>&gt;</span>不打烊”用工需求面临一定挑战。不过，“<span class="tag">&lt;<span class="name">em</span>&gt;</span>春节<span class="tag">&lt;/<span class="name">em</span>&gt;</span>不打烊”并不代表一定要全员留守，否则也会造成资源浪费。中通快递表示，会为<span class="tag">&lt;<span class="name">em</span>&gt;</span>春节<span class="tag">&lt;/<span class="name">em</span>&gt;</span>留守的一线员工提供完善的激励政策和福利保障，以保证快递小哥就地快乐过年和服务质量稳定；极兔速递也提出，将为<span class="tag">&lt;<span class="name">em</span>&gt;</span>春节<span class="tag">&lt;/<span class="name">em</span>&gt;</span>留守员工提供福利保障。&quot;</span><br><span class="line">contentId: 35083522</span><br><span class="line">displayTime: 1641429799000</span><br><span class="line">domain: null</span><br><span class="line">editor: &quot;麦文雄                     &quot;</span><br><span class="line">hasImg: 0</span><br><span class="line">hasVideo: 0</span><br><span class="line">id: 2000035083522</span><br><span class="line">imageUrl: null</span><br><span class="line">inputTime: 1641429799000</span><br><span class="line">isDisclosed: null</span><br><span class="line">isElited: null</span><br><span class="line">isFixed: null</span><br><span class="line">isOfficial: null</span><br><span class="line">isRecommend: null</span><br><span class="line">keyword: &quot;&quot;</span><br><span class="line">newsJson: null</span><br><span class="line">originNodeRname: null</span><br><span class="line">originUrl: &quot;http://paper.people.com.cn/rmrbhwb/html/2022-01/06/content_25897034.htm &quot;</span><br><span class="line">originalName: null</span><br><span class="line">originalType: null</span><br><span class="line">pretitle: &quot;近期多家快递企业宣布2022年春节不休，为年货等物资流通提供服务——&quot;</span><br><span class="line">shorttitle: &quot;&quot;</span><br><span class="line">source: 2</span><br><span class="line">sourceId: 35083522</span><br><span class="line">sourceType: 1</span><br><span class="line">sourcetitle: &quot;今年春节，快递不打烊！&quot;</span><br><span class="line">subtitle: &quot;&quot;</span><br><span class="line">title: &quot;今年<span class="tag">&lt;<span class="name">em</span>&gt;</span>春节<span class="tag">&lt;/<span class="name">em</span>&gt;</span>，快递不打烊！&quot;</span><br><span class="line">url: &quot;http://sn.people.com.cn/n2/2022/0106/c186331-35083522.html&quot;</span><br></pre></td></tr></table></figure>
+              </div>
+            </details>
+<h4 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h4><p><img src="https://cdn.jsdelivr.net/gh/ELIXsion/pictureck@master/pictureck/image.637t2p2k2zs0.webp" alt=""></p>
+<h4 id="附源代码"><a href="#附源代码" class="headerlink" title="附源代码"></a>附源代码</h4><details class="folding-tag" green><summary> 点击展开 </summary>
+              <div class='content'>
+              <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests						<span class="comment"># 发起网络请求</span></span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup		<span class="comment"># 解析HTML文本</span></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd					<span class="comment"># 处理数据</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> time			<span class="comment"># 处理时间戳</span></span><br><span class="line"><span class="keyword">import</span> json			<span class="comment"># 用来解析json文本</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fetchUrl</span>(<span class="params">url, kw, page</span>):</span></span><br><span class="line">    <span class="comment"># 请求头</span></span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">&quot;Accept&quot;</span>: <span class="string">&quot;application/json, text/plain, */*&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json;charset=UTF-8&quot;</span>,</span><br><span class="line">        <span class="string">&quot;User-Agent&quot;</span>: <span class="string">&quot;Mozilla / 5.0(Windows NT 10.0;Win64;x64) AppleWebKit / 537.36(KHTML, likeGecko) Chrome / 92.0.4515.107Safari / 537.36Edg / 92.0.902.55&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Referer&quot;</span>: <span class="string">&quot;http://search.people.cn/&quot;</span>,          <span class="comment">#访问来源</span></span><br><span class="line">        <span class="string">&quot;Cookie&quot;</span>: <span class="string">&quot;__jsluid_h = 42549df2735923361d7d5862a7faf64f;sso_c = 0;sfr = 1&quot;</span>,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 请求参数</span></span><br><span class="line">    payloads = &#123;</span><br><span class="line">        <span class="string">&quot;endTime&quot;</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="string">&quot;hasContent&quot;</span>: <span class="literal">True</span>,</span><br><span class="line">        <span class="string">&quot;hasTitle&quot;</span>: <span class="literal">True</span>,</span><br><span class="line">        <span class="string">&quot;isFuzzy&quot;</span>: <span class="literal">True</span>,</span><br><span class="line">        <span class="string">&quot;key&quot;</span>: kw,</span><br><span class="line">        <span class="string">&quot;limit&quot;</span>: <span class="number">10</span>,</span><br><span class="line">        <span class="string">&quot;page&quot;</span>: page,</span><br><span class="line">        <span class="string">&quot;sortType&quot;</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="string">&quot;startTime&quot;</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="string">&quot;type&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 发起 post 请求</span></span><br><span class="line">    r = requests.post(url, headers=headers, data=json.dumps(payloads))</span><br><span class="line">    <span class="keyword">return</span> r.json()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parseJson</span>(<span class="params">jsonObj</span>):</span></span><br><span class="line">    <span class="comment"># 解析数据</span></span><br><span class="line">    records = jsonObj[<span class="string">&quot;data&quot;</span>][<span class="string">&quot;records&quot;</span>];</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> records:</span><br><span class="line">        <span class="comment"># 这里示例解析了几条，其他数据项如末尾所示，有需要自行解析</span></span><br><span class="line">        pid = item[<span class="string">&quot;id&quot;</span>]</span><br><span class="line">        belongsName = item[<span class="string">&quot;belongsName&quot;</span>]</span><br><span class="line">        content = BeautifulSoup(item[<span class="string">&quot;content&quot;</span>], <span class="string">&quot;html.parser&quot;</span>).text</span><br><span class="line">        displayTime = time.strftime(<span class="string">&quot;%Y-%m-%d %H:%M:%S&quot;</span>, time.localtime(item[<span class="string">&quot;displayTime&quot;</span>] / <span class="number">1000</span>))        <span class="comment">#未处理数据样式:1641429799000</span></span><br><span class="line">        title = BeautifulSoup(item[<span class="string">&quot;title&quot;</span>], <span class="string">&quot;html.parser&quot;</span>).text</span><br><span class="line">        url = item[<span class="string">&quot;url&quot;</span>]</span><br><span class="line">        <span class="keyword">yield</span> [[pid, title, displayTime, belongsName, content, url]]</span><br><span class="line"></span><br><span class="line">    <span class="comment">#     datalist.append([[pid, title, displayTime, belongsName, content, url]])     #上面yield函数可等效于此代码（datalist需要先声明）</span></span><br><span class="line">    <span class="comment"># return datalist</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">saveFile</span>(<span class="params">path, filename, data</span>):</span></span><br><span class="line">    <span class="comment"># 如果路径不存在，就创建路径</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(path):</span><br><span class="line">        os.makedirs(path)</span><br><span class="line">    <span class="comment"># 保存数据</span></span><br><span class="line">    dataframe = pd.DataFrame(data)</span><br><span class="line">    dataframe.to_csv(path + filename + <span class="string">&quot;.csv&quot;</span>, encoding=<span class="string">&#x27;utf_8_sig&#x27;</span>, mode=<span class="string">&#x27;a&#x27;</span>, index=<span class="literal">False</span>, sep=<span class="string">&#x27;,&#x27;</span>, header=<span class="literal">False</span> )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># 起始页，终止页，关键词设置</span></span><br><span class="line">    start = <span class="number">1</span></span><br><span class="line">    end = <span class="number">3</span></span><br><span class="line">    kw = <span class="string">&quot;春节&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 保存表头行</span></span><br><span class="line">    headline = [[<span class="string">&quot;文章id&quot;</span>, <span class="string">&quot;标题&quot;</span>, <span class="string">&quot;发表时间&quot;</span>, <span class="string">&quot;版面&quot;</span>, <span class="string">&quot;摘要&quot;</span>, <span class="string">&quot;链接&quot;</span>]]</span><br><span class="line">    saveFile(<span class="string">&quot;./data/&quot;</span>, kw, headline)</span><br><span class="line">    <span class="comment"># 爬取数据</span></span><br><span class="line">    <span class="keyword">for</span> page <span class="keyword">in</span> <span class="built_in">range</span>(start, end + <span class="number">1</span>):</span><br><span class="line">        url = <span class="string">&quot;http://search.people.cn/search-platform/front/search&quot;</span></span><br><span class="line">        html = fetchUrl(url, kw, page)</span><br><span class="line">        <span class="comment"># data = parseJson(html)</span></span><br><span class="line">        <span class="comment"># for item in data:</span></span><br><span class="line">        <span class="comment">#     print(item)               每个item都储存了一个新闻的信息，如[1000032325931, &#x27;广西柳州：螺蛳粉企业备战春节市场&#x27;, &#x27;2022-01-07 08:43:00&#x27;, &#x27;#文旅·体育#&#x27;, &#x27;离春节还有不到一个月时间，广西柳州市各大螺蛳粉企业积极生产，全力供应节前市场。  \u3000\u3000离春节还有不到一个月时间，广西柳州市各大螺蛳粉企业积极生产，全力供应节前市场。  \u3000\u3000新华社记者 黄孝邦 摄&#x27;, &#x27;http://finance.people.com.cn/n1/2022/0107/c1004-32325931.html&#x27;]</span></span><br><span class="line">        <span class="keyword">for</span> data <span class="keyword">in</span> parseJson(html):</span><br><span class="line">            saveFile(<span class="string">&quot;./data/&quot;</span>, kw, data)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;第&#123;&#125;页爬取完成&quot;</span>.<span class="built_in">format</span>(page))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 爬虫完成提示信息</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;爬虫执行完毕！数据已保存至以下路径中，请查看！&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(os.getcwd(), <span class="string">&quot;\\data&quot;</span>)</span><br></pre></td></tr></table></figure>
+              </div>
+            </details>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>记录</tag>
+        <tag>python</tag>
       </tags>
   </entry>
 </search>
