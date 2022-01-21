@@ -3341,15 +3341,6 @@ li.categoryBar-list-item:nth-child(2)>span::after {
 li.categoryBar-list-item:nth-child(3)>span::after {
   content: '玩转Win10' !important;
 }
-li.categoryBar-list-item:nth-child(4)>span::after {
-  content: 'Ubuntu指南' !important;
-}
-li.categoryBar-list-item:nth-child(5)>span::after {
-  content: '个人日记' !important;
-}
-li.categoryBar-list-item:nth-child(6)>span::after {
-  content: '诗词歌赋' !important;
-}
 li.categoryBar-list-item {
   width: 32.3% !important;
 }
