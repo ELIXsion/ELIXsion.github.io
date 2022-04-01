@@ -2,23 +2,23 @@ function botui_init() {
   var botui = new BotUI("hello-akilar");
   botui.message.add({
     delay: 800,
-    content: "你好哦，欢迎来到ELIX的博客"
+    content: "你好哦，欢迎来到这里"
   }).then(function() {
     botui.message.add({
       delay: 1100,
-      content: "我是店长Akilar😄"
+      content: "我是博主ELIX"
     }).then(function() {
       botui.message.add({
         delay: 1100,
-        content: "你也可以叫我Aki~😋"
+        content: "希望你能有所收获！❤️"
       }).then(function() {
         botui.action.button({
           delay: 1600,
           action: [{
-            text: "我想知道更多关于糖果屋的故事!😃",
+            text: "告诉我更多关于博客的事情吧",
             value: "sure"
           }, {
-            text: "好的，就这样吧，拜拜！🙄",
+            text: "我已经完全get了，byebye",
             value: "skip"
           }]
         }).then(function(a) {
@@ -31,7 +31,7 @@ function botui_init() {
   var sure = function() {
       botui.message.add({
         delay: 600,
-        content: "🎉🎉🎉🎉🎉🎉"
+        content: "(/≧▽≦)/"
       }).then(function() {
         secondpart()
       })
