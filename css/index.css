@@ -3305,31 +3305,34 @@ span.categoryBar-list-count::after {
   right: -100%;
 }
 li.categoryBar-list-item:nth-child(1) {
-  background: url('https://cdn.jsdelivr.net/npm/akilar-candyassets/image/cover1.webp');
+  background: url('https://git.poker/ELIXsion/pictureck/blob/master/pictureck/30bfd89baffbc736b4b2030b357364d.3ow34g4emm40.webp?raw=true');
 }
 li.categoryBar-list-item:nth-child(2) {
-  background: url('https://cdn.jsdelivr.net/npm/akilar-candyassets/image/cover2.webp');
+  background: url('https://git.poker/ELIXsion/pictureck/blob/master/pictureck/image11.58vckzcglm80.webp?raw=true');
 }
 li.categoryBar-list-item:nth-child(3) {
-  background: url('https://cdn.jsdelivr.net/npm/akilar-candyassets/image/cover6.webp');
+  background: url('https://git.poker/ELIXsion/pictureck/blob/master/pictureck/image13.eoyqe25qujc.webp?raw=true');
 }
 li.categoryBar-list-item:nth-child(4) {
-  background: #abcdef;
+  background: url('https://git.poker/ELIXsion/pictureck/blob/master/pictureck/30bfd89baffbc736b4b2030b357364d.3ow34g4emm40.webp?raw=true');
 }
 li.categoryBar-list-item:nth-child(5) {
-  background: rgba(45,67,89,0.7);
+  background: #abcdef;
 }
 li.categoryBar-list-item:nth-child(6) {
+  background: rgba(45,67,89,0.7);
+}
+li.categoryBar-list-item:nth-child(7) {
   background: -webkit-linear-gradient(rgba(0, 0, 0, 0.4) 25%, rgba(200,16 , 16, 0) 100%);
   background: -moz-linear-gradient(rgba(0, 0, 0, 0.4) 25%, rgba(200,16 , 16, 0) 100%);
   background: -o-linear-gradient(rgba(0, 0, 0, 0.4) 25%, rgba(200,16 , 16, 0) 100%);
   background: -ms-linear-gradient(rgba(0, 0, 0, 0.4) 25%, rgba(200,16 , 16, 0) 100%);
   background: linear-gradient(rgba(0, 0, 0, 0.4) 25%, rgba(200,16 , 16, 0) 100%);
 }
-li.categoryBar-list-item:nth-child(7) {
+li.categoryBar-list-item:nth-child(8) {
   background: url('http://pic.jj20.com/up/allimg/911/100G5120150/15100G20150-6.jpg');
 }
-li.categoryBar-list-item:nth-child(8) {
+li.categoryBar-list-item:nth-child(9) {
   background: url('http://pic.jj20.com/up/allimg/911/100G5120150/15100G20150-6.jpg');
 }
 li.categoryBar-list-item:nth-child(1)>span::after {
