@@ -3305,16 +3305,16 @@ span.categoryBar-list-count::after {
   right: -100%;
 }
 li.categoryBar-list-item:nth-child(1) {
-  background: url('https://git.poker/ELIXsion/pictureck/blob/master/pictureck/30bfd89baffbc736b4b2030b357364d.3ow34g4emm40.webp?raw=true');
+  background: url('https://cdn.staticaly.com/gh/ELIXsion/pictureck@master/pictureck/30bfd89baffbc736b4b2030b357364d.3ow34g4emm40.webp');
 }
 li.categoryBar-list-item:nth-child(2) {
-  background: url('https://git.poker/ELIXsion/pictureck/blob/master/pictureck/image11.58vckzcglm80.webp?raw=true');
+  background: url('https://cdn.staticaly.com/gh/ELIXsion/pictureck@master/image.2c68v1scbwis.webp');
 }
 li.categoryBar-list-item:nth-child(3) {
-  background: url('https://git.poker/ELIXsion/pictureck/blob/master/pictureck/image13.eoyqe25qujc.webp?raw=true');
+  background: url('https://cdn.staticaly.com/gh/ELIXsion/pictureck@master/image.3s42slfwzaa0.webp');
 }
 li.categoryBar-list-item:nth-child(4) {
-  background: url('https://git.poker/ELIXsion/pictureck/blob/master/pictureck/30bfd89baffbc736b4b2030b357364d.3ow34g4emm40.webp?raw=true');
+  background: url('https://cdn.staticaly.com/gh/ELIXsion/pictureck@master/image.1sxjv9y4vmww.webp');
 }
 li.categoryBar-list-item:nth-child(5) {
   background: #abcdef;
@@ -3336,13 +3336,16 @@ li.categoryBar-list-item:nth-child(9) {
   background: url('http://pic.jj20.com/up/allimg/911/100G5120150/15100G20150-6.jpg');
 }
 li.categoryBar-list-item:nth-child(1)>span::after {
-  content: '日常测试' !important;
+  content: '记录' !important;
 }
 li.categoryBar-list-item:nth-child(2)>span::after {
-  content: '学习记录' !important;
+  content: '怀念' !important;
 }
 li.categoryBar-list-item:nth-child(3)>span::after {
-  content: '玩转Win10' !important;
+  content: '回首' !important;
+}
+li.categoryBar-list-item:nth-child(4)>span::after {
+  content: '向前' !important;
 }
 li.categoryBar-list-item {
   width: 32.3% !important;
