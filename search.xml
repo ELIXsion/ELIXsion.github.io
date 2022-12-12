@@ -115,34 +115,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Python学习记录之简单交互（微博热搜）</title>
-    <url>/2022/01/03/Python%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B9%8B%E7%AE%80%E5%8D%95%E4%BA%A4%E4%BA%92%EF%BC%88%E5%BE%AE%E5%8D%9A%E7%83%AD%E6%90%9C%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这次主要通过tkinter进行简单的交互操作，但感觉就目前看来这个功能没啥用处，于是没有深入研究。同时学习了一下更复杂的re正则表达式（虽然这次没用的上）</p>
-<p><a href="https://www.cnblogs.com/CYHISTW/p/11363209.html">python 正则 re模块(详细版) - 风，又奈何 - 博客园 (cnblogs.com)</a></p>
-<h2 id="思路与实践"><a href="#思路与实践" class="headerlink" title="思路与实践"></a>思路与实践</h2><p>研究微博源码的时候发现意外的简单（并不是），以为用requests就可以轻松爬取，但爬取之后却返回了一个错误的源码</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ELIXsion/pictureck@master/pictureck/image.7l0785oyuyg0.webp" alt=""></p>
-<p>大概是微博的身份识别系统吧，经过测试发现在网页滞留几秒之后才能正常进入，于是使用selenium进行操作（requests应该也能做到，以后研究）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Askurl</span>(<span class="params">url</span>):</span></span><br><span class="line">    s = Service(<span class="string">r&quot;E:\python\PyCharm Community Edition 2021.3.1\plugins\python-ce\helpers\typeshed\stubs\selenium\selenium\webdriver\chrome\chromedriver.exe&quot;</span>)</span><br><span class="line">    option = webdriver.ChromeOptions()</span><br><span class="line">    option.add_argument(<span class="string">&#x27;headless&#x27;</span>)  <span class="comment"># 设置option，隐藏弹出的窗口</span></span><br><span class="line">    driver = webdriver.Chrome(service=s,options=option)</span><br><span class="line">    driver.get(url)</span><br><span class="line">    <span class="comment">#这一段可以直接改为time.sleep(6)</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;请等待.....&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">7</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="built_in">str</span>(i) +<span class="string">&quot;/6&quot;</span>)</span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    text = driver.page_source</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></table></figure>
-<p>可以正常获取源码</p>
-<p>通过tkinter添加一个选择框，分别对应三个榜单</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">jh</span>():</span></span><br><span class="line">    root = Tk()</span><br><span class="line">    v = IntVar()</span><br><span class="line">    root.geometry(<span class="string">&#x27;300x100&#x27;</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">selection</span>():</span></span><br><span class="line">        se = <span class="built_in">str</span>(v.get())</span><br><span class="line">        url = <span class="string">&#x27;link&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> se==<span class="string">&#x27;1&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/&#x27;</span></span><br><span class="line">        <span class="keyword">elif</span> se==<span class="string">&#x27;2&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=socialevent&#x27;</span></span><br><span class="line">        <span class="keyword">elif</span> se==<span class="string">&#x27;3&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=entrank&#x27;</span></span><br><span class="line">        Gtedata(url)</span><br><span class="line">        root.destroy()</span><br><span class="line">    Language = [(<span class="string">&#x27;热搜榜&#x27;</span>, <span class="number">1</span>),</span><br><span class="line">                (<span class="string">&#x27;要闻榜&#x27;</span>, <span class="number">2</span>),</span><br><span class="line">                (<span class="string">&#x27;文娱榜&#x27;</span>, <span class="number">3</span>),</span><br><span class="line">                ]</span><br><span class="line">    <span class="keyword">for</span> lang, num <span class="keyword">in</span> Language:</span><br><span class="line">        b = Radiobutton(root, text=lang, variable=v, value=num, indicatoron=<span class="literal">False</span>, padx=<span class="number">30</span>, pady=<span class="number">3</span>,command=selection)</span><br><span class="line">        l = Label(root, textvariable=v)</span><br><span class="line">        b.pack(anchor=W, fill=X)</span><br><span class="line">    mainloop()</span><br></pre></td></tr></table></figure>
-<h4 id="运行结果："><a href="#运行结果：" class="headerlink" title="运行结果："></a>运行结果：</h4><p><img src="https://cdn.staticaly.com/gh/ELIXsion/pictureck@master/pictureck/image.5fobt0rnwzg0.webp" alt=""></p>
-<p><img src="https://cdn.staticaly.com/gh/ELIXsion/pictureck@master/pictureck/image.637t2p2k2zs0.webp" alt=""></p>
-<p>附源码：</p>
-<details class="folding-tag" cyan><summary> 点击展开 </summary>
-              <div class='content'>
-              <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.chrome.service <span class="keyword">import</span> Service</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Askurl</span>(<span class="params">url</span>):</span></span><br><span class="line">    s = Service(<span class="string">r&quot;E:\python\PyCharm Community Edition 2021.3.1\plugins\python-ce\helpers\typeshed\stubs\selenium\selenium\webdriver\chrome\chromedriver.exe&quot;</span>)</span><br><span class="line">    option = webdriver.ChromeOptions()</span><br><span class="line">    option.add_argument(<span class="string">&#x27;headless&#x27;</span>)  <span class="comment"># 设置option</span></span><br><span class="line">    driver = webdriver.Chrome(service=s,options=option)</span><br><span class="line">    driver.get(url)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;请等待.....&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">7</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="built_in">str</span>(i) +<span class="string">&quot;/6&quot;</span>)</span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line">    text = driver.page_source</span><br><span class="line">    <span class="keyword">return</span> text</span><br><span class="line"></span><br><span class="line">datalist = []</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Gtedata</span>(<span class="params">url</span>):</span></span><br><span class="line">    Findtitle = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&quot;&gt;(.*?)&lt;/a&gt;&#x27;</span>)</span><br><span class="line">    Findlink = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;a href=&quot;(.*?)&quot; target=&quot;_blank&quot;&gt;&#x27;</span>)</span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    html=Askurl(url)</span><br><span class="line">    <span class="built_in">print</span>(html)</span><br><span class="line">    soup=BeautifulSoup(html,<span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> soup.find_all(<span class="string">&#x27;td&#x27;</span>,class_=<span class="string">&quot;td-02&quot;</span>):</span><br><span class="line">        data = []</span><br><span class="line">        item = <span class="built_in">str</span>(item)</span><br><span class="line"></span><br><span class="line">        title = re.findall(Findtitle, item)[<span class="number">0</span>]</span><br><span class="line">        data.append(title)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> re.findall(Findlink,item):</span><br><span class="line">            slink = re.findall(Findlink, item)[<span class="number">0</span>]</span><br><span class="line">            link = <span class="string">&#x27;https://s.weibo.com&#x27;</span> + <span class="built_in">str</span>(slink)</span><br><span class="line">            data.append(link)</span><br><span class="line"></span><br><span class="line">        datalist.append(data)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#输出测试</span></span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> datalist:</span><br><span class="line">        <span class="built_in">print</span>(index)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">jh</span>():</span></span><br><span class="line">    root = Tk()</span><br><span class="line">    v = IntVar()</span><br><span class="line">    root.geometry(<span class="string">&#x27;300x100&#x27;</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">selection</span>():</span></span><br><span class="line">        se = <span class="built_in">str</span>(v.get())</span><br><span class="line">        url = <span class="string">&#x27;link&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> se==<span class="string">&#x27;1&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/&#x27;</span></span><br><span class="line">        <span class="keyword">elif</span> se==<span class="string">&#x27;2&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=socialevent&#x27;</span></span><br><span class="line">        <span class="keyword">elif</span> se==<span class="string">&#x27;3&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=entrank&#x27;</span></span><br><span class="line">        Gtedata(url)</span><br><span class="line">        root.destroy()</span><br><span class="line">    Language = [(<span class="string">&#x27;热搜榜&#x27;</span>, <span class="number">1</span>),</span><br><span class="line">                (<span class="string">&#x27;要闻榜&#x27;</span>, <span class="number">2</span>),</span><br><span class="line">                (<span class="string">&#x27;文娱榜&#x27;</span>, <span class="number">3</span>),</span><br><span class="line">                ]</span><br><span class="line">    <span class="keyword">for</span> lang, num <span class="keyword">in</span> Language:</span><br><span class="line">        b = Radiobutton(root, text=lang, variable=v, value=num, indicatoron=<span class="literal">False</span>, padx=<span class="number">30</span>, pady=<span class="number">3</span>,command=selection)</span><br><span class="line">        l = Label(root, textvariable=v)</span><br><span class="line">        b.pack(anchor=W, fill=X)</span><br><span class="line">    mainloop()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    jh()</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-              </div>
-            </details>]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>记录</tag>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Python学习记录之根据关键词筛选（json爬取）</title>
     <url>/2022/01/07/Python%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B9%8B%E6%A0%B9%E6%8D%AE%E5%85%B3%E9%94%AE%E8%AF%8D%E7%AD%9B%E9%80%89%EF%BC%88json%E7%88%AC%E5%8F%96%EF%BC%89/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前几天研究人民网新闻排行榜时发现了一篇文章，当时感觉讲的内容挺多没细看，今天再翻出来感觉讲的特别详细，对于新手的我真是受益匪浅，也解答了我的很多疑惑，主要是爬取网页的json信息，各种头信息的用处，反爬机制和应对办法等等。附链接：<a href="https://blog.csdn.net/wenxuhonghe/article/details/113730696">(133条消息) Python爬虫实战 | 人民网爬虫 根据关键词筛选新闻文章<em>亮出锋芒，剑指苍穹-CSDN博客</em>人民网爬虫</a></p>
@@ -175,6 +147,34 @@
       </tags>
   </entry>
   <entry>
+    <title>Python学习记录之简单交互（微博热搜）</title>
+    <url>/2022/01/03/Python%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B9%8B%E7%AE%80%E5%8D%95%E4%BA%A4%E4%BA%92%EF%BC%88%E5%BE%AE%E5%8D%9A%E7%83%AD%E6%90%9C%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这次主要通过tkinter进行简单的交互操作，但感觉就目前看来这个功能没啥用处，于是没有深入研究。同时学习了一下更复杂的re正则表达式（虽然这次没用的上）</p>
+<p><a href="https://www.cnblogs.com/CYHISTW/p/11363209.html">python 正则 re模块(详细版) - 风，又奈何 - 博客园 (cnblogs.com)</a></p>
+<h2 id="思路与实践"><a href="#思路与实践" class="headerlink" title="思路与实践"></a>思路与实践</h2><p>研究微博源码的时候发现意外的简单（并不是），以为用requests就可以轻松爬取，但爬取之后却返回了一个错误的源码</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ELIXsion/pictureck@master/pictureck/image.7l0785oyuyg0.webp" alt=""></p>
+<p>大概是微博的身份识别系统吧，经过测试发现在网页滞留几秒之后才能正常进入，于是使用selenium进行操作（requests应该也能做到，以后研究）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Askurl</span>(<span class="params">url</span>):</span></span><br><span class="line">    s = Service(<span class="string">r&quot;E:\python\PyCharm Community Edition 2021.3.1\plugins\python-ce\helpers\typeshed\stubs\selenium\selenium\webdriver\chrome\chromedriver.exe&quot;</span>)</span><br><span class="line">    option = webdriver.ChromeOptions()</span><br><span class="line">    option.add_argument(<span class="string">&#x27;headless&#x27;</span>)  <span class="comment"># 设置option，隐藏弹出的窗口</span></span><br><span class="line">    driver = webdriver.Chrome(service=s,options=option)</span><br><span class="line">    driver.get(url)</span><br><span class="line">    <span class="comment">#这一段可以直接改为time.sleep(6)</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;请等待.....&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">7</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="built_in">str</span>(i) +<span class="string">&quot;/6&quot;</span>)</span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    text = driver.page_source</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></table></figure>
+<p>可以正常获取源码</p>
+<p>通过tkinter添加一个选择框，分别对应三个榜单</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">jh</span>():</span></span><br><span class="line">    root = Tk()</span><br><span class="line">    v = IntVar()</span><br><span class="line">    root.geometry(<span class="string">&#x27;300x100&#x27;</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">selection</span>():</span></span><br><span class="line">        se = <span class="built_in">str</span>(v.get())</span><br><span class="line">        url = <span class="string">&#x27;link&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> se==<span class="string">&#x27;1&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/&#x27;</span></span><br><span class="line">        <span class="keyword">elif</span> se==<span class="string">&#x27;2&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=socialevent&#x27;</span></span><br><span class="line">        <span class="keyword">elif</span> se==<span class="string">&#x27;3&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=entrank&#x27;</span></span><br><span class="line">        Gtedata(url)</span><br><span class="line">        root.destroy()</span><br><span class="line">    Language = [(<span class="string">&#x27;热搜榜&#x27;</span>, <span class="number">1</span>),</span><br><span class="line">                (<span class="string">&#x27;要闻榜&#x27;</span>, <span class="number">2</span>),</span><br><span class="line">                (<span class="string">&#x27;文娱榜&#x27;</span>, <span class="number">3</span>),</span><br><span class="line">                ]</span><br><span class="line">    <span class="keyword">for</span> lang, num <span class="keyword">in</span> Language:</span><br><span class="line">        b = Radiobutton(root, text=lang, variable=v, value=num, indicatoron=<span class="literal">False</span>, padx=<span class="number">30</span>, pady=<span class="number">3</span>,command=selection)</span><br><span class="line">        l = Label(root, textvariable=v)</span><br><span class="line">        b.pack(anchor=W, fill=X)</span><br><span class="line">    mainloop()</span><br></pre></td></tr></table></figure>
+<h4 id="运行结果："><a href="#运行结果：" class="headerlink" title="运行结果："></a>运行结果：</h4><p><img src="https://cdn.staticaly.com/gh/ELIXsion/pictureck@master/pictureck/image.5fobt0rnwzg0.webp" alt=""></p>
+<p><img src="https://cdn.staticaly.com/gh/ELIXsion/pictureck@master/pictureck/image.637t2p2k2zs0.webp" alt=""></p>
+<p>附源码：</p>
+<details class="folding-tag" cyan><summary> 点击展开 </summary>
+              <div class='content'>
+              <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.chrome.service <span class="keyword">import</span> Service</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Askurl</span>(<span class="params">url</span>):</span></span><br><span class="line">    s = Service(<span class="string">r&quot;E:\python\PyCharm Community Edition 2021.3.1\plugins\python-ce\helpers\typeshed\stubs\selenium\selenium\webdriver\chrome\chromedriver.exe&quot;</span>)</span><br><span class="line">    option = webdriver.ChromeOptions()</span><br><span class="line">    option.add_argument(<span class="string">&#x27;headless&#x27;</span>)  <span class="comment"># 设置option</span></span><br><span class="line">    driver = webdriver.Chrome(service=s,options=option)</span><br><span class="line">    driver.get(url)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;请等待.....&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">7</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="built_in">str</span>(i) +<span class="string">&quot;/6&quot;</span>)</span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line">    text = driver.page_source</span><br><span class="line">    <span class="keyword">return</span> text</span><br><span class="line"></span><br><span class="line">datalist = []</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Gtedata</span>(<span class="params">url</span>):</span></span><br><span class="line">    Findtitle = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&quot;&gt;(.*?)&lt;/a&gt;&#x27;</span>)</span><br><span class="line">    Findlink = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;a href=&quot;(.*?)&quot; target=&quot;_blank&quot;&gt;&#x27;</span>)</span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    html=Askurl(url)</span><br><span class="line">    <span class="built_in">print</span>(html)</span><br><span class="line">    soup=BeautifulSoup(html,<span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> soup.find_all(<span class="string">&#x27;td&#x27;</span>,class_=<span class="string">&quot;td-02&quot;</span>):</span><br><span class="line">        data = []</span><br><span class="line">        item = <span class="built_in">str</span>(item)</span><br><span class="line"></span><br><span class="line">        title = re.findall(Findtitle, item)[<span class="number">0</span>]</span><br><span class="line">        data.append(title)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> re.findall(Findlink,item):</span><br><span class="line">            slink = re.findall(Findlink, item)[<span class="number">0</span>]</span><br><span class="line">            link = <span class="string">&#x27;https://s.weibo.com&#x27;</span> + <span class="built_in">str</span>(slink)</span><br><span class="line">            data.append(link)</span><br><span class="line"></span><br><span class="line">        datalist.append(data)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#输出测试</span></span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> datalist:</span><br><span class="line">        <span class="built_in">print</span>(index)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">jh</span>():</span></span><br><span class="line">    root = Tk()</span><br><span class="line">    v = IntVar()</span><br><span class="line">    root.geometry(<span class="string">&#x27;300x100&#x27;</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">selection</span>():</span></span><br><span class="line">        se = <span class="built_in">str</span>(v.get())</span><br><span class="line">        url = <span class="string">&#x27;link&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> se==<span class="string">&#x27;1&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/&#x27;</span></span><br><span class="line">        <span class="keyword">elif</span> se==<span class="string">&#x27;2&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=socialevent&#x27;</span></span><br><span class="line">        <span class="keyword">elif</span> se==<span class="string">&#x27;3&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=entrank&#x27;</span></span><br><span class="line">        Gtedata(url)</span><br><span class="line">        root.destroy()</span><br><span class="line">    Language = [(<span class="string">&#x27;热搜榜&#x27;</span>, <span class="number">1</span>),</span><br><span class="line">                (<span class="string">&#x27;要闻榜&#x27;</span>, <span class="number">2</span>),</span><br><span class="line">                (<span class="string">&#x27;文娱榜&#x27;</span>, <span class="number">3</span>),</span><br><span class="line">                ]</span><br><span class="line">    <span class="keyword">for</span> lang, num <span class="keyword">in</span> Language:</span><br><span class="line">        b = Radiobutton(root, text=lang, variable=v, value=num, indicatoron=<span class="literal">False</span>, padx=<span class="number">30</span>, pady=<span class="number">3</span>,command=selection)</span><br><span class="line">        l = Label(root, textvariable=v)</span><br><span class="line">        b.pack(anchor=W, fill=X)</span><br><span class="line">    mainloop()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    jh()</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+              </div>
+            </details>]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>记录</tag>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Python练习之文字提取</title>
     <url>/2022/04/08/Python%E7%BB%83%E4%B9%A0%E4%B9%8B%E6%96%87%E5%AD%97%E6%8F%90%E5%8F%96/</url>
     <content><![CDATA[<p>最近对明日方舟剧情很感兴趣，但游戏终有关服的一天，把剧情文本搞到本地才有安全感。于是到网上找到相关剧情，发现要么不能复制，要么会复制到奇怪的东西，反正都是麻烦，索性就用爬虫给爬下来了。</p>
@@ -195,85 +195,6 @@
       <tags>
         <tag>记录</tag>
         <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>butterfly使用记录（一直在更新）</title>
-    <url>/2021/10/12/butterfly%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<p> 刚开始建设博客，很多功能都不明白，记录一下常用的代码。（没有特殊说明均为主题配置文件下修改）</p>
-<p>日后：好乱啊，找个时间整理一下</p>
-<h1 id="美化相关"><a href="#美化相关" class="headerlink" title="美化相关"></a>美化相关</h1><p><strong>修改网站背景：background: url(/mysource/mainbg.png))</strong></p>
-<p>【mysource是在themes\butterfly\source下建立的文件夹用来存储个人资源，直接放在source下更新butterfly时可能被覆盖】</p>
-<p>（若使用网络链接，需要用 url(网址) 格式）</p>
-<p><strong>修改顶部图占比：index_top_img_height</strong></p>
-<p><strong>修改主页顶部图：index_img</strong></p>
-<p>（若使用网络连接，直接添加网址即可）</p>
-<p><strong>菜单子页面透明：archive_img: rgba(255,255,255,0.2)</strong></p>
-<p>（也可以改成其他图片，直接写链接即可；）</p>
-<p>其中tags页和category页需要在各自md文件中修改</p>
-<p><strong>打字效果（色彩，抖动）activate_power_mode</strong></p>
-<p><strong>鼠标点击效果：Mouse click effects</strong></p>
-<p><strong>背景动效：canvas_nest</strong></p>
-<p><strong>字体：<a href="https://akilar.top/posts/ebf20e02/">Custom Beautify | Akilar の糖果屋</a></strong></p>
-<p>这里面还有很多魔改美化内容</p>
-<p><strong>卡片背景透明化：<a href="https://www.cnblogs.com/MoYu-zc/p/14397889.html">Hexo之更换背景及透明度 - MoYu-zc - 博客园 (cnblogs.com)</a></strong></p>
-<details class="folding-tag" ><summary> 订正 </summary>
-              <div class='content'>
-              <p>文章里css引用可以直接在主题配置文件里面进行，不需要另外新建一个butterfly.yml</p><p>意思就是直接把</p><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/css/mycss.css&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure><p>插到主题配置文件的inject里</p>
-              </div>
-            </details>
-<p>版权板块美化：<a href="https://www.nesxc.com/post/hexocc.html">butterfly版权美化教程 | 小N博客 (nesxc.com)</a></p>
-<p>使用新字体：</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">font</span> <span class="attr">face</span>=<span class="string">&quot;新字体文件名（无需后缀）&quot;</span>&gt;</span></span><span class="xml"><span class="tag">&lt;/<span class="name">font</span>&gt;</span></span>  //直接在markdown中使用</span><br></pre></td></tr></table></figure>
-<h1 id="功能相关"><a href="#功能相关" class="headerlink" title="功能相关"></a>功能相关</h1><p><strong>添加顶部轮播图：<a href="https://akilar.top/posts/8e1264d1/">Swiper Bar | Akilarの糖果屋</a></strong></p>
-<p>在博文配置项添加   swiper_index: 1</p>
-<p><strong>评论区：gitalk（多种方式可选）</strong></p>
-<p>注意：gitalk配置到butterfly中，repo填  仓库名.github.io</p>
-<p><strong>主题分类磁贴：参考<a href="https://akilar.top/posts/a9131002/">Butterfly主题美化日记 | Akilarの糖果屋</a></strong></p>
-<p><strong>vercel提供加速：<a href="https://vercel.com">Dashboard – Vercel</a></strong></p>
-<p>（一开始遇到了vercel不能和github同步的问题，此时应该到vercel项目中setting-git-Production Branch中检查默认分支是否为master（或自己设置的默认主分支））</p>
-<p><strong>说说配置：建议参考<a href="https://blog.csdn.net/cungudafa/article/details/105938885">(82条消息) hexo（butterfly）添加说说页面（Artitalk可在线发布）_cungudafa的博客-CSDN博客</a></strong></p>
-<p>真的太折磨了，按照官方文档来做不知道为什么修改不了页面显示（会直接单独建立一个html），感觉默认的很丑。。。。于是按照上文大佬的教程直接在md文件里配置说说了。。。。</p>
-<p><strong>时钟：<a href="https://akilar.top/posts/4e39cf4a/">Butterfly主题美化日记 | Akilarの糖果屋</a></strong></p>
-<p>出奇的，没出现任何问题就搞好了。。。。</p>
-<p><strong>图床：<a href="https://picx.xpoet.cn/#/config">图床配置 | PicX 图床神器 (xpoet.cn)</a>网页里有教程，实际就是用github</strong></p>
-<p><strong>首页导航页面</strong>：<a href="https://github.com/NianBroken/Personal_Sakura_Guide_Page">NianBroken/Personal_Sakura_Guide_Page: 一款好看的樱花个人引导页，基于Dimension的二次修改。普通虚拟主机即可搭建，无需其他环境。把源码上传到服务器，修改index.html里面的代码，访问域名就可以使用。纯Html-Css-JavaScript (github.com)</a></p>
-<p><strong>桌宠（大概是功能？）：见下一篇博客</strong></p>
-<p><strong>各界面的透明度设置</strong>：配置路径：Blog\themes\butterfly\source\css\mycss.css</p>
-<p>参考教程：<a href="https://yl1010code.gitee.io/2021/10/04/Butterfly%E9%80%8F%E6%98%8E%E8%83%8C%E6%99%AF%E8%AE%BE%E7%BD%AE/">Butterfly 透明背景设置 | LY’s Blog (gitee.io)</a></p>
-<p><strong>文章密码</strong>：在文章md头文件添加：</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">password: 密码</span><br><span class="line">theme: xray       //可选主题：default/blink/shrink/flip/up/surge/wave/xray</span><br><span class="line">description: 有东西被加密了, 请输入密码查看.</span><br><span class="line">message: 您好, 这里需要密码.</span><br><span class="line">wrong<span class="emphasis">_pass_</span>message: 抱歉, 这个密码看着不太对, 请再试试.</span><br><span class="line">wrong<span class="emphasis">_hash_</span>message: 抱歉, 这个文章不能被校验, 不过您还是能看看解密后的内容.</span><br></pre></td></tr></table></figure>
-<p>音乐播放器（单曲）：</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&#123;% meting &quot;3986040&quot; &quot;netease&quot; &quot;song&quot; &quot;theme:#e6d0b2&quot; &quot;mutex:true&quot; &quot;listmaxheight:340px&quot; &quot;preload:auto&quot; %&#125;</span><br></pre></td></tr></table></figure>
-<p>音乐播放器（歌单）：</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&#123;% meting &quot;7642168633&quot; &quot;tencent&quot; &quot;playlist&quot; &quot;autoplay&quot; &quot;mutex:false&quot; &quot;listmaxheight:340px&quot; &quot;preload:none&quot; &quot;theme:#b4a7d6&quot;%&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="底部栏透明化"><a href="#底部栏透明化" class="headerlink" title="底部栏透明化"></a>底部栏透明化</h1><p>初始底部栏是蓝色的，更改网页背景后显得很突兀，难受我很久了却不知道怎么改。。。。</p>
-<p>解决方法：博客根目录\themes\butterfly\source\css_layout\footer.stly 将 background: $light-blue注释掉即可透明化，也可以改成其他颜色</p>
-]]></content>
-      <categories>
-        <category>记录</category>
-      </categories>
-      <tags>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>butterfly配置valine/twikoo评论区不能正常显示的问题</title>
-    <url>/2021/10/17/butterfly%E9%85%8D%E7%BD%AEvaline-twikoo%E8%AF%84%E8%AE%BA%E5%8C%BA%E4%B8%8D%E8%83%BDc%E6%AD%A3%E5%B8%B8%E6%98%BE%E7%A4%BA%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>今天想再配置一个评论区（gitalk有时候实在是太慢了），但按照教程配置完毕之后总是不能正常显示</p>
-
-<p>在网上找不到类似的案例，折腾了一下午都没有结果。。。</p>
-<p>最后发现原因是在butterfly中引用评论区的首字母要大写（如图）</p>
-
-<p>修改之后顺利解决。</p>
-<p>如果出现类似问题，也要考虑是不是功能调用错误。</p>
-<p><strong>好吧，果然还是我太菜了。</strong></p>
-]]></content>
-      <categories>
-        <category>记录</category>
-      </categories>
-      <tags>
-        <tag>记录</tag>
       </tags>
   </entry>
   <entry>
@@ -408,6 +329,66 @@
       </tags>
   </entry>
   <entry>
+    <title>butterfly使用记录（一直在更新）</title>
+    <url>/2021/10/12/butterfly%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<p> 刚开始建设博客，很多功能都不明白，记录一下常用的代码。（没有特殊说明均为主题配置文件下修改）</p>
+<p>日后：好乱啊，找个时间整理一下</p>
+<h1 id="美化相关"><a href="#美化相关" class="headerlink" title="美化相关"></a>美化相关</h1><p><strong>修改网站背景：background: url(/mysource/mainbg.png))</strong></p>
+<p>【mysource是在themes\butterfly\source下建立的文件夹用来存储个人资源，直接放在source下更新butterfly时可能被覆盖】</p>
+<p>（若使用网络链接，需要用 url(网址) 格式）</p>
+<p><strong>修改顶部图占比：index_top_img_height</strong></p>
+<p><strong>修改主页顶部图：index_img</strong></p>
+<p>（若使用网络连接，直接添加网址即可）</p>
+<p><strong>菜单子页面透明：archive_img: rgba(255,255,255,0.2)</strong></p>
+<p>（也可以改成其他图片，直接写链接即可；）</p>
+<p>其中tags页和category页需要在各自md文件中修改</p>
+<p><strong>打字效果（色彩，抖动）activate_power_mode</strong></p>
+<p><strong>鼠标点击效果：Mouse click effects</strong></p>
+<p><strong>背景动效：canvas_nest</strong></p>
+<p><strong>字体：<a href="https://akilar.top/posts/ebf20e02/">Custom Beautify | Akilar の糖果屋</a></strong></p>
+<p>这里面还有很多魔改美化内容</p>
+<p><strong>卡片背景透明化：<a href="https://www.cnblogs.com/MoYu-zc/p/14397889.html">Hexo之更换背景及透明度 - MoYu-zc - 博客园 (cnblogs.com)</a></strong></p>
+<details class="folding-tag" ><summary> 订正 </summary>
+              <div class='content'>
+              <p>文章里css引用可以直接在主题配置文件里面进行，不需要另外新建一个butterfly.yml</p><p>意思就是直接把</p><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/css/mycss.css&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure><p>插到主题配置文件的inject里</p>
+              </div>
+            </details>
+<p>版权板块美化：<a href="https://www.nesxc.com/post/hexocc.html">butterfly版权美化教程 | 小N博客 (nesxc.com)</a></p>
+<p>使用新字体：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">font</span> <span class="attr">face</span>=<span class="string">&quot;新字体文件名（无需后缀）&quot;</span>&gt;</span></span><span class="xml"><span class="tag">&lt;/<span class="name">font</span>&gt;</span></span>  //直接在markdown中使用</span><br></pre></td></tr></table></figure>
+<h1 id="功能相关"><a href="#功能相关" class="headerlink" title="功能相关"></a>功能相关</h1><p><strong>添加顶部轮播图：<a href="https://akilar.top/posts/8e1264d1/">Swiper Bar | Akilarの糖果屋</a></strong></p>
+<p>在博文配置项添加   swiper_index: 1</p>
+<p><strong>评论区：gitalk（多种方式可选）</strong></p>
+<p>注意：gitalk配置到butterfly中，repo填  仓库名.github.io</p>
+<p><strong>主题分类磁贴：参考<a href="https://akilar.top/posts/a9131002/">Butterfly主题美化日记 | Akilarの糖果屋</a></strong></p>
+<p><strong>vercel提供加速：<a href="https://vercel.com">Dashboard – Vercel</a></strong></p>
+<p>（一开始遇到了vercel不能和github同步的问题，此时应该到vercel项目中setting-git-Production Branch中检查默认分支是否为master（或自己设置的默认主分支））</p>
+<p><strong>说说配置：建议参考<a href="https://blog.csdn.net/cungudafa/article/details/105938885">(82条消息) hexo（butterfly）添加说说页面（Artitalk可在线发布）_cungudafa的博客-CSDN博客</a></strong></p>
+<p>真的太折磨了，按照官方文档来做不知道为什么修改不了页面显示（会直接单独建立一个html），感觉默认的很丑。。。。于是按照上文大佬的教程直接在md文件里配置说说了。。。。</p>
+<p><strong>时钟：<a href="https://akilar.top/posts/4e39cf4a/">Butterfly主题美化日记 | Akilarの糖果屋</a></strong></p>
+<p>出奇的，没出现任何问题就搞好了。。。。</p>
+<p><strong>图床：<a href="https://picx.xpoet.cn/#/config">图床配置 | PicX 图床神器 (xpoet.cn)</a>网页里有教程，实际就是用github</strong></p>
+<p><strong>首页导航页面</strong>：<a href="https://github.com/NianBroken/Personal_Sakura_Guide_Page">NianBroken/Personal_Sakura_Guide_Page: 一款好看的樱花个人引导页，基于Dimension的二次修改。普通虚拟主机即可搭建，无需其他环境。把源码上传到服务器，修改index.html里面的代码，访问域名就可以使用。纯Html-Css-JavaScript (github.com)</a></p>
+<p><strong>桌宠（大概是功能？）：见下一篇博客</strong></p>
+<p><strong>各界面的透明度设置</strong>：配置路径：Blog\themes\butterfly\source\css\mycss.css</p>
+<p>参考教程：<a href="https://yl1010code.gitee.io/2021/10/04/Butterfly%E9%80%8F%E6%98%8E%E8%83%8C%E6%99%AF%E8%AE%BE%E7%BD%AE/">Butterfly 透明背景设置 | LY’s Blog (gitee.io)</a></p>
+<p><strong>文章密码</strong>：在文章md头文件添加：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">password: 密码</span><br><span class="line">theme: xray       //可选主题：default/blink/shrink/flip/up/surge/wave/xray</span><br><span class="line">description: 有东西被加密了, 请输入密码查看.</span><br><span class="line">message: 您好, 这里需要密码.</span><br><span class="line">wrong<span class="emphasis">_pass_</span>message: 抱歉, 这个密码看着不太对, 请再试试.</span><br><span class="line">wrong<span class="emphasis">_hash_</span>message: 抱歉, 这个文章不能被校验, 不过您还是能看看解密后的内容.</span><br></pre></td></tr></table></figure>
+<p>音乐播放器（单曲）：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&#123;% meting &quot;3986040&quot; &quot;netease&quot; &quot;song&quot; &quot;theme:#e6d0b2&quot; &quot;mutex:true&quot; &quot;listmaxheight:340px&quot; &quot;preload:auto&quot; %&#125;</span><br></pre></td></tr></table></figure>
+<p>音乐播放器（歌单）：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&#123;% meting &quot;7642168633&quot; &quot;tencent&quot; &quot;playlist&quot; &quot;autoplay&quot; &quot;mutex:false&quot; &quot;listmaxheight:340px&quot; &quot;preload:none&quot; &quot;theme:#b4a7d6&quot;%&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="底部栏透明化"><a href="#底部栏透明化" class="headerlink" title="底部栏透明化"></a>底部栏透明化</h1><p>初始底部栏是蓝色的，更改网页背景后显得很突兀，难受我很久了却不知道怎么改。。。。</p>
+<p>解决方法：博客根目录\themes\butterfly\source\css_layout\footer.stly 将 background: $light-blue注释掉即可透明化，也可以改成其他颜色</p>
+]]></content>
+      <categories>
+        <category>记录</category>
+      </categories>
+      <tags>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>python学习记录（一）</title>
     <url>/2021/12/30/python%E4%BB%8E%E9%9B%B6%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>以前曾经接触过python这门语言，对它极高的简洁性和可读性印象深刻。也做过一些小的爬虫程序，但是经过一年的时间已经遗忘殆尽了，于是想通过博客来记录一下第二次学习的过程和自己的理解，加深印象同时备忘。刚开始接触可能有很多错误，但编程不就是在bug中不断进步吗（</p>
@@ -471,6 +452,241 @@
       <tags>
         <tag>记录</tag>
         <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>新闻</title>
+    <url>/2022/01/05/rmw/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>标题</th>
+<th>链接</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>大江奔涌绘宏图</td>
+<td><a href="http://politics.people.com.cn/n1/2022/0105/c1001-32323985.html">http://politics.people.com.cn/n1/2022/0105/c1001-32323985.html</a></td>
+</tr>
+<tr>
+<td>《壬寅年》特种邮票今日首发</td>
+<td><a href="http://ent.people.com.cn/n1/2022/0105/c1012-32324705.html">http://ent.people.com.cn/n1/2022/0105/c1012-32324705.html</a></td>
+</tr>
+<tr>
+<td>北京冬奥会倒计时一个月—这些冬奥项目你都get了吗？</td>
+<td><a href="http://ent.people.com.cn/n1/2022/0105/c1012-32324181.html">http://ent.people.com.cn/n1/2022/0105/c1012-32324181.html</a></td>
+</tr>
+<tr>
+<td>民航局对多个入境航班发出熔断指令 要求11家航司做好机票退改等工作</td>
+<td><a href="http://ent.people.com.cn/n1/2022/0105/c1012-32324452.html">http://ent.people.com.cn/n1/2022/0105/c1012-32324452.html</a></td>
+</tr>
+<tr>
+<td>北京冬奥会倒计时一个月—中国已获173个参赛席位</td>
+<td><a href="http://ent.people.com.cn/n1/2022/0105/c1012-32324204.html">http://ent.people.com.cn/n1/2022/0105/c1012-32324204.html</a></td>
+</tr>
+<tr>
+<td>人民网评：向算法“技术霸凌”说不</td>
+<td><a href="http://opinion.people.com.cn/n1/2022/0105/c223228-32324462.html">http://opinion.people.com.cn/n1/2022/0105/c223228-32324462.html</a></td>
+</tr>
+<tr>
+<td>元旦各省份旅游收入排行出炉：“旅游+”新玩法点亮寒冬</td>
+<td><a href="http://ent.people.com.cn/n1/2022/0105/c1012-32324571.html">http://ent.people.com.cn/n1/2022/0105/c1012-32324571.html</a></td>
+</tr>
+<tr>
+<td>“民之所忧，我必念之；民之所盼，我必行之”（人民论坛）</td>
+<td><a href="http://opinion.people.com.cn/n1/2022/0105/c1003-32323996.html">http://opinion.people.com.cn/n1/2022/0105/c1003-32323996.html</a></td>
+</tr>
+<tr>
+<td>福建厦门：新机场项目全面开工</td>
+<td><a href="http://pic.people.com.cn/n1/2022/0105/c1016-32324132.html">http://pic.people.com.cn/n1/2022/0105/c1016-32324132.html</a></td>
+</tr>
+<tr>
+<td>习近平签署中央军委2022年1号命令 向全军发布开训动员令</td>
+<td><a href="http://military.people.com.cn/n1/2022/0105/c1011-32324463.html">http://military.people.com.cn/n1/2022/0105/c1011-32324463.html</a></td>
+</tr>
+<tr>
+<td>《改变中国的力量》之人民至上篇：让每一双手都成为致富之手</td>
+<td><a href="http://theory.people.com.cn/n1/2022/0105/c40531-32324284.html">http://theory.people.com.cn/n1/2022/0105/c40531-32324284.html</a></td>
+</tr>
+<tr>
+<td>持续深入学习宣传党的十九届六中全会精神 激励干部群众满怀信心奋进新征程建功新时代</td>
+<td><a href="http://cpc.people.com.cn/n1/2022/0105/c64094-32324091.html">http://cpc.people.com.cn/n1/2022/0105/c64094-32324091.html</a></td>
+</tr>
+<tr>
+<td>坚决制止借“网红儿童”牟利（人民时评）</td>
+<td><a href="http://opinion.people.com.cn/n1/2022/0105/c1003-32324002.html">http://opinion.people.com.cn/n1/2022/0105/c1003-32324002.html</a></td>
+</tr>
+<tr>
+<td>书写构建人类命运共同体的新篇章</td>
+<td><a href="http://opinion.people.com.cn/n1/2022/0105/c1003-32323983.html">http://opinion.people.com.cn/n1/2022/0105/c1003-32323983.html</a></td>
+</tr>
+<tr>
+<td>深刻认识“两个确立”的重要意义</td>
+<td><a href="http://dangjian.people.com.cn/n1/2022/0105/c117092-32324387.html">http://dangjian.people.com.cn/n1/2022/0105/c117092-32324387.html</a></td>
+</tr>
+<tr>
+<td>贵州余庆：椪柑喜获丰收</td>
+<td><a href="http://pic.people.com.cn/n1/2022/0105/c1016-32324417.html">http://pic.people.com.cn/n1/2022/0105/c1016-32324417.html</a></td>
+</tr>
+<tr>
+<td>习近平在北京考察2022年冬奥会、冬残奥会筹办备赛工作</td>
+<td><a href="http://pic.people.com.cn/n1/2022/0105/c426981-32324707.html">http://pic.people.com.cn/n1/2022/0105/c426981-32324707.html</a></td>
+</tr>
+<tr>
+<td>西安：中医药助力新冠肺炎预防救治</td>
+<td><a href="http://pic.people.com.cn/n1/2022/0105/c1016-32324119.html">http://pic.people.com.cn/n1/2022/0105/c1016-32324119.html</a></td>
+</tr>
+<tr>
+<td>为维持“白富美”人设 挪用公款近千万</td>
+<td><a href="http://fanfu.people.com.cn/n1/2022/0105/c64371-32324354.html">http://fanfu.people.com.cn/n1/2022/0105/c64371-32324354.html</a></td>
+</tr>
+<tr>
+<td>人民网评：进一步保障网络安全和数据安全</td>
+<td><a href="http://opinion.people.com.cn/n1/2022/0105/c223228-32324079.html">http://opinion.people.com.cn/n1/2022/0105/c223228-32324079.html</a></td>
+</tr>
+<tr>
+<td>关于2016-2020年全国党史和文献部门优秀科研成果拟获奖名单的公示</td>
+<td><a href="http://www.dswxyjy.org.cn/n1/2022/0105/c427276-32324771.html">http://www.dswxyjy.org.cn/n1/2022/0105/c427276-32324771.html</a></td>
+</tr>
+<tr>
+<td>着力打造政治过硬具备领导现代化建设能力的领导班子和干部队伍</td>
+<td><a href="http://renshi.people.com.cn/n1/2022/0105/c139617-32324357.html">http://renshi.people.com.cn/n1/2022/0105/c139617-32324357.html</a></td>
+</tr>
+<tr>
+<td>持续深入学习宣传党的十九届六中全会精神 激励干部群众满怀信心奋进新征程建功新时代</td>
+<td><a href="http://dangshi.people.com.cn/n1/2022/0105/c436975-32324105.html">http://dangshi.people.com.cn/n1/2022/0105/c436975-32324105.html</a></td>
+</tr>
+<tr>
+<td>《壬寅年》特种邮票发行</td>
+<td><a href="http://pic.people.com.cn/n1/2022/0105/c1016-32324619.html">http://pic.people.com.cn/n1/2022/0105/c1016-32324619.html</a></td>
+</tr>
+<tr>
+<td>中国共产党纪律检查委员会工作条例</td>
+<td><a href="http://politics.people.com.cn/n1/2022/0105/c1001-32323981.html">http://politics.people.com.cn/n1/2022/0105/c1001-32323981.html</a></td>
+</tr>
+<tr>
+<td>中国共产党纪律检查委员会工作条例</td>
+<td><a href="http://politics.people.com.cn/n1/2022/0105/c1001-32323997.html">http://politics.people.com.cn/n1/2022/0105/c1001-32323997.html</a></td>
+</tr>
+<tr>
+<td>三堂会审 — 纵容涉黑组织哪些情形为“情节严重” 从广西梧州市人大常委会原委员朱钢案说起</td>
+<td><a href="http://fanfu.people.com.cn/n1/2022/0105/c64371-32324348.html">http://fanfu.people.com.cn/n1/2022/0105/c64371-32324348.html</a></td>
+</tr>
+<tr>
+<td>美国新冠肺炎确诊5680万 上周平均每天672名儿童住院治疗</td>
+<td><a href="http://world.people.com.cn/n1/2022/0105/c1002-32324133.html">http://world.people.com.cn/n1/2022/0105/c1002-32324133.html</a></td>
+</tr>
+<tr>
+<td>让“躺平”者无处遁形</td>
+<td><a href="http://renshi.people.com.cn/n1/2022/0105/c139617-32324366.html">http://renshi.people.com.cn/n1/2022/0105/c139617-32324366.html</a></td>
+</tr>
+<tr>
+<td>深入贯彻习近平总书记重要讲话重要指示精神 巩固拓展党史学习教育成果 为吉林振兴注入新动能</td>
+<td><a href="http://dangshi.people.com.cn/n1/2022/0105/c436975-32324532.html">http://dangshi.people.com.cn/n1/2022/0105/c436975-32324532.html</a></td>
+</tr>
+<tr>
+<td>外交部：立陶宛认识到错误是正确的一步</td>
+<td><a href="http://world.people.com.cn/n1/2022/0105/c1002-32324814.html">http://world.people.com.cn/n1/2022/0105/c1002-32324814.html</a></td>
+</tr>
+<tr>
+<td>礼赞百年风华 谱写时代新篇</td>
+<td><a href="http://dangshi.people.com.cn/n1/2022/0105/c436975-32324102.html">http://dangshi.people.com.cn/n1/2022/0105/c436975-32324102.html</a></td>
+</tr>
+<tr>
+<td>向全军发布开训动员令</td>
+<td><a href="http://cpc.people.com.cn/n1/2022/0105/c64094-32324070.html">http://cpc.people.com.cn/n1/2022/0105/c64094-32324070.html</a></td>
+</tr>
+<tr>
+<td>持续深入学习宣传党的十九届六中全会精神 激励干部群众满怀信心奋进新征程建功新时代</td>
+<td><a href="http://politics.people.com.cn/n1/2022/0105/c1001-32323994.html">http://politics.people.com.cn/n1/2022/0105/c1001-32323994.html</a></td>
+</tr>
+<tr>
+<td>这个五年规划关系“米袋子”“菜篮子”“水缸子”安全</td>
+<td><a href="http://finance.people.com.cn/n1/2022/0105/c1004-32324371.html">http://finance.people.com.cn/n1/2022/0105/c1004-32324371.html</a></td>
+</tr>
+<tr>
+<td>世界同期待——写在北京冬奥会开幕倒计时一个月之际</td>
+<td><a href="http://pic.people.com.cn/n1/2022/0105/c1016-32324331.html">http://pic.people.com.cn/n1/2022/0105/c1016-32324331.html</a></td>
+</tr>
+<tr>
+<td>罗永：数次生死交锋 始终冲在救援第一线</td>
+<td><a href="http://society.people.com.cn/n1/2022/0105/c1008-32324267.html">http://society.people.com.cn/n1/2022/0105/c1008-32324267.html</a></td>
+</tr>
+<tr>
+<td>土耳其伊沙克帕夏宫冬日静美</td>
+<td><a href="http://world.people.com.cn/n1/2022/0105/c1002-32324121.html">http://world.people.com.cn/n1/2022/0105/c1002-32324121.html</a></td>
+</tr>
+<tr>
+<td>践行全过程民主 基层治理添活力（“牢记初心使命 走好新的赶考路”大家谈）</td>
+<td><a href="http://politics.people.com.cn/n1/2022/0105/c1001-32324019.html">http://politics.people.com.cn/n1/2022/0105/c1001-32324019.html</a></td>
+</tr>
+<tr>
+<td>不吸烟的人也会得肺癌？这一致病元凶千万要注意</td>
+<td><a href="http://lxjk.people.cn/n1/2022/0105/c404177-32324218.html">http://lxjk.people.cn/n1/2022/0105/c404177-32324218.html</a></td>
+</tr>
+<tr>
+<td>2022年首次普高学业水平合格性考试今天开考</td>
+<td><a href="http://edu.people.com.cn/n1/2022/0105/c1006-32324253.html">http://edu.people.com.cn/n1/2022/0105/c1006-32324253.html</a></td>
+</tr>
+<tr>
+<td>美国俄亥俄州日出风光美如画</td>
+<td><a href="http://world.people.com.cn/n1/2022/0105/c1002-32324151.html">http://world.people.com.cn/n1/2022/0105/c1002-32324151.html</a></td>
+</tr>
+<tr>
+<td>新修订科技进步法迎来哪些重大变化</td>
+<td><a href="http://finance.people.com.cn/n1/2022/0105/c1004-32324427.html">http://finance.people.com.cn/n1/2022/0105/c1004-32324427.html</a></td>
+</tr>
+<tr>
+<td>礼赞百年风华 谱写时代新篇</td>
+<td><a href="http://politics.people.com.cn/n1/2022/0105/c1001-32323982.html">http://politics.people.com.cn/n1/2022/0105/c1001-32323982.html</a></td>
+</tr>
+<tr>
+<td>书写新时代重大课题的优异答卷</td>
+<td><a href="http://theory.people.com.cn/n1/2022/0105/c40531-32324142.html">http://theory.people.com.cn/n1/2022/0105/c40531-32324142.html</a></td>
+</tr>
+<tr>
+<td>北京冬奥会火炬开始在黑龙江省进行展示</td>
+<td><a href="http://pic.people.com.cn/n1/2022/0105/c1016-32324823.html">http://pic.people.com.cn/n1/2022/0105/c1016-32324823.html</a></td>
+</tr>
+<tr>
+<td>“中国经济具有巨大发展空间”</td>
+<td><a href="http://world.people.com.cn/n1/2022/0105/c1002-32323991.html">http://world.people.com.cn/n1/2022/0105/c1002-32323991.html</a></td>
+</tr>
+<tr>
+<td>网商银行：签约涉农县区数量占全国总数近一半</td>
+<td><a href="http://finance.people.com.cn/n1/2022/0105/c1004-32324740.html">http://finance.people.com.cn/n1/2022/0105/c1004-32324740.html</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>新闻</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>butterfly配置valine/twikoo评论区不能正常显示的问题</title>
+    <url>/2021/10/17/butterfly%E9%85%8D%E7%BD%AEvaline-twikoo%E8%AF%84%E8%AE%BA%E5%8C%BA%E4%B8%8D%E8%83%BDc%E6%AD%A3%E5%B8%B8%E6%98%BE%E7%A4%BA%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>今天想再配置一个评论区（gitalk有时候实在是太慢了），但按照教程配置完毕之后总是不能正常显示</p>
+
+<p>在网上找不到类似的案例，折腾了一下午都没有结果。。。</p>
+<p>最后发现原因是在butterfly中引用评论区的首字母要大写（如图）</p>
+
+<p>修改之后顺利解决。</p>
+<p>如果出现类似问题，也要考虑是不是功能调用错误。</p>
+<p><strong>好吧，果然还是我太菜了。</strong></p>
+]]></content>
+      <categories>
+        <category>记录</category>
+      </categories>
+      <tags>
+        <tag>记录</tag>
       </tags>
   </entry>
   <entry>
@@ -921,219 +1137,24 @@
       </tags>
   </entry>
   <entry>
-    <title>新闻</title>
-    <url>/2022/01/05/rmw/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>标题</th>
-<th>链接</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>大江奔涌绘宏图</td>
-<td><a href="http://politics.people.com.cn/n1/2022/0105/c1001-32323985.html">http://politics.people.com.cn/n1/2022/0105/c1001-32323985.html</a></td>
-</tr>
-<tr>
-<td>《壬寅年》特种邮票今日首发</td>
-<td><a href="http://ent.people.com.cn/n1/2022/0105/c1012-32324705.html">http://ent.people.com.cn/n1/2022/0105/c1012-32324705.html</a></td>
-</tr>
-<tr>
-<td>北京冬奥会倒计时一个月—这些冬奥项目你都get了吗？</td>
-<td><a href="http://ent.people.com.cn/n1/2022/0105/c1012-32324181.html">http://ent.people.com.cn/n1/2022/0105/c1012-32324181.html</a></td>
-</tr>
-<tr>
-<td>民航局对多个入境航班发出熔断指令 要求11家航司做好机票退改等工作</td>
-<td><a href="http://ent.people.com.cn/n1/2022/0105/c1012-32324452.html">http://ent.people.com.cn/n1/2022/0105/c1012-32324452.html</a></td>
-</tr>
-<tr>
-<td>北京冬奥会倒计时一个月—中国已获173个参赛席位</td>
-<td><a href="http://ent.people.com.cn/n1/2022/0105/c1012-32324204.html">http://ent.people.com.cn/n1/2022/0105/c1012-32324204.html</a></td>
-</tr>
-<tr>
-<td>人民网评：向算法“技术霸凌”说不</td>
-<td><a href="http://opinion.people.com.cn/n1/2022/0105/c223228-32324462.html">http://opinion.people.com.cn/n1/2022/0105/c223228-32324462.html</a></td>
-</tr>
-<tr>
-<td>元旦各省份旅游收入排行出炉：“旅游+”新玩法点亮寒冬</td>
-<td><a href="http://ent.people.com.cn/n1/2022/0105/c1012-32324571.html">http://ent.people.com.cn/n1/2022/0105/c1012-32324571.html</a></td>
-</tr>
-<tr>
-<td>“民之所忧，我必念之；民之所盼，我必行之”（人民论坛）</td>
-<td><a href="http://opinion.people.com.cn/n1/2022/0105/c1003-32323996.html">http://opinion.people.com.cn/n1/2022/0105/c1003-32323996.html</a></td>
-</tr>
-<tr>
-<td>福建厦门：新机场项目全面开工</td>
-<td><a href="http://pic.people.com.cn/n1/2022/0105/c1016-32324132.html">http://pic.people.com.cn/n1/2022/0105/c1016-32324132.html</a></td>
-</tr>
-<tr>
-<td>习近平签署中央军委2022年1号命令 向全军发布开训动员令</td>
-<td><a href="http://military.people.com.cn/n1/2022/0105/c1011-32324463.html">http://military.people.com.cn/n1/2022/0105/c1011-32324463.html</a></td>
-</tr>
-<tr>
-<td>《改变中国的力量》之人民至上篇：让每一双手都成为致富之手</td>
-<td><a href="http://theory.people.com.cn/n1/2022/0105/c40531-32324284.html">http://theory.people.com.cn/n1/2022/0105/c40531-32324284.html</a></td>
-</tr>
-<tr>
-<td>持续深入学习宣传党的十九届六中全会精神 激励干部群众满怀信心奋进新征程建功新时代</td>
-<td><a href="http://cpc.people.com.cn/n1/2022/0105/c64094-32324091.html">http://cpc.people.com.cn/n1/2022/0105/c64094-32324091.html</a></td>
-</tr>
-<tr>
-<td>坚决制止借“网红儿童”牟利（人民时评）</td>
-<td><a href="http://opinion.people.com.cn/n1/2022/0105/c1003-32324002.html">http://opinion.people.com.cn/n1/2022/0105/c1003-32324002.html</a></td>
-</tr>
-<tr>
-<td>书写构建人类命运共同体的新篇章</td>
-<td><a href="http://opinion.people.com.cn/n1/2022/0105/c1003-32323983.html">http://opinion.people.com.cn/n1/2022/0105/c1003-32323983.html</a></td>
-</tr>
-<tr>
-<td>深刻认识“两个确立”的重要意义</td>
-<td><a href="http://dangjian.people.com.cn/n1/2022/0105/c117092-32324387.html">http://dangjian.people.com.cn/n1/2022/0105/c117092-32324387.html</a></td>
-</tr>
-<tr>
-<td>贵州余庆：椪柑喜获丰收</td>
-<td><a href="http://pic.people.com.cn/n1/2022/0105/c1016-32324417.html">http://pic.people.com.cn/n1/2022/0105/c1016-32324417.html</a></td>
-</tr>
-<tr>
-<td>习近平在北京考察2022年冬奥会、冬残奥会筹办备赛工作</td>
-<td><a href="http://pic.people.com.cn/n1/2022/0105/c426981-32324707.html">http://pic.people.com.cn/n1/2022/0105/c426981-32324707.html</a></td>
-</tr>
-<tr>
-<td>西安：中医药助力新冠肺炎预防救治</td>
-<td><a href="http://pic.people.com.cn/n1/2022/0105/c1016-32324119.html">http://pic.people.com.cn/n1/2022/0105/c1016-32324119.html</a></td>
-</tr>
-<tr>
-<td>为维持“白富美”人设 挪用公款近千万</td>
-<td><a href="http://fanfu.people.com.cn/n1/2022/0105/c64371-32324354.html">http://fanfu.people.com.cn/n1/2022/0105/c64371-32324354.html</a></td>
-</tr>
-<tr>
-<td>人民网评：进一步保障网络安全和数据安全</td>
-<td><a href="http://opinion.people.com.cn/n1/2022/0105/c223228-32324079.html">http://opinion.people.com.cn/n1/2022/0105/c223228-32324079.html</a></td>
-</tr>
-<tr>
-<td>关于2016-2020年全国党史和文献部门优秀科研成果拟获奖名单的公示</td>
-<td><a href="http://www.dswxyjy.org.cn/n1/2022/0105/c427276-32324771.html">http://www.dswxyjy.org.cn/n1/2022/0105/c427276-32324771.html</a></td>
-</tr>
-<tr>
-<td>着力打造政治过硬具备领导现代化建设能力的领导班子和干部队伍</td>
-<td><a href="http://renshi.people.com.cn/n1/2022/0105/c139617-32324357.html">http://renshi.people.com.cn/n1/2022/0105/c139617-32324357.html</a></td>
-</tr>
-<tr>
-<td>持续深入学习宣传党的十九届六中全会精神 激励干部群众满怀信心奋进新征程建功新时代</td>
-<td><a href="http://dangshi.people.com.cn/n1/2022/0105/c436975-32324105.html">http://dangshi.people.com.cn/n1/2022/0105/c436975-32324105.html</a></td>
-</tr>
-<tr>
-<td>《壬寅年》特种邮票发行</td>
-<td><a href="http://pic.people.com.cn/n1/2022/0105/c1016-32324619.html">http://pic.people.com.cn/n1/2022/0105/c1016-32324619.html</a></td>
-</tr>
-<tr>
-<td>中国共产党纪律检查委员会工作条例</td>
-<td><a href="http://politics.people.com.cn/n1/2022/0105/c1001-32323981.html">http://politics.people.com.cn/n1/2022/0105/c1001-32323981.html</a></td>
-</tr>
-<tr>
-<td>中国共产党纪律检查委员会工作条例</td>
-<td><a href="http://politics.people.com.cn/n1/2022/0105/c1001-32323997.html">http://politics.people.com.cn/n1/2022/0105/c1001-32323997.html</a></td>
-</tr>
-<tr>
-<td>三堂会审 — 纵容涉黑组织哪些情形为“情节严重” 从广西梧州市人大常委会原委员朱钢案说起</td>
-<td><a href="http://fanfu.people.com.cn/n1/2022/0105/c64371-32324348.html">http://fanfu.people.com.cn/n1/2022/0105/c64371-32324348.html</a></td>
-</tr>
-<tr>
-<td>美国新冠肺炎确诊5680万 上周平均每天672名儿童住院治疗</td>
-<td><a href="http://world.people.com.cn/n1/2022/0105/c1002-32324133.html">http://world.people.com.cn/n1/2022/0105/c1002-32324133.html</a></td>
-</tr>
-<tr>
-<td>让“躺平”者无处遁形</td>
-<td><a href="http://renshi.people.com.cn/n1/2022/0105/c139617-32324366.html">http://renshi.people.com.cn/n1/2022/0105/c139617-32324366.html</a></td>
-</tr>
-<tr>
-<td>深入贯彻习近平总书记重要讲话重要指示精神 巩固拓展党史学习教育成果 为吉林振兴注入新动能</td>
-<td><a href="http://dangshi.people.com.cn/n1/2022/0105/c436975-32324532.html">http://dangshi.people.com.cn/n1/2022/0105/c436975-32324532.html</a></td>
-</tr>
-<tr>
-<td>外交部：立陶宛认识到错误是正确的一步</td>
-<td><a href="http://world.people.com.cn/n1/2022/0105/c1002-32324814.html">http://world.people.com.cn/n1/2022/0105/c1002-32324814.html</a></td>
-</tr>
-<tr>
-<td>礼赞百年风华 谱写时代新篇</td>
-<td><a href="http://dangshi.people.com.cn/n1/2022/0105/c436975-32324102.html">http://dangshi.people.com.cn/n1/2022/0105/c436975-32324102.html</a></td>
-</tr>
-<tr>
-<td>向全军发布开训动员令</td>
-<td><a href="http://cpc.people.com.cn/n1/2022/0105/c64094-32324070.html">http://cpc.people.com.cn/n1/2022/0105/c64094-32324070.html</a></td>
-</tr>
-<tr>
-<td>持续深入学习宣传党的十九届六中全会精神 激励干部群众满怀信心奋进新征程建功新时代</td>
-<td><a href="http://politics.people.com.cn/n1/2022/0105/c1001-32323994.html">http://politics.people.com.cn/n1/2022/0105/c1001-32323994.html</a></td>
-</tr>
-<tr>
-<td>这个五年规划关系“米袋子”“菜篮子”“水缸子”安全</td>
-<td><a href="http://finance.people.com.cn/n1/2022/0105/c1004-32324371.html">http://finance.people.com.cn/n1/2022/0105/c1004-32324371.html</a></td>
-</tr>
-<tr>
-<td>世界同期待——写在北京冬奥会开幕倒计时一个月之际</td>
-<td><a href="http://pic.people.com.cn/n1/2022/0105/c1016-32324331.html">http://pic.people.com.cn/n1/2022/0105/c1016-32324331.html</a></td>
-</tr>
-<tr>
-<td>罗永：数次生死交锋 始终冲在救援第一线</td>
-<td><a href="http://society.people.com.cn/n1/2022/0105/c1008-32324267.html">http://society.people.com.cn/n1/2022/0105/c1008-32324267.html</a></td>
-</tr>
-<tr>
-<td>土耳其伊沙克帕夏宫冬日静美</td>
-<td><a href="http://world.people.com.cn/n1/2022/0105/c1002-32324121.html">http://world.people.com.cn/n1/2022/0105/c1002-32324121.html</a></td>
-</tr>
-<tr>
-<td>践行全过程民主 基层治理添活力（“牢记初心使命 走好新的赶考路”大家谈）</td>
-<td><a href="http://politics.people.com.cn/n1/2022/0105/c1001-32324019.html">http://politics.people.com.cn/n1/2022/0105/c1001-32324019.html</a></td>
-</tr>
-<tr>
-<td>不吸烟的人也会得肺癌？这一致病元凶千万要注意</td>
-<td><a href="http://lxjk.people.cn/n1/2022/0105/c404177-32324218.html">http://lxjk.people.cn/n1/2022/0105/c404177-32324218.html</a></td>
-</tr>
-<tr>
-<td>2022年首次普高学业水平合格性考试今天开考</td>
-<td><a href="http://edu.people.com.cn/n1/2022/0105/c1006-32324253.html">http://edu.people.com.cn/n1/2022/0105/c1006-32324253.html</a></td>
-</tr>
-<tr>
-<td>美国俄亥俄州日出风光美如画</td>
-<td><a href="http://world.people.com.cn/n1/2022/0105/c1002-32324151.html">http://world.people.com.cn/n1/2022/0105/c1002-32324151.html</a></td>
-</tr>
-<tr>
-<td>新修订科技进步法迎来哪些重大变化</td>
-<td><a href="http://finance.people.com.cn/n1/2022/0105/c1004-32324427.html">http://finance.people.com.cn/n1/2022/0105/c1004-32324427.html</a></td>
-</tr>
-<tr>
-<td>礼赞百年风华 谱写时代新篇</td>
-<td><a href="http://politics.people.com.cn/n1/2022/0105/c1001-32323982.html">http://politics.people.com.cn/n1/2022/0105/c1001-32323982.html</a></td>
-</tr>
-<tr>
-<td>书写新时代重大课题的优异答卷</td>
-<td><a href="http://theory.people.com.cn/n1/2022/0105/c40531-32324142.html">http://theory.people.com.cn/n1/2022/0105/c40531-32324142.html</a></td>
-</tr>
-<tr>
-<td>北京冬奥会火炬开始在黑龙江省进行展示</td>
-<td><a href="http://pic.people.com.cn/n1/2022/0105/c1016-32324823.html">http://pic.people.com.cn/n1/2022/0105/c1016-32324823.html</a></td>
-</tr>
-<tr>
-<td>“中国经济具有巨大发展空间”</td>
-<td><a href="http://world.people.com.cn/n1/2022/0105/c1002-32323991.html">http://world.people.com.cn/n1/2022/0105/c1002-32323991.html</a></td>
-</tr>
-<tr>
-<td>网商银行：签约涉农县区数量占全国总数近一半</td>
-<td><a href="http://finance.people.com.cn/n1/2022/0105/c1004-32324740.html">http://finance.people.com.cn/n1/2022/0105/c1004-32324740.html</a></td>
-</tr>
-</tbody>
-</table>
-</div>
+    <title>博客建设日志</title>
+    <url>/2021/10/21/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E8%AE%BE%E6%97%A5%E5%BF%97/</url>
+    <content><![CDATA[<p>记录一下搭建的过程，大部分参考的文章可以在butterfly使用记录找到</p>
+<p>…….</p>
+<p>2021/10/19：加入音乐，电影功能</p>
+<p>2021/10/20：加入图库功能</p>
+<p>2021/10/21：创建图床，顶部轮播文章，改了字体和动态标题</p>
+<p>2021/10/22：外挂标签，添加P站日榜</p>
+<p>2021/10/23：添加搜索框，优化了底部栏（至少比以前好了），取消了顶部文章轮播。发现黑夜模式出问题了，说说功能需要刷新一次才显示。</p>
+<p>2021/11/11：修改各页面的透明度</p>
+<p>2021/11/14：部分优化，尝试做点美化最后回归默认。。。</p>
+<p>2021//11/16：添加导航页面，虽然目前只有这一个站点。修复了说说头像问题</p>
+<p>2021/12/26：美化版权信息板块，引入新字体</p>
+<p>2022/2/10： 添加文章密码功能（虽然没啥用）</p>
+<p>2022/3/24： pivix日榜API好像失效了….也可能是被墙了？于是取消了。</p>
 ]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
       <tags>
-        <tag>python</tag>
-        <tag>新闻</tag>
+        <tag>记录</tag>
       </tags>
   </entry>
   <entry>
@@ -1216,27 +1237,6 @@
       </tags>
   </entry>
   <entry>
-    <title>博客建设日志</title>
-    <url>/2021/10/21/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E8%AE%BE%E6%97%A5%E5%BF%97/</url>
-    <content><![CDATA[<p>记录一下搭建的过程，大部分参考的文章可以在butterfly使用记录找到</p>
-<p>…….</p>
-<p>2021/10/19：加入音乐，电影功能</p>
-<p>2021/10/20：加入图库功能</p>
-<p>2021/10/21：创建图床，顶部轮播文章，改了字体和动态标题</p>
-<p>2021/10/22：外挂标签，添加P站日榜</p>
-<p>2021/10/23：添加搜索框，优化了底部栏（至少比以前好了），取消了顶部文章轮播。发现黑夜模式出问题了，说说功能需要刷新一次才显示。</p>
-<p>2021/11/11：修改各页面的透明度</p>
-<p>2021/11/14：部分优化，尝试做点美化最后回归默认。。。</p>
-<p>2021//11/16：添加导航页面，虽然目前只有这一个站点。修复了说说头像问题</p>
-<p>2021/12/26：美化版权信息板块，引入新字体</p>
-<p>2022/2/10： 添加文章密码功能（虽然没啥用）</p>
-<p>2022/3/24： pivix日榜API好像失效了….也可能是被墙了？于是取消了。</p>
-]]></content>
-      <tags>
-        <tag>记录</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>博客添加Pixiv日榜</title>
     <url>/2021/10/22/%E5%8D%9A%E5%AE%A2%E6%B7%BB%E5%8A%A0Pixiv%E6%97%A5%E6%A6%9C/</url>
     <content><![CDATA[<p>今天逛大佬博客看见这个功能，自己也想整一个，但是添加的过程中发现日榜的窗口不是固定的，可能是主题更新的缘故吧，需要对旧的代码做一些改动，以下是我的配置步骤。（参考文章：<a href="https://blog.hclonely.com/posts/57bd67ce/">HCLonely Blog - Hexo 博客美化</a>）</p>
@@ -1252,6 +1252,49 @@
 <li><p>编辑 <code>themes\Butterfly\languages\zh-CN.yml</code> 文件 (请根据你的网站语言选择)，找到 <code>card_announcement: 公告</code> , 在下面添加一行 <code>card_pixiv: Pixiv日榜Top50</code>(后面的文本可自定义)</p>
 </li>
 </ol>
+]]></content>
+      <tags>
+        <tag>记录</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>周年记</title>
+    <url>/2022/12/12/%E5%91%A8%E5%B9%B4%E8%AE%B0/</url>
+    <content><![CDATA[<h2 id="一周年！"><a href="#一周年！" class="headerlink" title="一周年！"></a><strong>一周年！</strong></h2>
+    <div id="aplayer-vDAvHBEZ" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="1815684465" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
+    ></div>
+<p>这是迟来两个月的周年记</p>
+<p>本来早就想着在一周年的时候好好记录一下这一年的事情，但总被各种原因耽误搁置</p>
+<p>事实上，已经很久没有更新博客了</p>
+<p>这次回来，原本井井有条的博客变得千疮百孔</p>
+<p>leancloud(Intl)对中国停用，腾讯云停止免费服务，Vercel域名被墙，图床链接失效….</p>
+<p>折腾了一晚上才大致恢复</p>
+<p>也砍掉了不少失效的配置</p>
+<p>同时，“被迫”申请了新域名和虚拟主机来配置我的博客</p>
+<p>变化真大啊，是了。</p>
+<p><strong><em>变化</em></strong></p>
+<p>这是一年来最为深刻的感受</p>
+<p>这一年，我的博客从无到有</p>
+<p>从first blog到elix.fun</p>
+<p>至少将它变成了我曾经憧憬的样子</p>
+<p>我还会继续让它变得更好</p>
+<p>这一年，发生了很多事</p>
+<p>多到一时无法理清思路</p>
+<p>很多变化在我未曾反应时，已经悄然发生</p>
+<p>关于未来的规划</p>
+<p>我希望能够提高一下博客的技术性</p>
+<p>改变一下流水账式的记录方法</p>
+<p>说实话，很多记录贴自己看都觉得很敷衍</p>
+<p>当然，也会记录一下生活中的所思所想和随笔记录</p>
+<p>这才是我认为博客应有的样子</p>
+<p>（反正没人看）</p>
+<hr>
+
+
+
+<p><strong>未来很长,总会变得更好</strong></p>
+<p><strong>行脚下路，擢天上辰。</strong></p>
 ]]></content>
       <tags>
         <tag>记录</tag>
@@ -1346,31 +1389,6 @@
   </div>
 </div>
 <script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
-  </entry>
-  <entry>
-    <title>看板娘配置过程中的一些问题</title>
-    <url>/2021/10/13/%E7%9C%8B%E6%9D%BF%E5%A8%98%E9%85%8D%E7%BD%AE%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p><strong>插件配置参考大佬文章   <a href="https://akilar.top/posts/5b8f515f/">Live2d Widget | Akilarの糖果屋</a></strong></p>
-<h1>获取插件问题</h1>
-
-<p>根据教程下载插件时报错，显示如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">found XX vulnerabilities (X low, X moderate, X high) in 2770 scanned packages</span><br><span class="line">  run `npm audit fix` to fix 1 of them.</span><br><span class="line">  XX vulnerabilities require semver-major dependency updates.</span><br><span class="line">  XXX vulnerabilities require manual review. See the full report for details.</span><br></pre></td></tr></table></figure>
-<p>根据提示执行npm audit fix 依然无法完成下载</p>
-<p>网上查阅得知解决方案如下：</p>
-<ol>
-<li>淘宝镜像源会自动修复，然后下载相关依赖包。</li>
-<li>使用<code>nrm use taobao</code>，<code>nrm</code>如果没有安装，就使用<code>npm i -g nrm</code>，然后再使用<code>nrm use taobao</code></li>
-<li>再使用<code>npm i</code> 安装一遍所有依赖包，这时候没下载的会自动下载，问题解决。</li>
-</ol>
-<h1>文件修改</h1>
-
-<p>根据教程修改 autoload.js 文件时无法打开，提示‘return’语句在函数之外。</p>
-<p>网上查询乱七八糟，后来发现系统自带打开js文件的工具是based script host</p>
-<p>解决方案：使用记事本打开文件</p>
-]]></content>
-      <tags>
-        <tag>记录</tag>
-      </tags>
   </entry>
   <entry>
     <title>First Blog</title>
@@ -2070,6 +2088,31 @@
       </tags>
   </entry>
   <entry>
+    <title>看板娘配置过程中的一些问题</title>
+    <url>/2021/10/13/%E7%9C%8B%E6%9D%BF%E5%A8%98%E9%85%8D%E7%BD%AE%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p><strong>插件配置参考大佬文章   <a href="https://akilar.top/posts/5b8f515f/">Live2d Widget | Akilarの糖果屋</a></strong></p>
+<h1>获取插件问题</h1>
+
+<p>根据教程下载插件时报错，显示如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">found XX vulnerabilities (X low, X moderate, X high) in 2770 scanned packages</span><br><span class="line">  run `npm audit fix` to fix 1 of them.</span><br><span class="line">  XX vulnerabilities require semver-major dependency updates.</span><br><span class="line">  XXX vulnerabilities require manual review. See the full report for details.</span><br></pre></td></tr></table></figure>
+<p>根据提示执行npm audit fix 依然无法完成下载</p>
+<p>网上查阅得知解决方案如下：</p>
+<ol>
+<li>淘宝镜像源会自动修复，然后下载相关依赖包。</li>
+<li>使用<code>nrm use taobao</code>，<code>nrm</code>如果没有安装，就使用<code>npm i -g nrm</code>，然后再使用<code>nrm use taobao</code></li>
+<li>再使用<code>npm i</code> 安装一遍所有依赖包，这时候没下载的会自动下载，问题解决。</li>
+</ol>
+<h1>文件修改</h1>
+
+<p>根据教程修改 autoload.js 文件时无法打开，提示‘return’语句在函数之外。</p>
+<p>网上查询乱七八糟，后来发现系统自带打开js文件的工具是based script host</p>
+<p>解决方案：使用记事本打开文件</p>
+]]></content>
+      <tags>
+        <tag>记录</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>算法试做</title>
     <url>/2022/09/12/%E7%AE%97%E6%B3%95%E8%AF%95%E5%81%9A/</url>
     <content><![CDATA[<p>877—石子游戏（动态规划）</p>
@@ -2164,6 +2207,68 @@
 </div>]]></content>
       <tags>
         <tag>诗词</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>音乐赏</title>
+    <url>/2022/02/14/%E9%9F%B3%E4%B9%90%E8%B5%8F/</url>
+    <content><![CDATA[<blockquote>
+<p>生命如花朵绽放</p>
+<p>或许遥远，或许就在路边</p>
+</blockquote>
+
+    <div id="aplayer-BxIsashP" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="1815684465" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
+    ></div>
+<blockquote>
+<p>梦里不觉秋已深，余情岂是为他人</p>
+</blockquote>
+
+    <div id="aplayer-ZDOUxeIz" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="27594398" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
+    ></div>
+<blockquote>
+<p>那就是我曾经统治的世界</p>
+</blockquote>
+
+    <div id="aplayer-ubNNGQQz" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="5139948" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
+    ></div>
+<blockquote>
+<p>不畏惧风沙满目皆繁华</p>
+</blockquote>
+
+    <div id="aplayer-mbxfxMeK" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="1889103238" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
+    ></div>
+<blockquote>
+<p>I’ll try hard to soar to the heaven I dreamed.</p>
+<p>为了梦中彼岸，我要全力飞翔</p>
+</blockquote>
+
+    <div id="aplayer-MxbLwmoJ" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="1375725396" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
+    ></div>
+<blockquote>
+<p>神明给我在最难熬的时光   留下唯一的星光</p>
+</blockquote>
+<div class="audio"><audio controls preload><source src='https://webfs.tx.kugou.com/202207081723/e6e1c8d5d5bcc2abcf30c5477198bb6a/KGTX/CLTX001/30725353c6518b938d893b42b09189f6.mp3' type='audio/mp3'>Your browser does not support the audio tag.</audio></div>
+<details class="folding-tag" blue><summary> LRC歌词 </summary>
+              <div class='content'>
+              <p>[id:$00000000][ar:Zyboy忠宇]<br>[ti:堕][by:]<br>[hash:30725353c6518b938d893b42b09189f6][al:]<br>[sign:][qq:]<br>[total:183484][offset:0]<br>[00:00.45]Zyboy忠宇 - 堕<br>[00:01.06]作词：Zyboy忠宇<br>[00:01.21]作曲：Zyboy忠宇<br>[00:01.36]编曲：曲鲁帅<br>[00:01.56]制作人：Zyboy忠宇、曲鲁帅<br>[00:01.87]混音：利比<br>[00:01.97]和声：芬芬<br>[00:02.12]监制：彬宝<br>[00:02.27]制作团队：音炬文化<br>[00:02.52]推广：星斗推、蚂蚁行动、星河计划<br>[00:03.54]OP：Hikoon Music<br>[00:03.64]特别鸣谢：海星试唱<br>[00:03.94]（未经著作权人许可，不得翻唱翻录或使用）<br>[00:14.79]星河挂在天上<br>[00:18.36]保护璀璨月亮<br>[00:22.26]而你在我心中宛如月光<br>[00:30.10]为你痴为你狂<br>[00:33.71]为你笑为你闯<br>[00:37.47]为你悲为你伤 为你扬<br>[00:48.65]她是踏碎星河<br>[00:52.05]落入我梦境的幻想<br>[00:54.98]环遍星系为你寻找的力量<br>[00:58.62]神明给我在最难熬的时光<br>[01:02.17]留下唯一的星光<br>[01:05.66]堕入日月星辉之中<br>[01:07.90]梦的信仰<br>[01:10.13]踏碎黎明星照映出的模样<br>[01:14.03]铭憬银河最闪耀的地方<br>[01:17.37]眷恋唯一的星光就是你<br>[01:35.47]海面上风和浪<br>[01:39.09]故事反复发烫<br>[01:42.83]而我在黑暗中就是烈阳<br>[01:50.47]我已痴我已狂<br>[01:54.26]我已疯我伪装<br>[01:58.05]我已悲我已伤 我已扬<br>[02:09.29]她是踏碎星河<br>[02:11.93]落入我梦境的幻想<br>[02:14.81]环遍星系为你寻找的力量<br>[02:18.60]神明给我在最难熬的时光<br>[02:22.15]留下唯一的星光<br>[02:25.79]堕入日月星辉之中<br>[02:28.25]梦的信仰<br>[02:30.02]踏碎黎明星照映出的模样<br>[02:34.10]铭憬银河最闪耀的地方<br>[02:37.34]眷恋唯一的星光就是你</p>
+              </div>
+            </details>
+<blockquote>
+<p>在这独一无二属于我的时代   莫忘了初心常在   痛快去热爱</p>
+</blockquote>
+<div class="audio"><audio controls preload><source src='https://webfs.ali.kugou.com/202207091930/954f9a775d84c6bc77f6017432a78c01/KGTX/CLTX001/10c38851978035797a4f64bdf4e2cf72.mp3' type='audio/mp3'>Your browser does not support the audio tag.</audio></div>
+<details class="folding-tag" blue><summary> LRC歌词 </summary>
+              <div class='content'>
+              <p>[id:$00000000][ar:一清清清]<br>[ti:热爱105度的你][by:]<br>[hash:10c38851978035797a4f64bdf4e2cf72][al:]<br>[sign:][qq:]<br>[total:194089][offset:0]<br>[00:00.61]Super Idol的笑容<br>[00:02.29]都没你的甜<br>[00:04.07]八月正午的阳光<br>[00:05.85]都没你耀眼<br>[00:07.53]热爱 １０５ °C的你<br>[00:10.29]滴滴清纯的蒸馏水<br>[00:15.79]你不知道你有多可爱<br>[00:18.34]跌倒后会傻笑着再站起来<br>[00:22.76]你从来都不轻言失败<br>[00:25.31]对梦想的执着一直不曾更改<br>[00:29.08]很安心 当你对我说<br>[00:32.18]不怕有我在<br>[00:33.86]放着让我来<br>[00:36.56]勇敢追自己的梦想<br>[00:39.00]那坚定的模样<br>[00:42.63]Super Idol的笑容<br>[00:44.36]都没你的甜<br>[00:46.19]八月正午的阳光<br>[00:47.86]都没你耀眼<br>[00:49.54]热爱 １０５ °C的你<br>[00:52.29]滴滴清纯的蒸馏水<br>[00:56.92]在这独一无二<br>[00:58.04]属于我的时代<br>[01:00.17]不怕失败来一场<br>[01:01.85]痛快的热爱<br>[01:03.63]热爱 １０５°C的你<br>[01:06.23]滴滴清纯的蒸馏水<br>[01:10.91]在这独一无二<br>[01:12.03]属于我的时代<br>[01:14.26]莫忘了初心常在<br>[01:15.95]痛快去热爱<br>[01:17.68]热爱 １０５°C的你<br>[01:20.23]滴滴清纯的蒸馏水<br>[01:22.82]喝一口又活力全开<br>[01:29.94]再次回到最佳状态<br>[01:36.96]喝一口哟<br>[01:39.82]你不知道你有多可爱<br>[01:42.37]跌倒后会傻笑着再站起来<br>[01:46.59]你从来都不轻言失败<br>[01:49.39]对梦想的执着一直不曾更改<br>[01:53.26]很安心 当你对我说<br>[01:56.21]不怕有我在<br>[01:57.94]放着让我来<br>[02:00.64]勇敢追自己的梦想<br>[02:03.02]那坚定的模样<br>[02:06.70]Super Idol的笑容<br>[02:08.47]都没你的甜<br>[02:10.20]八月正午的阳光<br>[02:11.94]都没你耀眼<br>[02:13.62]热爱 １０５°C的你<br>[02:16.32]滴滴清纯的蒸馏水<br>[02:20.86]在这独一无二<br>[02:22.13]属于我的时代<br>[02:24.22]不怕失败来一场<br>[02:25.99]痛快的热爱<br>[02:27.77]热爱 １０５°C的你<br>[02:30.36]滴滴清纯的蒸馏水<br>[02:34.94]在这独一无二<br>[02:36.06]属于我的时代<br>[02:38.29]莫忘了初心常在<br>[02:39.97]痛快去热爱<br>[02:41.75]热爱 １０５°C的你<br>[02:44.34]滴滴清纯的蒸馏水<br>[02:47.10]喝一口又活力全开<br>[02:53.90]再次回到最佳状态<br>[03:01.03]喝一口又活力全开</p>
+              </div>
+            </details>]]></content>
+      <tags>
+        <tag>音乐</tag>
       </tags>
   </entry>
   <entry>
@@ -5685,68 +5790,6 @@
       </categories>
       <tags>
         <tag>分享</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>音乐赏</title>
-    <url>/2022/02/14/%E9%9F%B3%E4%B9%90%E8%B5%8F/</url>
-    <content><![CDATA[<blockquote>
-<p>生命如花朵绽放</p>
-<p>或许遥远，或许就在路边</p>
-</blockquote>
-
-    <div id="aplayer-qrMVelUJ" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="1815684465" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
-    ></div>
-<blockquote>
-<p>梦里不觉秋已深，余情岂是为他人</p>
-</blockquote>
-
-    <div id="aplayer-rZfSlOHe" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="27594398" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
-    ></div>
-<blockquote>
-<p>那就是我曾经统治的世界</p>
-</blockquote>
-
-    <div id="aplayer-OWSNRVlR" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="5139948" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
-    ></div>
-<blockquote>
-<p>不畏惧风沙满目皆繁华</p>
-</blockquote>
-
-    <div id="aplayer-mhVZrhAV" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="1889103238" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
-    ></div>
-<blockquote>
-<p>I’ll try hard to soar to the heaven I dreamed.</p>
-<p>为了梦中彼岸，我要全力飞翔</p>
-</blockquote>
-
-    <div id="aplayer-IDlYtsyl" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="1375725396" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
-    ></div>
-<blockquote>
-<p>神明给我在最难熬的时光   留下唯一的星光</p>
-</blockquote>
-<div class="audio"><audio controls preload><source src='https://webfs.tx.kugou.com/202207081723/e6e1c8d5d5bcc2abcf30c5477198bb6a/KGTX/CLTX001/30725353c6518b938d893b42b09189f6.mp3' type='audio/mp3'>Your browser does not support the audio tag.</audio></div>
-<details class="folding-tag" blue><summary> LRC歌词 </summary>
-              <div class='content'>
-              <p>[id:$00000000][ar:Zyboy忠宇]<br>[ti:堕][by:]<br>[hash:30725353c6518b938d893b42b09189f6][al:]<br>[sign:][qq:]<br>[total:183484][offset:0]<br>[00:00.45]Zyboy忠宇 - 堕<br>[00:01.06]作词：Zyboy忠宇<br>[00:01.21]作曲：Zyboy忠宇<br>[00:01.36]编曲：曲鲁帅<br>[00:01.56]制作人：Zyboy忠宇、曲鲁帅<br>[00:01.87]混音：利比<br>[00:01.97]和声：芬芬<br>[00:02.12]监制：彬宝<br>[00:02.27]制作团队：音炬文化<br>[00:02.52]推广：星斗推、蚂蚁行动、星河计划<br>[00:03.54]OP：Hikoon Music<br>[00:03.64]特别鸣谢：海星试唱<br>[00:03.94]（未经著作权人许可，不得翻唱翻录或使用）<br>[00:14.79]星河挂在天上<br>[00:18.36]保护璀璨月亮<br>[00:22.26]而你在我心中宛如月光<br>[00:30.10]为你痴为你狂<br>[00:33.71]为你笑为你闯<br>[00:37.47]为你悲为你伤 为你扬<br>[00:48.65]她是踏碎星河<br>[00:52.05]落入我梦境的幻想<br>[00:54.98]环遍星系为你寻找的力量<br>[00:58.62]神明给我在最难熬的时光<br>[01:02.17]留下唯一的星光<br>[01:05.66]堕入日月星辉之中<br>[01:07.90]梦的信仰<br>[01:10.13]踏碎黎明星照映出的模样<br>[01:14.03]铭憬银河最闪耀的地方<br>[01:17.37]眷恋唯一的星光就是你<br>[01:35.47]海面上风和浪<br>[01:39.09]故事反复发烫<br>[01:42.83]而我在黑暗中就是烈阳<br>[01:50.47]我已痴我已狂<br>[01:54.26]我已疯我伪装<br>[01:58.05]我已悲我已伤 我已扬<br>[02:09.29]她是踏碎星河<br>[02:11.93]落入我梦境的幻想<br>[02:14.81]环遍星系为你寻找的力量<br>[02:18.60]神明给我在最难熬的时光<br>[02:22.15]留下唯一的星光<br>[02:25.79]堕入日月星辉之中<br>[02:28.25]梦的信仰<br>[02:30.02]踏碎黎明星照映出的模样<br>[02:34.10]铭憬银河最闪耀的地方<br>[02:37.34]眷恋唯一的星光就是你</p>
-              </div>
-            </details>
-<blockquote>
-<p>在这独一无二属于我的时代   莫忘了初心常在   痛快去热爱</p>
-</blockquote>
-<div class="audio"><audio controls preload><source src='https://webfs.ali.kugou.com/202207091930/954f9a775d84c6bc77f6017432a78c01/KGTX/CLTX001/10c38851978035797a4f64bdf4e2cf72.mp3' type='audio/mp3'>Your browser does not support the audio tag.</audio></div>
-<details class="folding-tag" blue><summary> LRC歌词 </summary>
-              <div class='content'>
-              <p>[id:$00000000][ar:一清清清]<br>[ti:热爱105度的你][by:]<br>[hash:10c38851978035797a4f64bdf4e2cf72][al:]<br>[sign:][qq:]<br>[total:194089][offset:0]<br>[00:00.61]Super Idol的笑容<br>[00:02.29]都没你的甜<br>[00:04.07]八月正午的阳光<br>[00:05.85]都没你耀眼<br>[00:07.53]热爱 １０５ °C的你<br>[00:10.29]滴滴清纯的蒸馏水<br>[00:15.79]你不知道你有多可爱<br>[00:18.34]跌倒后会傻笑着再站起来<br>[00:22.76]你从来都不轻言失败<br>[00:25.31]对梦想的执着一直不曾更改<br>[00:29.08]很安心 当你对我说<br>[00:32.18]不怕有我在<br>[00:33.86]放着让我来<br>[00:36.56]勇敢追自己的梦想<br>[00:39.00]那坚定的模样<br>[00:42.63]Super Idol的笑容<br>[00:44.36]都没你的甜<br>[00:46.19]八月正午的阳光<br>[00:47.86]都没你耀眼<br>[00:49.54]热爱 １０５ °C的你<br>[00:52.29]滴滴清纯的蒸馏水<br>[00:56.92]在这独一无二<br>[00:58.04]属于我的时代<br>[01:00.17]不怕失败来一场<br>[01:01.85]痛快的热爱<br>[01:03.63]热爱 １０５°C的你<br>[01:06.23]滴滴清纯的蒸馏水<br>[01:10.91]在这独一无二<br>[01:12.03]属于我的时代<br>[01:14.26]莫忘了初心常在<br>[01:15.95]痛快去热爱<br>[01:17.68]热爱 １０５°C的你<br>[01:20.23]滴滴清纯的蒸馏水<br>[01:22.82]喝一口又活力全开<br>[01:29.94]再次回到最佳状态<br>[01:36.96]喝一口哟<br>[01:39.82]你不知道你有多可爱<br>[01:42.37]跌倒后会傻笑着再站起来<br>[01:46.59]你从来都不轻言失败<br>[01:49.39]对梦想的执着一直不曾更改<br>[01:53.26]很安心 当你对我说<br>[01:56.21]不怕有我在<br>[01:57.94]放着让我来<br>[02:00.64]勇敢追自己的梦想<br>[02:03.02]那坚定的模样<br>[02:06.70]Super Idol的笑容<br>[02:08.47]都没你的甜<br>[02:10.20]八月正午的阳光<br>[02:11.94]都没你耀眼<br>[02:13.62]热爱 １０５°C的你<br>[02:16.32]滴滴清纯的蒸馏水<br>[02:20.86]在这独一无二<br>[02:22.13]属于我的时代<br>[02:24.22]不怕失败来一场<br>[02:25.99]痛快的热爱<br>[02:27.77]热爱 １０５°C的你<br>[02:30.36]滴滴清纯的蒸馏水<br>[02:34.94]在这独一无二<br>[02:36.06]属于我的时代<br>[02:38.29]莫忘了初心常在<br>[02:39.97]痛快去热爱<br>[02:41.75]热爱 １０５°C的你<br>[02:44.34]滴滴清纯的蒸馏水<br>[02:47.10]喝一口又活力全开<br>[02:53.90]再次回到最佳状态<br>[03:01.03]喝一口又活力全开</p>
-              </div>
-            </details>]]></content>
-      <tags>
-        <tag>音乐</tag>
       </tags>
   </entry>
 </search>
