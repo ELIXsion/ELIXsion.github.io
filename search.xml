@@ -53,23 +53,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Python学习记录之批量爬取知乎图片</title>
-    <url>/2022/01/13/Python%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B9%8B%E6%89%B9%E9%87%8F%E7%88%AC%E5%8F%96%E7%9F%A5%E4%B9%8E%E5%9B%BE%E7%89%87/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前几天学了根据json爬取网页源码中没有的内容，知乎就是这种类型。正好最近没有好看的图片做博客封面，就用这种方式一劳永逸吧。在查阅资料的时候发现可以用两种方式实现图片获取。</p>
-<h3 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Askurl</span>(<span class="params">url</span>):</span></span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.92 Safari/537.36&#x27;</span>&#125;</span><br><span class="line">    <span class="comment"># 请求头要添加，不然访问失败</span></span><br><span class="line">    response = requests.get(url = url, headers = headers)</span><br><span class="line">    <span class="comment"># print(response.text)</span></span><br><span class="line">    <span class="keyword">return</span> response</span><br><span class="line"></span><br><span class="line">piclink = []</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Getpic</span>(<span class="params">html</span>):</span></span><br><span class="line">    Findurl = re.<span class="built_in">compile</span>(<span class="string">&#x27;&lt;noscript&gt;.*?data-original=&quot;(.*?)&quot;.*?&lt;/noscript&gt;&#x27;</span>, re.S)      <span class="comment">#  .*?  表示任意个，任意字符</span></span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line">    items = soup.select(<span class="string">&#x27;figure&#x27;</span>)</span><br><span class="line">    <span class="comment"># 将figure节点选择出来</span></span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> items:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            index = <span class="built_in">str</span>(index)</span><br><span class="line">            link = re.findall(Findurl,index)[<span class="number">0</span>]</span><br><span class="line">            piclink.append(link)</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;存在图片缺失&quot;</span>)                           <span class="comment">#用来解决数据为空的情况，很重要</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download</span>(<span class="params">path</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="built_in">len</span>(piclink)):</span><br><span class="line">        <span class="built_in">bytes</span> = Askurl(piclink[i]).content                <span class="comment">#.content返回二进制数据，适用于获取图片，视频等，与.text相对（返回文本）</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(path):</span><br><span class="line">            os.makedirs(path)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(path + <span class="string">&quot;image&quot;</span> + <span class="built_in">str</span>(i) + <span class="string">&quot;.jpg&quot;</span>, <span class="string">&quot;wb+&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(<span class="built_in">bytes</span>)</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="built_in">str</span>(i+<span class="number">1</span>) + <span class="string">&quot;/&quot;</span> + <span class="built_in">str</span>(<span class="built_in">len</span>(piclink)))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;图片下载成功&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    url = <span class="string">&quot;https://zhuanlan.zhihu.com/p/100765620&quot;</span></span><br><span class="line">    path = <span class="string">&quot;Images/&quot;</span></span><br><span class="line">    Getpic(Askurl(url).text)</span><br><span class="line">    download(path)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-<p>这是通过request直接获取整个页面源码</p>
-<h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fetchUrl</span>(<span class="params">url</span>):</span></span><br><span class="line">    header = &#123;</span><br><span class="line">        <span class="string">&#x27;Accept&#x27;</span>: <span class="string">&#x27;text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36&#x27;</span>,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    r = requests.get(url, headers=header)</span><br><span class="line">    r.encoding = <span class="string">&quot;utf-8&quot;</span></span><br><span class="line">    <span class="keyword">return</span> r</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parseJson</span>(<span class="params">jsonStr</span>):</span>                         <span class="comment">#这个函数实际就是把json源码中的各项数据扒下来</span></span><br><span class="line"></span><br><span class="line">    jsonObj = json.loads(jsonStr)               <span class="comment">#解析json</span></span><br><span class="line">    data = jsonObj[<span class="string">&#x27;data&#x27;</span>]                      <span class="comment">#data是json中的属性，后面author也是，name是suthor的子属性，可以参照源码理解</span></span><br><span class="line">    <span class="comment"># datalist = []</span></span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> data:</span><br><span class="line">        name = item[<span class="string">&quot;author&quot;</span>][<span class="string">&quot;name&quot;</span>]</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;正在爬取&quot;</span>, name, <span class="string">&quot;的回答&quot;</span>)</span><br><span class="line">        Download(item[<span class="string">&quot;content&quot;</span>])</span><br><span class="line">        <span class="comment"># headline = item[&quot;author&quot;][&quot;headline&quot;]</span></span><br><span class="line">        <span class="comment"># dateTIme = time.strftime(&quot;%Y-%m-%d&quot;, time.localtime(item[&#x27;updated_time&#x27;]))</span></span><br><span class="line">        <span class="comment"># comment_count = item[&#x27;comment_count&#x27;]</span></span><br><span class="line">        <span class="comment"># voteup_count = item[&#x27;voteup_count&#x27;]</span></span><br><span class="line">        <span class="comment"># content = parseHtml(item[&quot;content&quot;])</span></span><br><span class="line">    <span class="comment">#     datalist.append([name, headline, dateTIme, comment_count, voteup_count, content])</span></span><br><span class="line">    <span class="comment"># return datalist</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Download</span>(<span class="params">html</span>):</span></span><br><span class="line"></span><br><span class="line">    bsObj = BeautifulSoup(html, <span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line">    images = bsObj.find_all(<span class="string">&quot;noscript&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">len</span>(images) == <span class="number">0</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;回答内容无图片&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;回答中共有&quot;</span>,<span class="built_in">len</span>(images),<span class="string">&quot;张图片，正在下载……&quot;</span>)</span><br><span class="line">        <span class="keyword">for</span> item <span class="keyword">in</span> images:</span><br><span class="line">            link = item.img[<span class="string">&#x27;data-original&#x27;</span>]</span><br><span class="line">            <span class="built_in">print</span>(link)</span><br><span class="line">            path = <span class="string">&quot;Images/&quot;</span></span><br><span class="line">            <span class="built_in">bytes</span> = fetchUrl(link).content</span><br><span class="line">            <span class="comment"># url : https://pic3.zhimg.com/c7ad985268e7144b588d7bf94eedb487_r.jpg?source=1940ef5c</span></span><br><span class="line">            <span class="comment"># filename: c7ad985268e7144b588d7bf94eedb487_r.jpg</span></span><br><span class="line">            filename = link.split(<span class="string">&quot;?&quot;</span>)[<span class="number">0</span>].split(<span class="string">&quot;/&quot;</span>)[-<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 如果没有该文件夹，则自动生成</span></span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(path):</span><br><span class="line">                os.makedirs(path)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">with</span> <span class="built_in">open</span>(path + filename, <span class="string">&quot;wb+&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                f.write(<span class="built_in">bytes</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;图片下载完成&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> bsObj.text</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">downloadImage</span>(<span class="params">url, path</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">bytes</span> = fetchUrl(url).content</span><br><span class="line">    <span class="comment"># url : https://pic3.zhimg.com/c7ad985268e7144b588d7bf94eedb487_r.jpg?source=1940ef5c</span></span><br><span class="line">    <span class="comment"># filename: c7ad985268e7144b588d7bf94eedb487_r.jpg</span></span><br><span class="line">    filename = url.split(<span class="string">&quot;?&quot;</span>)[<span class="number">0</span>].split(<span class="string">&quot;/&quot;</span>)[-<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 如果没有该文件夹，则自动生成</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(path):</span><br><span class="line">        os.makedirs(path)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(path + filename, <span class="string">&quot;wb+&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(<span class="built_in">bytes</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># def saveData(data, filename):</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#     dataframe = pd.DataFrame(data)</span></span><br><span class="line"><span class="comment">#     dataframe.to_csv(filename, mode=&#x27;a&#x27;, index=False, sep=&#x27;,&#x27;, header=False, encoding=&quot;utf_8_sig&quot;)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 保存的文件名</span></span><br><span class="line">    filename = <span class="string">&quot;data.csv&quot;</span></span><br><span class="line">    qid = <span class="number">316039999</span></span><br><span class="line">    offset = <span class="number">0</span></span><br><span class="line">    totalNum = <span class="number">50</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> offset &lt; totalNum:</span><br><span class="line">        url = <span class="string">&quot;https://www.zhihu.com/api/v4/questions/&#123;0&#125;/answers?include=data%5B%2A%5D.is_normal%2Cadmin_closed_comment%2Creward_info%2Cis_collapsed%2Cannotation_action%2Cannotation_detail%2Ccollapse_reason%2Cis_sticky%2Ccollapsed_by%2Csuggest_edit%2Ccomment_count%2Ccan_comment%2Ccontent%2Ceditable_content%2Cvoteup_count%2Creshipment_settings%2Ccomment_permission%2Ccreated_time%2Cupdated_time%2Creview_info%2Crelevant_info%2Cquestion%2Cexcerpt%2Crelationship.is_authorized%2Cis_author%2Cvoting%2Cis_thanked%2Cis_nothelp%2Cis_labeled%2Cis_recognized%2Cpaid_info%2Cpaid_info_content%3Bdata%5B%2A%5D.mark_infos%5B%2A%5D.url%3Bdata%5B%2A%5D.author.follower_count%2Cbadge%5B%2A%5D.topics&amp;limit=5&amp;offset=&#123;1&#125;&amp;platform=desktop&amp;sort_by=default&quot;</span> .<span class="built_in">format</span>(qid, offset)</span><br><span class="line">        <span class="comment">#这个请求链接包含网页参数。用format函数替换连接中的&#123;0&#125;，&#123;1&#125;等实现不同的请求。offset：请求页数，qid：知乎问题id</span></span><br><span class="line">        html = fetchUrl(url).text</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> data <span class="keyword">in</span> parseJson(html):</span><br><span class="line">            offset += <span class="number">1</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;已经爬取完成&quot;</span>,offset,<span class="string">&quot;条回答数据，一共有&quot;</span>,totalNum, <span class="string">&quot;条&quot;</span>)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;---&quot;</span>*<span class="number">20</span>)</span><br></pre></td></tr></table></figure>
-<p>这是获取json加载的源码</p>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>记录</tag>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Python学习记录之数据库基础操作</title>
     <url>/2022/01/02/Python%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>爬取网易云的过程中发现每次测试数据都需要把整个程序从头运行一次，效率太低，于是就想到了直接把爬取的数据存到数据库里一劳永逸。</p>
@@ -102,10 +85,108 @@
       </tags>
   </entry>
   <entry>
+    <title>LeetCode每日一题(一)</title>
+    <url>/2023/02/01/LeetCode%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-%E4%B8%80/</url>
+    <content><![CDATA[<h3 id="剑指-Offer-II-002-二进制加法"><a href="#剑指-Offer-II-002-二进制加法" class="headerlink" title="剑指 Offer II 002. 二进制加法"></a><a href="https://leetcode.cn/problems/JFETK5/">剑指 Offer II 002. 二进制加法</a></h3><p>难度：简单</p>
+<p>给定两个 01 字符串 <code>a</code> 和 <code>b</code> ，请计算它们的和，并以二进制字符串的形式输出。</p>
+<p>输入为 <strong>非空</strong> 字符串且只包含数字 <code>1</code> 和 <code>0</code>。</p>
+<blockquote>
+<p>示例 1:</p>
+<p>输入: a = “11”, b = “10”<br>输出: “101”</p>
+<p>示例 2:</p>
+<p>输入: a = “1010”, b = “1011”<br>输出: “10101”</p>
+<p>提示：每个字符串仅由字符 ‘0’ 或 ‘1’ 组成。<br>1 &lt;= a.length, b.length &lt;= 10^4<br>字符串如果不是 “0” ，就都不含前导零。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//将两个字符串的末位分别相加，如有进位用temp标记，将结果插入一个新的字符串的首位类似于进栈</span></span><br><span class="line"><span class="comment">//注意，字符char-&#x27;0&#x27;的使用，若char为整型的字符形式，该计算结果得到其int值，如&#x27;6&#x27;-&#x27;0&#x27;=6(int)</span></span><br><span class="line"><span class="comment">//另有一种算法，将两字符串每位相加得到新字符串，再进行逐字符进位计算</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">addBinary</span><span class="params">(String a, String b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> longa = a.length() - <span class="number">1</span> , longb = b.length()-<span class="number">1</span> , temp = <span class="number">0</span>;</span><br><span class="line">        StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        <span class="keyword">while</span>(longa&gt;=<span class="number">0</span>||longb&gt;=<span class="number">0</span>||temp!=<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">int</span> num1 = longa&gt;=<span class="number">0</span>?a.charAt(longa)-<span class="string">&#x27;0&#x27;</span>:<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> num2 = longb&gt;=<span class="number">0</span>?b.charAt(longb)-<span class="string">&#x27;0&#x27;</span>:<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> add = num1 + num2 + temp;</span><br><span class="line">            temp = add/<span class="number">2</span>;</span><br><span class="line">            sb.insert(<span class="number">0</span>,add%<span class="number">2</span>);</span><br><span class="line">            longa--;</span><br><span class="line">            longb--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sb.toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="剑指-Offer-II-003-前-n-个数字二进制中-1-的个数"><a href="#剑指-Offer-II-003-前-n-个数字二进制中-1-的个数" class="headerlink" title="剑指 Offer II 003. 前 n 个数字二进制中 1 的个数"></a><a href="https://leetcode.cn/problems/w3tCBm/">剑指 Offer II 003. 前 n 个数字二进制中 1 的个数</a></h3><p>难度简单114收藏分享切换为英文接收动态反馈</p>
+<p>给定一个非负整数 <code>n</code> ，请计算 <code>0</code> 到 <code>n</code> 之间的每个数字的二进制表示中 1 的个数，并输出一个数组。</p>
+<blockquote>
+<p><strong>示例 1:</strong></p>
+<p>输入: n = 2<br>输出: [0,1,1]<br>解释:<br>0 —&gt; 0<br>1 —&gt; 1<br>2 —&gt; 10</p>
+<p><strong>示例 2:</strong></p>
+<p>输入: n = 5<br>输出: [0,1,1,2,1,2]<br>解释:<br>0 —&gt; 0<br>1 —&gt; 1<br>2 —&gt; 10<br>3 —&gt; 11<br>4 —&gt; 100<br>5 —&gt; 101</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//奇数：二进制表示中，奇数一定比前面那个偶数多一个 1，因为多的就是最低位的 1。</span></span><br><span class="line"><span class="comment">//偶数：二进制表示中，偶数中 1 的个数一定和除以 2 之后的那个数一样多。因为最低位是 0，除以 2 就是右移一位，也就是把那个 0 抹掉而已，所以 1 的个数是不变的。</span></span><br><span class="line"><span class="comment">//dp[i] = dp[i/2] + i % 2</span></span><br><span class="line"><span class="comment">//通过位运算进一步优化：</span></span><br><span class="line"><span class="comment">//i / 2 可以通过 i &gt;&gt; 1 得到；</span></span><br><span class="line"><span class="comment">//i % 2 可以通过 i &amp; 1 得到；</span></span><br><span class="line"><span class="comment">//&amp;是按位与，对应位都为1时该位得1，否则得0。</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] countBits(<span class="keyword">int</span> n) &#123;</span><br><span class="line">        <span class="keyword">int</span>[] ans = <span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=n;i++)&#123;</span><br><span class="line">            ans[i] = ans[i&gt;&gt;<span class="number">1</span>]+(i&amp;<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="剑指-Offer-II-005-单词长度的最大乘积"><a href="#剑指-Offer-II-005-单词长度的最大乘积" class="headerlink" title="剑指 Offer II 005. 单词长度的最大乘积"></a><a href="https://leetcode.cn/problems/aseY1I/">剑指 Offer II 005. 单词长度的最大乘积</a></h3><p>难度中等122收藏分享切换为英文接收动态反馈</p>
+<p>给定一个字符串数组 <code>words</code>，请计算当两个字符串 <code>words[i]</code> 和 <code>words[j]</code> 不包含相同字符时，它们长度的乘积的最大值。假设字符串中只包含英语的小写字母。如果没有不包含相同字符的一对字符串，返回 0。</p>
+<blockquote>
+<p><strong>示例 1:</strong></p>
+<p>输入: words = [“abcw”,”baz”,”foo”,”bar”,”fxyz”,”abcdef”]<br>输出: 16<br>解释: 这两个单词为 “abcw”, “fxyz”。它们不包含相同字符，且长度的乘积最大。</p>
+<p><strong>示例 2:</strong></p>
+<p>输入: words = [“a”,”ab”,”abc”,”d”,”cd”,”bcd”,”abcd”]<br>输出: 4<br>解释: 这两个单词为 “ab”, “cd”。</p>
+<p><strong>示例 3:</strong></p>
+<p>输入: words = [“a”,”aa”,”aaa”,”aaaa”]<br>输出: 0<br>解释: 不存在这样的两个单词。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//将字符串中字符出现情况用二进制数表示，即字符a~z对应二进制数第0~25位，哪个字符出现就将二进制数对应位置1。这样的话对于不含相同字符的字符串，它们的二进制表示进行与运算结果就为0，否则结果就不为0，位运算能大大加快算法速度。</span></span><br><span class="line"><span class="comment">//本解法运用位运算和与或算法结合，如binary[i] |=(1&lt;&lt;(words[i].charAt(j)-&#x27;a&#x27;));</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProduct</span><span class="params">(String[] words)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = words.length,ans=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span>[] binary = <span class="keyword">new</span> <span class="keyword">int</span>[len];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;words[i].length();j++)&#123;</span><br><span class="line">                binary[i] |=(<span class="number">1</span>&lt;&lt;(words[i].charAt(j)-<span class="string">&#x27;a&#x27;</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len-<span class="number">1</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>;j&lt;len;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>((binary[i]&amp;binary[j])==<span class="number">0</span>) ans = Math.max(ans,(words[i].length()*words[j].length()));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="剑指-Offer-II-007-数组中和为-0-的三个数"><a href="#剑指-Offer-II-007-数组中和为-0-的三个数" class="headerlink" title="剑指 Offer II 007. 数组中和为 0 的三个数"></a><a href="https://leetcode.cn/problems/1fGaJU/">剑指 Offer II 007. 数组中和为 0 的三个数</a></h3><p>给你一个整数数组 <code>nums</code> ，判断是否存在三元组 <code>[nums[i], nums[j], nums[k]]</code> 满足 <code>i != j</code>、<code>i != k</code> 且 <code>j != k</code> ，同时还满足 <code>nums[i] + nums[j] + nums[k] == 0</code> 。请</p>
+<p>你返回所有和为 <code>0</code> 且不重复的三元组。</p>
+<p><strong>注意：</strong>答案中不可以包含重复的三元组。</p>
+<blockquote>
+<p><strong>示例 1：</strong></p>
+<p>输入：nums = [-1,0,1,2,-1,-4]<br>输出：[[-1,-1,2],[-1,0,1]]<br>解释：<br>nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0 。<br>nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0 。<br>nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0 。<br>不同的三元组是 [-1,0,1] 和 [-1,-1,2] 。<br>注意，输出的顺序和三元组的顺序并不重要。</p>
+<p><strong>示例 2：</strong></p>
+<p>输入：nums = [0,1,1]<br>输出：[]<br>解释：唯一可能的三元组和不为 0 。</p>
+<p><strong>示例 3：</strong></p>
+<p>输入：nums = [0,0,0]<br>输出：[[0,0,0]]<br>解释：唯一可能的三元组和为 0 。</p>
+</blockquote>
+<p>遥闻海水梦幽幽，君愁相思我亦愁</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//经典的双指针算法，固定一个数字i，从i+1到n-1下标中找到j和k，使得nums[i]+nums[j]+nums[k]=0</span></span><br><span class="line"><span class="comment">//本题关键在于去重，遍历nums时要去除相同数字。</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; threeSum(<span class="keyword">int</span>[] nums) &#123;</span><br><span class="line">        Arrays.sort(nums);</span><br><span class="line">        List&lt;List&lt;Integer&gt;&gt; ans = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">int</span> n = nums.length-<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;n-<span class="number">1</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(i&gt;<span class="number">0</span>&amp;&amp;nums[i]==nums[i-<span class="number">1</span>]) <span class="keyword">continue</span>; <span class="comment">//去重</span></span><br><span class="line">            <span class="keyword">int</span> j = i+<span class="number">1</span>,k = n;</span><br><span class="line">            <span class="keyword">while</span>(j &lt; k)&#123;</span><br><span class="line">                <span class="keyword">int</span> nownum = nums[i] + nums[j] + nums[k];</span><br><span class="line">                <span class="keyword">if</span>(nownum == <span class="number">0</span>)&#123;</span><br><span class="line">                    List&lt;Integer&gt; temp = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">                    temp.add(nums[i]);</span><br><span class="line">                    temp.add(nums[j]);</span><br><span class="line">                    temp.add(nums[k]);</span><br><span class="line">                    ans.add(temp);</span><br><span class="line">                    <span class="keyword">while</span>(j&lt;k&amp;&amp;nums[j+<span class="number">1</span>]==nums[j]) j++;  <span class="comment">//去重</span></span><br><span class="line">                    j++;</span><br><span class="line">                    <span class="keyword">while</span>(j&lt;k&amp;&amp;nums[k-<span class="number">1</span>]==nums[k]) k--;</span><br><span class="line">                    k--;</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span>(nownum&lt;<span class="number">0</span>)&#123;</span><br><span class="line">                    j++;</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span>(nownum&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                    k--;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>记录</tag>
+        <tag>编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python学习记录之批量爬取知乎图片</title>
+    <url>/2022/01/13/Python%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B9%8B%E6%89%B9%E9%87%8F%E7%88%AC%E5%8F%96%E7%9F%A5%E4%B9%8E%E5%9B%BE%E7%89%87/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前几天学了根据json爬取网页源码中没有的内容，知乎就是这种类型。正好最近没有好看的图片做博客封面，就用这种方式一劳永逸吧。在查阅资料的时候发现可以用两种方式实现图片获取。</p>
+<h3 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Askurl</span>(<span class="params">url</span>):</span></span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.92 Safari/537.36&#x27;</span>&#125;</span><br><span class="line">    <span class="comment"># 请求头要添加，不然访问失败</span></span><br><span class="line">    response = requests.get(url = url, headers = headers)</span><br><span class="line">    <span class="comment"># print(response.text)</span></span><br><span class="line">    <span class="keyword">return</span> response</span><br><span class="line"></span><br><span class="line">piclink = []</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Getpic</span>(<span class="params">html</span>):</span></span><br><span class="line">    Findurl = re.<span class="built_in">compile</span>(<span class="string">&#x27;&lt;noscript&gt;.*?data-original=&quot;(.*?)&quot;.*?&lt;/noscript&gt;&#x27;</span>, re.S)      <span class="comment">#  .*?  表示任意个，任意字符</span></span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line">    items = soup.select(<span class="string">&#x27;figure&#x27;</span>)</span><br><span class="line">    <span class="comment"># 将figure节点选择出来</span></span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> items:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            index = <span class="built_in">str</span>(index)</span><br><span class="line">            link = re.findall(Findurl,index)[<span class="number">0</span>]</span><br><span class="line">            piclink.append(link)</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;存在图片缺失&quot;</span>)                           <span class="comment">#用来解决数据为空的情况，很重要</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download</span>(<span class="params">path</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="built_in">len</span>(piclink)):</span><br><span class="line">        <span class="built_in">bytes</span> = Askurl(piclink[i]).content                <span class="comment">#.content返回二进制数据，适用于获取图片，视频等，与.text相对（返回文本）</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(path):</span><br><span class="line">            os.makedirs(path)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(path + <span class="string">&quot;image&quot;</span> + <span class="built_in">str</span>(i) + <span class="string">&quot;.jpg&quot;</span>, <span class="string">&quot;wb+&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(<span class="built_in">bytes</span>)</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="built_in">str</span>(i+<span class="number">1</span>) + <span class="string">&quot;/&quot;</span> + <span class="built_in">str</span>(<span class="built_in">len</span>(piclink)))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;图片下载成功&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    url = <span class="string">&quot;https://zhuanlan.zhihu.com/p/100765620&quot;</span></span><br><span class="line">    path = <span class="string">&quot;Images/&quot;</span></span><br><span class="line">    Getpic(Askurl(url).text)</span><br><span class="line">    download(path)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>这是通过request直接获取整个页面源码</p>
+<h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fetchUrl</span>(<span class="params">url</span>):</span></span><br><span class="line">    header = &#123;</span><br><span class="line">        <span class="string">&#x27;Accept&#x27;</span>: <span class="string">&#x27;text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36&#x27;</span>,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    r = requests.get(url, headers=header)</span><br><span class="line">    r.encoding = <span class="string">&quot;utf-8&quot;</span></span><br><span class="line">    <span class="keyword">return</span> r</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parseJson</span>(<span class="params">jsonStr</span>):</span>                         <span class="comment">#这个函数实际就是把json源码中的各项数据扒下来</span></span><br><span class="line"></span><br><span class="line">    jsonObj = json.loads(jsonStr)               <span class="comment">#解析json</span></span><br><span class="line">    data = jsonObj[<span class="string">&#x27;data&#x27;</span>]                      <span class="comment">#data是json中的属性，后面author也是，name是suthor的子属性，可以参照源码理解</span></span><br><span class="line">    <span class="comment"># datalist = []</span></span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> data:</span><br><span class="line">        name = item[<span class="string">&quot;author&quot;</span>][<span class="string">&quot;name&quot;</span>]</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;正在爬取&quot;</span>, name, <span class="string">&quot;的回答&quot;</span>)</span><br><span class="line">        Download(item[<span class="string">&quot;content&quot;</span>])</span><br><span class="line">        <span class="comment"># headline = item[&quot;author&quot;][&quot;headline&quot;]</span></span><br><span class="line">        <span class="comment"># dateTIme = time.strftime(&quot;%Y-%m-%d&quot;, time.localtime(item[&#x27;updated_time&#x27;]))</span></span><br><span class="line">        <span class="comment"># comment_count = item[&#x27;comment_count&#x27;]</span></span><br><span class="line">        <span class="comment"># voteup_count = item[&#x27;voteup_count&#x27;]</span></span><br><span class="line">        <span class="comment"># content = parseHtml(item[&quot;content&quot;])</span></span><br><span class="line">    <span class="comment">#     datalist.append([name, headline, dateTIme, comment_count, voteup_count, content])</span></span><br><span class="line">    <span class="comment"># return datalist</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Download</span>(<span class="params">html</span>):</span></span><br><span class="line"></span><br><span class="line">    bsObj = BeautifulSoup(html, <span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line">    images = bsObj.find_all(<span class="string">&quot;noscript&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">len</span>(images) == <span class="number">0</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;回答内容无图片&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;回答中共有&quot;</span>,<span class="built_in">len</span>(images),<span class="string">&quot;张图片，正在下载……&quot;</span>)</span><br><span class="line">        <span class="keyword">for</span> item <span class="keyword">in</span> images:</span><br><span class="line">            link = item.img[<span class="string">&#x27;data-original&#x27;</span>]</span><br><span class="line">            <span class="built_in">print</span>(link)</span><br><span class="line">            path = <span class="string">&quot;Images/&quot;</span></span><br><span class="line">            <span class="built_in">bytes</span> = fetchUrl(link).content</span><br><span class="line">            <span class="comment"># url : https://pic3.zhimg.com/c7ad985268e7144b588d7bf94eedb487_r.jpg?source=1940ef5c</span></span><br><span class="line">            <span class="comment"># filename: c7ad985268e7144b588d7bf94eedb487_r.jpg</span></span><br><span class="line">            filename = link.split(<span class="string">&quot;?&quot;</span>)[<span class="number">0</span>].split(<span class="string">&quot;/&quot;</span>)[-<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 如果没有该文件夹，则自动生成</span></span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(path):</span><br><span class="line">                os.makedirs(path)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">with</span> <span class="built_in">open</span>(path + filename, <span class="string">&quot;wb+&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                f.write(<span class="built_in">bytes</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;图片下载完成&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> bsObj.text</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">downloadImage</span>(<span class="params">url, path</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">bytes</span> = fetchUrl(url).content</span><br><span class="line">    <span class="comment"># url : https://pic3.zhimg.com/c7ad985268e7144b588d7bf94eedb487_r.jpg?source=1940ef5c</span></span><br><span class="line">    <span class="comment"># filename: c7ad985268e7144b588d7bf94eedb487_r.jpg</span></span><br><span class="line">    filename = url.split(<span class="string">&quot;?&quot;</span>)[<span class="number">0</span>].split(<span class="string">&quot;/&quot;</span>)[-<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 如果没有该文件夹，则自动生成</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(path):</span><br><span class="line">        os.makedirs(path)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(path + filename, <span class="string">&quot;wb+&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(<span class="built_in">bytes</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># def saveData(data, filename):</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#     dataframe = pd.DataFrame(data)</span></span><br><span class="line"><span class="comment">#     dataframe.to_csv(filename, mode=&#x27;a&#x27;, index=False, sep=&#x27;,&#x27;, header=False, encoding=&quot;utf_8_sig&quot;)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 保存的文件名</span></span><br><span class="line">    filename = <span class="string">&quot;data.csv&quot;</span></span><br><span class="line">    qid = <span class="number">316039999</span></span><br><span class="line">    offset = <span class="number">0</span></span><br><span class="line">    totalNum = <span class="number">50</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> offset &lt; totalNum:</span><br><span class="line">        url = <span class="string">&quot;https://www.zhihu.com/api/v4/questions/&#123;0&#125;/answers?include=data%5B%2A%5D.is_normal%2Cadmin_closed_comment%2Creward_info%2Cis_collapsed%2Cannotation_action%2Cannotation_detail%2Ccollapse_reason%2Cis_sticky%2Ccollapsed_by%2Csuggest_edit%2Ccomment_count%2Ccan_comment%2Ccontent%2Ceditable_content%2Cvoteup_count%2Creshipment_settings%2Ccomment_permission%2Ccreated_time%2Cupdated_time%2Creview_info%2Crelevant_info%2Cquestion%2Cexcerpt%2Crelationship.is_authorized%2Cis_author%2Cvoting%2Cis_thanked%2Cis_nothelp%2Cis_labeled%2Cis_recognized%2Cpaid_info%2Cpaid_info_content%3Bdata%5B%2A%5D.mark_infos%5B%2A%5D.url%3Bdata%5B%2A%5D.author.follower_count%2Cbadge%5B%2A%5D.topics&amp;limit=5&amp;offset=&#123;1&#125;&amp;platform=desktop&amp;sort_by=default&quot;</span> .<span class="built_in">format</span>(qid, offset)</span><br><span class="line">        <span class="comment">#这个请求链接包含网页参数。用format函数替换连接中的&#123;0&#125;，&#123;1&#125;等实现不同的请求。offset：请求页数，qid：知乎问题id</span></span><br><span class="line">        html = fetchUrl(url).text</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> data <span class="keyword">in</span> parseJson(html):</span><br><span class="line">            offset += <span class="number">1</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;已经爬取完成&quot;</span>,offset,<span class="string">&quot;条回答数据，一共有&quot;</span>,totalNum, <span class="string">&quot;条&quot;</span>)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;---&quot;</span>*<span class="number">20</span>)</span><br></pre></td></tr></table></figure>
+<p>这是获取json加载的源码</p>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>记录</tag>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Python学习记录之文件写入</title>
     <url>/2022/01/07/Python%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B9%8B%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>算是整了个活吧，先爬取人民网的新闻排行榜，再写入到md文件里面，按照博客的格式样式进行编辑，可以直接作为博客文件发表。整体没有什么难度，就当练手了。</p>
 <h3 id="直接上源码"><a href="#直接上源码" class="headerlink" title="直接上源码"></a>直接上源码</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- codeing = utf-8 -*-</span></span><br><span class="line"><span class="comment"># @time:2021/12/31  12:44</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> xlwt</span><br><span class="line"><span class="keyword">import</span> sqlite3  <span class="comment">#进行SQlite数据库操作</span></span><br><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.chrome.service <span class="keyword">import</span> Service</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Askurl</span>(<span class="params">url</span>):</span></span><br><span class="line">    head = &#123;</span><br><span class="line">        <span class="string">&quot;User-Agent&quot;</span>: <span class="string">&quot;Mozilla / 5.0(Windows NT 10.0;Win64;x64) AppleWebKit / 537.36(KHTML, likeGecko) Chrome / 92.0.4515.107Safari / 537.36Edg / 92.0.902.55&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">    req = requests.get(url=url, headers=head)</span><br><span class="line">    response = req.content.decode(<span class="string">&quot;gbk&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> response</span><br><span class="line"></span><br><span class="line">datalist = []</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Gtedata</span>(<span class="params">url</span>):</span></span><br><span class="line">    Findtitle = re.<span class="built_in">compile</span>(<span class="string">r&#x27;.html&quot;&gt;(.*?)&lt;/a&gt;&#x27;</span>)</span><br><span class="line">    Findlink = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;a class=&quot;anavy&quot; href=&quot;(.*?)&quot;&gt;&#x27;</span>)</span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    html=Askurl(url)</span><br><span class="line">    <span class="comment"># print(html)</span></span><br><span class="line">    soup=BeautifulSoup(html,<span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line">    index = soup.find_all(<span class="string">&#x27;table&#x27;</span>,width=<span class="string">&quot;712&quot;</span>)</span><br><span class="line">    fg = <span class="built_in">str</span>(index[<span class="number">0</span>]).split(<span class="string">&#x27;&lt;/tr&gt;&#x27;</span>)</span><br><span class="line">    fg = fg[<span class="number">1</span>:]</span><br><span class="line">    fg = fg[:(<span class="built_in">len</span>(fg)-<span class="number">1</span>)]       <span class="comment">#删除元组首尾元素，在这里面是无用信息</span></span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> fg:</span><br><span class="line">        <span class="comment"># print(item)</span></span><br><span class="line">        data = []</span><br><span class="line">        item = <span class="built_in">str</span>(item)</span><br><span class="line">        <span class="keyword">if</span> re.findall(Findtitle, item):</span><br><span class="line">            title = re.findall(Findtitle, item)[<span class="number">0</span>]</span><br><span class="line">            title = <span class="built_in">str</span>(title).replace(<span class="string">&#x27;\xa0&#x27;</span>,<span class="string">&#x27; &#x27;</span>).replace(<span class="string">&#x27;|&#x27;</span>,<span class="string">&#x27;--&#x27;</span>)</span><br><span class="line">            data.append(title)</span><br><span class="line"></span><br><span class="line">            slink = re.findall(Findlink,item)[<span class="number">0</span>]</span><br><span class="line">            link = <span class="built_in">str</span>(slink)</span><br><span class="line">            data.append(link)</span><br><span class="line"></span><br><span class="line">            datalist.append(data)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#输出测试</span></span><br><span class="line">    <span class="comment"># for index in datalist:</span></span><br><span class="line">        <span class="comment"># print(index)</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">wirtexx</span>():</span></span><br><span class="line">    tit = []</span><br><span class="line">    link = []</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> datalist:</span><br><span class="line">        tit.append(item[<span class="number">0</span>])</span><br><span class="line">        link.append(item[<span class="number">1</span>])</span><br><span class="line">    zh = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(tit)-<span class="number">1</span>):</span><br><span class="line">        a = <span class="string">&#x27;| &#x27;</span> +<span class="built_in">str</span>(tit[i]) + <span class="string">&#x27; | &#x27;</span> + <span class="built_in">str</span>(link[i]) + <span class="string">&#x27; |&#x27;</span></span><br><span class="line">        zh.append(a)</span><br><span class="line"></span><br><span class="line">    f = <span class="built_in">open</span>(<span class="string">&quot;rmw.md&quot;</span>, <span class="string">&quot;a&quot;</span>,encoding=<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">    f.write(<span class="string">&#x27;&#x27;&#x27;---</span></span><br><span class="line"><span class="string">title: 新闻</span></span><br><span class="line"><span class="string">date: 2022-01-05 20:21:09</span></span><br><span class="line"><span class="string">tags: </span></span><br><span class="line"><span class="string">- 新闻</span></span><br><span class="line"><span class="string">- python</span></span><br><span class="line"><span class="string">categories: python</span></span><br><span class="line"><span class="string">cover: https://cdn.jsdelivr.net/gh/ELIXsion/pictureck@master/pictureck/炮姐.28izrer0hq4g.webp</span></span><br><span class="line"><span class="string">top_img: https://cdn.jsdelivr.net/gh/ELIXsion/pictureck@master/pictureck/炮姐.28izrer0hq4g.webp</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">---</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>)</span><br><span class="line">    f.write(<span class="string">&#x27;| 标题 | 链接 |&#x27;</span>+<span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>+<span class="string">&#x27;|  ----  | ----  |&#x27;</span>+<span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> zh:</span><br><span class="line">        f.write(item+ <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>)</span><br><span class="line">    f.close()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 追加后，打开并读取该文件：</span></span><br><span class="line">    f = <span class="built_in">open</span>(<span class="string">&quot;rmw.md&quot;</span>, <span class="string">&quot;r&quot;</span>,encoding=<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(f.read())</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    baseurl=<span class="string">&quot;http://news.people.com.cn/GB/28053/index.html&quot;</span></span><br><span class="line">    Gtedata(baseurl)</span><br><span class="line">    wirtexx()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>记录</tag>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python学习记录之简单交互（微博热搜）</title>
+    <url>/2022/01/03/Python%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B9%8B%E7%AE%80%E5%8D%95%E4%BA%A4%E4%BA%92%EF%BC%88%E5%BE%AE%E5%8D%9A%E7%83%AD%E6%90%9C%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这次主要通过tkinter进行简单的交互操作，但感觉就目前看来这个功能没啥用处，于是没有深入研究。同时学习了一下更复杂的re正则表达式（虽然这次没用的上）</p>
+<p><a href="https://www.cnblogs.com/CYHISTW/p/11363209.html">python 正则 re模块(详细版) - 风，又奈何 - 博客园 (cnblogs.com)</a></p>
+<h2 id="思路与实践"><a href="#思路与实践" class="headerlink" title="思路与实践"></a>思路与实践</h2><p>研究微博源码的时候发现意外的简单（并不是），以为用requests就可以轻松爬取，但爬取之后却返回了一个错误的源码</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ELIXsion/pictureck@master/pictureck/image.7l0785oyuyg0.webp" alt=""></p>
+<p>大概是微博的身份识别系统吧，经过测试发现在网页滞留几秒之后才能正常进入，于是使用selenium进行操作（requests应该也能做到，以后研究）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Askurl</span>(<span class="params">url</span>):</span></span><br><span class="line">    s = Service(<span class="string">r&quot;E:\python\PyCharm Community Edition 2021.3.1\plugins\python-ce\helpers\typeshed\stubs\selenium\selenium\webdriver\chrome\chromedriver.exe&quot;</span>)</span><br><span class="line">    option = webdriver.ChromeOptions()</span><br><span class="line">    option.add_argument(<span class="string">&#x27;headless&#x27;</span>)  <span class="comment"># 设置option，隐藏弹出的窗口</span></span><br><span class="line">    driver = webdriver.Chrome(service=s,options=option)</span><br><span class="line">    driver.get(url)</span><br><span class="line">    <span class="comment">#这一段可以直接改为time.sleep(6)</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;请等待.....&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">7</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="built_in">str</span>(i) +<span class="string">&quot;/6&quot;</span>)</span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    text = driver.page_source</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></table></figure>
+<p>可以正常获取源码</p>
+<p>通过tkinter添加一个选择框，分别对应三个榜单</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">jh</span>():</span></span><br><span class="line">    root = Tk()</span><br><span class="line">    v = IntVar()</span><br><span class="line">    root.geometry(<span class="string">&#x27;300x100&#x27;</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">selection</span>():</span></span><br><span class="line">        se = <span class="built_in">str</span>(v.get())</span><br><span class="line">        url = <span class="string">&#x27;link&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> se==<span class="string">&#x27;1&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/&#x27;</span></span><br><span class="line">        <span class="keyword">elif</span> se==<span class="string">&#x27;2&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=socialevent&#x27;</span></span><br><span class="line">        <span class="keyword">elif</span> se==<span class="string">&#x27;3&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=entrank&#x27;</span></span><br><span class="line">        Gtedata(url)</span><br><span class="line">        root.destroy()</span><br><span class="line">    Language = [(<span class="string">&#x27;热搜榜&#x27;</span>, <span class="number">1</span>),</span><br><span class="line">                (<span class="string">&#x27;要闻榜&#x27;</span>, <span class="number">2</span>),</span><br><span class="line">                (<span class="string">&#x27;文娱榜&#x27;</span>, <span class="number">3</span>),</span><br><span class="line">                ]</span><br><span class="line">    <span class="keyword">for</span> lang, num <span class="keyword">in</span> Language:</span><br><span class="line">        b = Radiobutton(root, text=lang, variable=v, value=num, indicatoron=<span class="literal">False</span>, padx=<span class="number">30</span>, pady=<span class="number">3</span>,command=selection)</span><br><span class="line">        l = Label(root, textvariable=v)</span><br><span class="line">        b.pack(anchor=W, fill=X)</span><br><span class="line">    mainloop()</span><br></pre></td></tr></table></figure>
+<h4 id="运行结果："><a href="#运行结果：" class="headerlink" title="运行结果："></a>运行结果：</h4><p><img src="https://cdn.staticaly.com/gh/ELIXsion/pictureck@master/pictureck/image.5fobt0rnwzg0.webp" alt=""></p>
+<p><img src="https://cdn.staticaly.com/gh/ELIXsion/pictureck@master/pictureck/image.637t2p2k2zs0.webp" alt=""></p>
+<p>附源码：</p>
+<details class="folding-tag" cyan><summary> 点击展开 </summary>
+              <div class='content'>
+              <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.chrome.service <span class="keyword">import</span> Service</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Askurl</span>(<span class="params">url</span>):</span></span><br><span class="line">    s = Service(<span class="string">r&quot;E:\python\PyCharm Community Edition 2021.3.1\plugins\python-ce\helpers\typeshed\stubs\selenium\selenium\webdriver\chrome\chromedriver.exe&quot;</span>)</span><br><span class="line">    option = webdriver.ChromeOptions()</span><br><span class="line">    option.add_argument(<span class="string">&#x27;headless&#x27;</span>)  <span class="comment"># 设置option</span></span><br><span class="line">    driver = webdriver.Chrome(service=s,options=option)</span><br><span class="line">    driver.get(url)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;请等待.....&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">7</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="built_in">str</span>(i) +<span class="string">&quot;/6&quot;</span>)</span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line">    text = driver.page_source</span><br><span class="line">    <span class="keyword">return</span> text</span><br><span class="line"></span><br><span class="line">datalist = []</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Gtedata</span>(<span class="params">url</span>):</span></span><br><span class="line">    Findtitle = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&quot;&gt;(.*?)&lt;/a&gt;&#x27;</span>)</span><br><span class="line">    Findlink = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;a href=&quot;(.*?)&quot; target=&quot;_blank&quot;&gt;&#x27;</span>)</span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    html=Askurl(url)</span><br><span class="line">    <span class="built_in">print</span>(html)</span><br><span class="line">    soup=BeautifulSoup(html,<span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> soup.find_all(<span class="string">&#x27;td&#x27;</span>,class_=<span class="string">&quot;td-02&quot;</span>):</span><br><span class="line">        data = []</span><br><span class="line">        item = <span class="built_in">str</span>(item)</span><br><span class="line"></span><br><span class="line">        title = re.findall(Findtitle, item)[<span class="number">0</span>]</span><br><span class="line">        data.append(title)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> re.findall(Findlink,item):</span><br><span class="line">            slink = re.findall(Findlink, item)[<span class="number">0</span>]</span><br><span class="line">            link = <span class="string">&#x27;https://s.weibo.com&#x27;</span> + <span class="built_in">str</span>(slink)</span><br><span class="line">            data.append(link)</span><br><span class="line"></span><br><span class="line">        datalist.append(data)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#输出测试</span></span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> datalist:</span><br><span class="line">        <span class="built_in">print</span>(index)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">jh</span>():</span></span><br><span class="line">    root = Tk()</span><br><span class="line">    v = IntVar()</span><br><span class="line">    root.geometry(<span class="string">&#x27;300x100&#x27;</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">selection</span>():</span></span><br><span class="line">        se = <span class="built_in">str</span>(v.get())</span><br><span class="line">        url = <span class="string">&#x27;link&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> se==<span class="string">&#x27;1&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/&#x27;</span></span><br><span class="line">        <span class="keyword">elif</span> se==<span class="string">&#x27;2&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=socialevent&#x27;</span></span><br><span class="line">        <span class="keyword">elif</span> se==<span class="string">&#x27;3&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=entrank&#x27;</span></span><br><span class="line">        Gtedata(url)</span><br><span class="line">        root.destroy()</span><br><span class="line">    Language = [(<span class="string">&#x27;热搜榜&#x27;</span>, <span class="number">1</span>),</span><br><span class="line">                (<span class="string">&#x27;要闻榜&#x27;</span>, <span class="number">2</span>),</span><br><span class="line">                (<span class="string">&#x27;文娱榜&#x27;</span>, <span class="number">3</span>),</span><br><span class="line">                ]</span><br><span class="line">    <span class="keyword">for</span> lang, num <span class="keyword">in</span> Language:</span><br><span class="line">        b = Radiobutton(root, text=lang, variable=v, value=num, indicatoron=<span class="literal">False</span>, padx=<span class="number">30</span>, pady=<span class="number">3</span>,command=selection)</span><br><span class="line">        l = Label(root, textvariable=v)</span><br><span class="line">        b.pack(anchor=W, fill=X)</span><br><span class="line">    mainloop()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    jh()</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+              </div>
+            </details>]]></content>
       <categories>
         <category>python</category>
       </categories>
@@ -147,34 +228,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Python学习记录之简单交互（微博热搜）</title>
-    <url>/2022/01/03/Python%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B9%8B%E7%AE%80%E5%8D%95%E4%BA%A4%E4%BA%92%EF%BC%88%E5%BE%AE%E5%8D%9A%E7%83%AD%E6%90%9C%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这次主要通过tkinter进行简单的交互操作，但感觉就目前看来这个功能没啥用处，于是没有深入研究。同时学习了一下更复杂的re正则表达式（虽然这次没用的上）</p>
-<p><a href="https://www.cnblogs.com/CYHISTW/p/11363209.html">python 正则 re模块(详细版) - 风，又奈何 - 博客园 (cnblogs.com)</a></p>
-<h2 id="思路与实践"><a href="#思路与实践" class="headerlink" title="思路与实践"></a>思路与实践</h2><p>研究微博源码的时候发现意外的简单（并不是），以为用requests就可以轻松爬取，但爬取之后却返回了一个错误的源码</p>
-<p><img src="https://cdn.jsdelivr.net/gh/ELIXsion/pictureck@master/pictureck/image.7l0785oyuyg0.webp" alt=""></p>
-<p>大概是微博的身份识别系统吧，经过测试发现在网页滞留几秒之后才能正常进入，于是使用selenium进行操作（requests应该也能做到，以后研究）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Askurl</span>(<span class="params">url</span>):</span></span><br><span class="line">    s = Service(<span class="string">r&quot;E:\python\PyCharm Community Edition 2021.3.1\plugins\python-ce\helpers\typeshed\stubs\selenium\selenium\webdriver\chrome\chromedriver.exe&quot;</span>)</span><br><span class="line">    option = webdriver.ChromeOptions()</span><br><span class="line">    option.add_argument(<span class="string">&#x27;headless&#x27;</span>)  <span class="comment"># 设置option，隐藏弹出的窗口</span></span><br><span class="line">    driver = webdriver.Chrome(service=s,options=option)</span><br><span class="line">    driver.get(url)</span><br><span class="line">    <span class="comment">#这一段可以直接改为time.sleep(6)</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;请等待.....&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">7</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="built_in">str</span>(i) +<span class="string">&quot;/6&quot;</span>)</span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    text = driver.page_source</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></table></figure>
-<p>可以正常获取源码</p>
-<p>通过tkinter添加一个选择框，分别对应三个榜单</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">jh</span>():</span></span><br><span class="line">    root = Tk()</span><br><span class="line">    v = IntVar()</span><br><span class="line">    root.geometry(<span class="string">&#x27;300x100&#x27;</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">selection</span>():</span></span><br><span class="line">        se = <span class="built_in">str</span>(v.get())</span><br><span class="line">        url = <span class="string">&#x27;link&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> se==<span class="string">&#x27;1&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/&#x27;</span></span><br><span class="line">        <span class="keyword">elif</span> se==<span class="string">&#x27;2&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=socialevent&#x27;</span></span><br><span class="line">        <span class="keyword">elif</span> se==<span class="string">&#x27;3&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=entrank&#x27;</span></span><br><span class="line">        Gtedata(url)</span><br><span class="line">        root.destroy()</span><br><span class="line">    Language = [(<span class="string">&#x27;热搜榜&#x27;</span>, <span class="number">1</span>),</span><br><span class="line">                (<span class="string">&#x27;要闻榜&#x27;</span>, <span class="number">2</span>),</span><br><span class="line">                (<span class="string">&#x27;文娱榜&#x27;</span>, <span class="number">3</span>),</span><br><span class="line">                ]</span><br><span class="line">    <span class="keyword">for</span> lang, num <span class="keyword">in</span> Language:</span><br><span class="line">        b = Radiobutton(root, text=lang, variable=v, value=num, indicatoron=<span class="literal">False</span>, padx=<span class="number">30</span>, pady=<span class="number">3</span>,command=selection)</span><br><span class="line">        l = Label(root, textvariable=v)</span><br><span class="line">        b.pack(anchor=W, fill=X)</span><br><span class="line">    mainloop()</span><br></pre></td></tr></table></figure>
-<h4 id="运行结果："><a href="#运行结果：" class="headerlink" title="运行结果："></a>运行结果：</h4><p><img src="https://cdn.staticaly.com/gh/ELIXsion/pictureck@master/pictureck/image.5fobt0rnwzg0.webp" alt=""></p>
-<p><img src="https://cdn.staticaly.com/gh/ELIXsion/pictureck@master/pictureck/image.637t2p2k2zs0.webp" alt=""></p>
-<p>附源码：</p>
-<details class="folding-tag" cyan><summary> 点击展开 </summary>
-              <div class='content'>
-              <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.chrome.service <span class="keyword">import</span> Service</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Askurl</span>(<span class="params">url</span>):</span></span><br><span class="line">    s = Service(<span class="string">r&quot;E:\python\PyCharm Community Edition 2021.3.1\plugins\python-ce\helpers\typeshed\stubs\selenium\selenium\webdriver\chrome\chromedriver.exe&quot;</span>)</span><br><span class="line">    option = webdriver.ChromeOptions()</span><br><span class="line">    option.add_argument(<span class="string">&#x27;headless&#x27;</span>)  <span class="comment"># 设置option</span></span><br><span class="line">    driver = webdriver.Chrome(service=s,options=option)</span><br><span class="line">    driver.get(url)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;请等待.....&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">7</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="built_in">str</span>(i) +<span class="string">&quot;/6&quot;</span>)</span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line">    text = driver.page_source</span><br><span class="line">    <span class="keyword">return</span> text</span><br><span class="line"></span><br><span class="line">datalist = []</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Gtedata</span>(<span class="params">url</span>):</span></span><br><span class="line">    Findtitle = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&quot;&gt;(.*?)&lt;/a&gt;&#x27;</span>)</span><br><span class="line">    Findlink = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;a href=&quot;(.*?)&quot; target=&quot;_blank&quot;&gt;&#x27;</span>)</span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    html=Askurl(url)</span><br><span class="line">    <span class="built_in">print</span>(html)</span><br><span class="line">    soup=BeautifulSoup(html,<span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> soup.find_all(<span class="string">&#x27;td&#x27;</span>,class_=<span class="string">&quot;td-02&quot;</span>):</span><br><span class="line">        data = []</span><br><span class="line">        item = <span class="built_in">str</span>(item)</span><br><span class="line"></span><br><span class="line">        title = re.findall(Findtitle, item)[<span class="number">0</span>]</span><br><span class="line">        data.append(title)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> re.findall(Findlink,item):</span><br><span class="line">            slink = re.findall(Findlink, item)[<span class="number">0</span>]</span><br><span class="line">            link = <span class="string">&#x27;https://s.weibo.com&#x27;</span> + <span class="built_in">str</span>(slink)</span><br><span class="line">            data.append(link)</span><br><span class="line"></span><br><span class="line">        datalist.append(data)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#输出测试</span></span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> datalist:</span><br><span class="line">        <span class="built_in">print</span>(index)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">jh</span>():</span></span><br><span class="line">    root = Tk()</span><br><span class="line">    v = IntVar()</span><br><span class="line">    root.geometry(<span class="string">&#x27;300x100&#x27;</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">selection</span>():</span></span><br><span class="line">        se = <span class="built_in">str</span>(v.get())</span><br><span class="line">        url = <span class="string">&#x27;link&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> se==<span class="string">&#x27;1&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/&#x27;</span></span><br><span class="line">        <span class="keyword">elif</span> se==<span class="string">&#x27;2&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=socialevent&#x27;</span></span><br><span class="line">        <span class="keyword">elif</span> se==<span class="string">&#x27;3&#x27;</span>:</span><br><span class="line">            url = <span class="string">&#x27;https://s.weibo.com/top/summary/summary?cate=entrank&#x27;</span></span><br><span class="line">        Gtedata(url)</span><br><span class="line">        root.destroy()</span><br><span class="line">    Language = [(<span class="string">&#x27;热搜榜&#x27;</span>, <span class="number">1</span>),</span><br><span class="line">                (<span class="string">&#x27;要闻榜&#x27;</span>, <span class="number">2</span>),</span><br><span class="line">                (<span class="string">&#x27;文娱榜&#x27;</span>, <span class="number">3</span>),</span><br><span class="line">                ]</span><br><span class="line">    <span class="keyword">for</span> lang, num <span class="keyword">in</span> Language:</span><br><span class="line">        b = Radiobutton(root, text=lang, variable=v, value=num, indicatoron=<span class="literal">False</span>, padx=<span class="number">30</span>, pady=<span class="number">3</span>,command=selection)</span><br><span class="line">        l = Label(root, textvariable=v)</span><br><span class="line">        b.pack(anchor=W, fill=X)</span><br><span class="line">    mainloop()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    jh()</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-              </div>
-            </details>]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>记录</tag>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Python练习之文字提取</title>
     <url>/2022/04/08/Python%E7%BB%83%E4%B9%A0%E4%B9%8B%E6%96%87%E5%AD%97%E6%8F%90%E5%8F%96/</url>
     <content><![CDATA[<p>最近对明日方舟剧情很感兴趣，但游戏终有关服的一天，把剧情文本搞到本地才有安全感。于是到网上找到相关剧情，发现要么不能复制，要么会复制到奇怪的东西，反正都是麻烦，索性就用爬虫给爬下来了。</p>
@@ -195,6 +248,66 @@
       <tags>
         <tag>记录</tag>
         <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>butterfly使用记录（一直在更新）</title>
+    <url>/2021/10/12/butterfly%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<p> 刚开始建设博客，很多功能都不明白，记录一下常用的代码。（没有特殊说明均为主题配置文件下修改）</p>
+<p>日后：好乱啊，找个时间整理一下</p>
+<h1 id="美化相关"><a href="#美化相关" class="headerlink" title="美化相关"></a>美化相关</h1><p><strong>修改网站背景：background: url(/mysource/mainbg.png))</strong></p>
+<p>【mysource是在themes\butterfly\source下建立的文件夹用来存储个人资源，直接放在source下更新butterfly时可能被覆盖】</p>
+<p>（若使用网络链接，需要用 url(网址) 格式）</p>
+<p><strong>修改顶部图占比：index_top_img_height</strong></p>
+<p><strong>修改主页顶部图：index_img</strong></p>
+<p>（若使用网络连接，直接添加网址即可）</p>
+<p><strong>菜单子页面透明：archive_img: rgba(255,255,255,0.2)</strong></p>
+<p>（也可以改成其他图片，直接写链接即可；）</p>
+<p>其中tags页和category页需要在各自md文件中修改</p>
+<p><strong>打字效果（色彩，抖动）activate_power_mode</strong></p>
+<p><strong>鼠标点击效果：Mouse click effects</strong></p>
+<p><strong>背景动效：canvas_nest</strong></p>
+<p><strong>字体：<a href="https://akilar.top/posts/ebf20e02/">Custom Beautify | Akilar の糖果屋</a></strong></p>
+<p>这里面还有很多魔改美化内容</p>
+<p><strong>卡片背景透明化：<a href="https://www.cnblogs.com/MoYu-zc/p/14397889.html">Hexo之更换背景及透明度 - MoYu-zc - 博客园 (cnblogs.com)</a></strong></p>
+<details class="folding-tag" ><summary> 订正 </summary>
+              <div class='content'>
+              <p>文章里css引用可以直接在主题配置文件里面进行，不需要另外新建一个butterfly.yml</p><p>意思就是直接把</p><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/css/mycss.css&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure><p>插到主题配置文件的inject里</p>
+              </div>
+            </details>
+<p>版权板块美化：<a href="https://www.nesxc.com/post/hexocc.html">butterfly版权美化教程 | 小N博客 (nesxc.com)</a></p>
+<p>使用新字体：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">font</span> <span class="attr">face</span>=<span class="string">&quot;新字体文件名（无需后缀）&quot;</span>&gt;</span></span><span class="xml"><span class="tag">&lt;/<span class="name">font</span>&gt;</span></span>  //直接在markdown中使用</span><br></pre></td></tr></table></figure>
+<h1 id="功能相关"><a href="#功能相关" class="headerlink" title="功能相关"></a>功能相关</h1><p><strong>添加顶部轮播图：<a href="https://akilar.top/posts/8e1264d1/">Swiper Bar | Akilarの糖果屋</a></strong></p>
+<p>在博文配置项添加   swiper_index: 1</p>
+<p><strong>评论区：gitalk（多种方式可选）</strong></p>
+<p>注意：gitalk配置到butterfly中，repo填  仓库名.github.io</p>
+<p><strong>主题分类磁贴：参考<a href="https://akilar.top/posts/a9131002/">Butterfly主题美化日记 | Akilarの糖果屋</a></strong></p>
+<p><strong>vercel提供加速：<a href="https://vercel.com">Dashboard – Vercel</a></strong></p>
+<p>（一开始遇到了vercel不能和github同步的问题，此时应该到vercel项目中setting-git-Production Branch中检查默认分支是否为master（或自己设置的默认主分支））</p>
+<p><strong>说说配置：建议参考<a href="https://blog.csdn.net/cungudafa/article/details/105938885">(82条消息) hexo（butterfly）添加说说页面（Artitalk可在线发布）_cungudafa的博客-CSDN博客</a></strong></p>
+<p>真的太折磨了，按照官方文档来做不知道为什么修改不了页面显示（会直接单独建立一个html），感觉默认的很丑。。。。于是按照上文大佬的教程直接在md文件里配置说说了。。。。</p>
+<p><strong>时钟：<a href="https://akilar.top/posts/4e39cf4a/">Butterfly主题美化日记 | Akilarの糖果屋</a></strong></p>
+<p>出奇的，没出现任何问题就搞好了。。。。</p>
+<p><strong>图床：<a href="https://picx.xpoet.cn/#/config">图床配置 | PicX 图床神器 (xpoet.cn)</a>网页里有教程，实际就是用github</strong></p>
+<p><strong>首页导航页面</strong>：<a href="https://github.com/NianBroken/Personal_Sakura_Guide_Page">NianBroken/Personal_Sakura_Guide_Page: 一款好看的樱花个人引导页，基于Dimension的二次修改。普通虚拟主机即可搭建，无需其他环境。把源码上传到服务器，修改index.html里面的代码，访问域名就可以使用。纯Html-Css-JavaScript (github.com)</a></p>
+<p><strong>桌宠（大概是功能？）：见下一篇博客</strong></p>
+<p><strong>各界面的透明度设置</strong>：配置路径：Blog\themes\butterfly\source\css\mycss.css</p>
+<p>参考教程：<a href="https://yl1010code.gitee.io/2021/10/04/Butterfly%E9%80%8F%E6%98%8E%E8%83%8C%E6%99%AF%E8%AE%BE%E7%BD%AE/">Butterfly 透明背景设置 | LY’s Blog (gitee.io)</a></p>
+<p><strong>文章密码</strong>：在文章md头文件添加：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">password: 密码</span><br><span class="line">theme: xray       //可选主题：default/blink/shrink/flip/up/surge/wave/xray</span><br><span class="line">description: 有东西被加密了, 请输入密码查看.</span><br><span class="line">message: 您好, 这里需要密码.</span><br><span class="line">wrong<span class="emphasis">_pass_</span>message: 抱歉, 这个密码看着不太对, 请再试试.</span><br><span class="line">wrong<span class="emphasis">_hash_</span>message: 抱歉, 这个文章不能被校验, 不过您还是能看看解密后的内容.</span><br></pre></td></tr></table></figure>
+<p>音乐播放器（单曲）：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&#123;% meting &quot;3986040&quot; &quot;netease&quot; &quot;song&quot; &quot;theme:#e6d0b2&quot; &quot;mutex:true&quot; &quot;listmaxheight:340px&quot; &quot;preload:auto&quot; %&#125;</span><br></pre></td></tr></table></figure>
+<p>音乐播放器（歌单）：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&#123;% meting &quot;7642168633&quot; &quot;tencent&quot; &quot;playlist&quot; &quot;autoplay&quot; &quot;mutex:false&quot; &quot;listmaxheight:340px&quot; &quot;preload:none&quot; &quot;theme:#b4a7d6&quot;%&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="底部栏透明化"><a href="#底部栏透明化" class="headerlink" title="底部栏透明化"></a>底部栏透明化</h1><p>初始底部栏是蓝色的，更改网页背景后显得很突兀，难受我很久了却不知道怎么改。。。。</p>
+<p>解决方法：博客根目录\themes\butterfly\source\css_layout\footer.stly 将 background: $light-blue注释掉即可透明化，也可以改成其他颜色</p>
+]]></content>
+      <categories>
+        <category>记录</category>
+      </categories>
+      <tags>
+        <tag>工具</tag>
       </tags>
   </entry>
   <entry>
@@ -329,63 +442,22 @@
       </tags>
   </entry>
   <entry>
-    <title>butterfly使用记录（一直在更新）</title>
-    <url>/2021/10/12/butterfly%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<p> 刚开始建设博客，很多功能都不明白，记录一下常用的代码。（没有特殊说明均为主题配置文件下修改）</p>
-<p>日后：好乱啊，找个时间整理一下</p>
-<h1 id="美化相关"><a href="#美化相关" class="headerlink" title="美化相关"></a>美化相关</h1><p><strong>修改网站背景：background: url(/mysource/mainbg.png))</strong></p>
-<p>【mysource是在themes\butterfly\source下建立的文件夹用来存储个人资源，直接放在source下更新butterfly时可能被覆盖】</p>
-<p>（若使用网络链接，需要用 url(网址) 格式）</p>
-<p><strong>修改顶部图占比：index_top_img_height</strong></p>
-<p><strong>修改主页顶部图：index_img</strong></p>
-<p>（若使用网络连接，直接添加网址即可）</p>
-<p><strong>菜单子页面透明：archive_img: rgba(255,255,255,0.2)</strong></p>
-<p>（也可以改成其他图片，直接写链接即可；）</p>
-<p>其中tags页和category页需要在各自md文件中修改</p>
-<p><strong>打字效果（色彩，抖动）activate_power_mode</strong></p>
-<p><strong>鼠标点击效果：Mouse click effects</strong></p>
-<p><strong>背景动效：canvas_nest</strong></p>
-<p><strong>字体：<a href="https://akilar.top/posts/ebf20e02/">Custom Beautify | Akilar の糖果屋</a></strong></p>
-<p>这里面还有很多魔改美化内容</p>
-<p><strong>卡片背景透明化：<a href="https://www.cnblogs.com/MoYu-zc/p/14397889.html">Hexo之更换背景及透明度 - MoYu-zc - 博客园 (cnblogs.com)</a></strong></p>
-<details class="folding-tag" ><summary> 订正 </summary>
-              <div class='content'>
-              <p>文章里css引用可以直接在主题配置文件里面进行，不需要另外新建一个butterfly.yml</p><p>意思就是直接把</p><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/css/mycss.css&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure><p>插到主题配置文件的inject里</p>
-              </div>
-            </details>
-<p>版权板块美化：<a href="https://www.nesxc.com/post/hexocc.html">butterfly版权美化教程 | 小N博客 (nesxc.com)</a></p>
-<p>使用新字体：</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">font</span> <span class="attr">face</span>=<span class="string">&quot;新字体文件名（无需后缀）&quot;</span>&gt;</span></span><span class="xml"><span class="tag">&lt;/<span class="name">font</span>&gt;</span></span>  //直接在markdown中使用</span><br></pre></td></tr></table></figure>
-<h1 id="功能相关"><a href="#功能相关" class="headerlink" title="功能相关"></a>功能相关</h1><p><strong>添加顶部轮播图：<a href="https://akilar.top/posts/8e1264d1/">Swiper Bar | Akilarの糖果屋</a></strong></p>
-<p>在博文配置项添加   swiper_index: 1</p>
-<p><strong>评论区：gitalk（多种方式可选）</strong></p>
-<p>注意：gitalk配置到butterfly中，repo填  仓库名.github.io</p>
-<p><strong>主题分类磁贴：参考<a href="https://akilar.top/posts/a9131002/">Butterfly主题美化日记 | Akilarの糖果屋</a></strong></p>
-<p><strong>vercel提供加速：<a href="https://vercel.com">Dashboard – Vercel</a></strong></p>
-<p>（一开始遇到了vercel不能和github同步的问题，此时应该到vercel项目中setting-git-Production Branch中检查默认分支是否为master（或自己设置的默认主分支））</p>
-<p><strong>说说配置：建议参考<a href="https://blog.csdn.net/cungudafa/article/details/105938885">(82条消息) hexo（butterfly）添加说说页面（Artitalk可在线发布）_cungudafa的博客-CSDN博客</a></strong></p>
-<p>真的太折磨了，按照官方文档来做不知道为什么修改不了页面显示（会直接单独建立一个html），感觉默认的很丑。。。。于是按照上文大佬的教程直接在md文件里配置说说了。。。。</p>
-<p><strong>时钟：<a href="https://akilar.top/posts/4e39cf4a/">Butterfly主题美化日记 | Akilarの糖果屋</a></strong></p>
-<p>出奇的，没出现任何问题就搞好了。。。。</p>
-<p><strong>图床：<a href="https://picx.xpoet.cn/#/config">图床配置 | PicX 图床神器 (xpoet.cn)</a>网页里有教程，实际就是用github</strong></p>
-<p><strong>首页导航页面</strong>：<a href="https://github.com/NianBroken/Personal_Sakura_Guide_Page">NianBroken/Personal_Sakura_Guide_Page: 一款好看的樱花个人引导页，基于Dimension的二次修改。普通虚拟主机即可搭建，无需其他环境。把源码上传到服务器，修改index.html里面的代码，访问域名就可以使用。纯Html-Css-JavaScript (github.com)</a></p>
-<p><strong>桌宠（大概是功能？）：见下一篇博客</strong></p>
-<p><strong>各界面的透明度设置</strong>：配置路径：Blog\themes\butterfly\source\css\mycss.css</p>
-<p>参考教程：<a href="https://yl1010code.gitee.io/2021/10/04/Butterfly%E9%80%8F%E6%98%8E%E8%83%8C%E6%99%AF%E8%AE%BE%E7%BD%AE/">Butterfly 透明背景设置 | LY’s Blog (gitee.io)</a></p>
-<p><strong>文章密码</strong>：在文章md头文件添加：</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">password: 密码</span><br><span class="line">theme: xray       //可选主题：default/blink/shrink/flip/up/surge/wave/xray</span><br><span class="line">description: 有东西被加密了, 请输入密码查看.</span><br><span class="line">message: 您好, 这里需要密码.</span><br><span class="line">wrong<span class="emphasis">_pass_</span>message: 抱歉, 这个密码看着不太对, 请再试试.</span><br><span class="line">wrong<span class="emphasis">_hash_</span>message: 抱歉, 这个文章不能被校验, 不过您还是能看看解密后的内容.</span><br></pre></td></tr></table></figure>
-<p>音乐播放器（单曲）：</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&#123;% meting &quot;3986040&quot; &quot;netease&quot; &quot;song&quot; &quot;theme:#e6d0b2&quot; &quot;mutex:true&quot; &quot;listmaxheight:340px&quot; &quot;preload:auto&quot; %&#125;</span><br></pre></td></tr></table></figure>
-<p>音乐播放器（歌单）：</p>
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&#123;% meting &quot;7642168633&quot; &quot;tencent&quot; &quot;playlist&quot; &quot;autoplay&quot; &quot;mutex:false&quot; &quot;listmaxheight:340px&quot; &quot;preload:none&quot; &quot;theme:#b4a7d6&quot;%&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="底部栏透明化"><a href="#底部栏透明化" class="headerlink" title="底部栏透明化"></a>底部栏透明化</h1><p>初始底部栏是蓝色的，更改网页背景后显得很突兀，难受我很久了却不知道怎么改。。。。</p>
-<p>解决方法：博客根目录\themes\butterfly\source\css_layout\footer.stly 将 background: $light-blue注释掉即可透明化，也可以改成其他颜色</p>
+    <title>butterfly配置valine/twikoo评论区不能正常显示的问题</title>
+    <url>/2021/10/17/butterfly%E9%85%8D%E7%BD%AEvaline-twikoo%E8%AF%84%E8%AE%BA%E5%8C%BA%E4%B8%8D%E8%83%BDc%E6%AD%A3%E5%B8%B8%E6%98%BE%E7%A4%BA%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>今天想再配置一个评论区（gitalk有时候实在是太慢了），但按照教程配置完毕之后总是不能正常显示</p>
+
+<p>在网上找不到类似的案例，折腾了一下午都没有结果。。。</p>
+<p>最后发现原因是在butterfly中引用评论区的首字母要大写（如图）</p>
+
+<p>修改之后顺利解决。</p>
+<p>如果出现类似问题，也要考虑是不是功能调用错误。</p>
+<p><strong>好吧，果然还是我太菜了。</strong></p>
 ]]></content>
       <categories>
         <category>记录</category>
       </categories>
       <tags>
-        <tag>工具</tag>
+        <tag>记录</tag>
       </tags>
   </entry>
   <entry>
@@ -668,25 +740,6 @@
       <tags>
         <tag>python</tag>
         <tag>新闻</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>butterfly配置valine/twikoo评论区不能正常显示的问题</title>
-    <url>/2021/10/17/butterfly%E9%85%8D%E7%BD%AEvaline-twikoo%E8%AF%84%E8%AE%BA%E5%8C%BA%E4%B8%8D%E8%83%BDc%E6%AD%A3%E5%B8%B8%E6%98%BE%E7%A4%BA%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>今天想再配置一个评论区（gitalk有时候实在是太慢了），但按照教程配置完毕之后总是不能正常显示</p>
-
-<p>在网上找不到类似的案例，折腾了一下午都没有结果。。。</p>
-<p>最后发现原因是在butterfly中引用评论区的首字母要大写（如图）</p>
-
-<p>修改之后顺利解决。</p>
-<p>如果出现类似问题，也要考虑是不是功能调用错误。</p>
-<p><strong>好吧，果然还是我太菜了。</strong></p>
-]]></content>
-      <categories>
-        <category>记录</category>
-      </categories>
-      <tags>
-        <tag>记录</tag>
       </tags>
   </entry>
   <entry>
@@ -1137,27 +1190,6 @@
       </tags>
   </entry>
   <entry>
-    <title>博客建设日志</title>
-    <url>/2021/10/21/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E8%AE%BE%E6%97%A5%E5%BF%97/</url>
-    <content><![CDATA[<p>记录一下搭建的过程，大部分参考的文章可以在butterfly使用记录找到</p>
-<p>…….</p>
-<p>2021/10/19：加入音乐，电影功能</p>
-<p>2021/10/20：加入图库功能</p>
-<p>2021/10/21：创建图床，顶部轮播文章，改了字体和动态标题</p>
-<p>2021/10/22：外挂标签，添加P站日榜</p>
-<p>2021/10/23：添加搜索框，优化了底部栏（至少比以前好了），取消了顶部文章轮播。发现黑夜模式出问题了，说说功能需要刷新一次才显示。</p>
-<p>2021/11/11：修改各页面的透明度</p>
-<p>2021/11/14：部分优化，尝试做点美化最后回归默认。。。</p>
-<p>2021//11/16：添加导航页面，虽然目前只有这一个站点。修复了说说头像问题</p>
-<p>2021/12/26：美化版权信息板块，引入新字体</p>
-<p>2022/2/10： 添加文章密码功能（虽然没啥用）</p>
-<p>2022/3/24： pivix日榜API好像失效了….也可能是被墙了？于是取消了。</p>
-]]></content>
-      <tags>
-        <tag>记录</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>scrapy二级爬取实践详记</title>
     <url>/2022/07/10/scrapy%E7%88%AC%E5%8F%96%E9%9F%B3%E4%B9%90%E7%BD%91%E7%AB%99%E8%AF%A6%E8%AE%B0/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>既上一篇文章之后发现自己对scrapy的爬取流程还是不太理解，于是自己做了个小脚本用来练习。因为爬取到信息较少，但是涉及的功能没有减少，因此也更直观更好理解了。</p>
@@ -1237,6 +1269,27 @@
       </tags>
   </entry>
   <entry>
+    <title>博客建设日志</title>
+    <url>/2021/10/21/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E8%AE%BE%E6%97%A5%E5%BF%97/</url>
+    <content><![CDATA[<p>记录一下搭建的过程，大部分参考的文章可以在butterfly使用记录找到</p>
+<p>…….</p>
+<p>2021/10/19：加入音乐，电影功能</p>
+<p>2021/10/20：加入图库功能</p>
+<p>2021/10/21：创建图床，顶部轮播文章，改了字体和动态标题</p>
+<p>2021/10/22：外挂标签，添加P站日榜</p>
+<p>2021/10/23：添加搜索框，优化了底部栏（至少比以前好了），取消了顶部文章轮播。发现黑夜模式出问题了，说说功能需要刷新一次才显示。</p>
+<p>2021/11/11：修改各页面的透明度</p>
+<p>2021/11/14：部分优化，尝试做点美化最后回归默认。。。</p>
+<p>2021//11/16：添加导航页面，虽然目前只有这一个站点。修复了说说头像问题</p>
+<p>2021/12/26：美化版权信息板块，引入新字体</p>
+<p>2022/2/10： 添加文章密码功能（虽然没啥用）</p>
+<p>2022/3/24： pivix日榜API好像失效了….也可能是被墙了？于是取消了。</p>
+]]></content>
+      <tags>
+        <tag>记录</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>博客添加Pixiv日榜</title>
     <url>/2021/10/22/%E5%8D%9A%E5%AE%A2%E6%B7%BB%E5%8A%A0Pixiv%E6%97%A5%E6%A6%9C/</url>
     <content><![CDATA[<p>今天逛大佬博客看见这个功能，自己也想整一个，但是添加的过程中发现日榜的窗口不是固定的，可能是主题更新的缘故吧，需要对旧的代码做一些改动，以下是我的配置步骤。（参考文章：<a href="https://blog.hclonely.com/posts/57bd67ce/">HCLonely Blog - Hexo 博客美化</a>）</p>
@@ -1261,7 +1314,7 @@
     <title>周年记</title>
     <url>/2022/12/12/%E5%91%A8%E5%B9%B4%E8%AE%B0/</url>
     <content><![CDATA[<h2 id="一周年！"><a href="#一周年！" class="headerlink" title="一周年！"></a><strong>一周年！</strong></h2>
-    <div id="aplayer-vDAvHBEZ" class="aplayer aplayer-tag-marker meting-tag-marker"
+    <div id="aplayer-TyNFgxCG" class="aplayer aplayer-tag-marker meting-tag-marker"
          data-id="1815684465" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
     ></div>
 <p>这是迟来两个月的周年记</p>
@@ -1371,24 +1424,29 @@
       </tags>
   </entry>
   <entry>
-    <title>瀚海独行</title>
-    <url>/2022/02/27/%E7%80%9A%E6%B5%B7%E7%8B%AC%E8%A1%8C/</url>
-    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉, 这个密码看着不太对, 请再试试." data-whm="抱歉, 这个文章不能被校验, 不过您还是能看看解密后的内容.">
-  <script id="hbeData" type="hbeData" data-hmacdigest="bb2059bb80e779fd678d9bbe6039abf48592727faf1c7859cd42d79f4b9c13b3">32e625606d9bf475f5093184c24ea92ac89503c90238ae5ee411efef900b742d292f19f6dd256a293a4306e09bd43a015139d65d4f406e594d3f61f292134262eb56cc142148ef4b9dd58781c61575517db087b11eeb7845d642b54706a0f0417d1521628984d0dbc929f357423d00ac07d38902c7ff5dbc033bb6f1875cebe9337321f9ed4b2aa1aa937ee068d4e68e0d7e0bac34c8de95301bb695a3b4031ee95659605455cb47a7193e3516e9f4a81ced0172cb603526e836754c6d5924922562197e0f33163da7e9fd95b0ee2db4a0078fa44b61426ae8010ba10a3bf0a91fd8fa46657be41f6722c17cdfa207018b45ccace09efbc53e6d6b20f719a12ff71284afc52386ee9feb01648df13b21155c866a1c43f28c04a323365a18ab207694a7276d8ea72ad728a7a39e6b3f3036e5bea02278d0ae063ff9ab9373e9c6ea3a188c0d018e4f531a9b96f875b4e21b562a2d88f33f1d4dd91c4eb362c3be538f42a9e16750a2e8d1fc843bdd8be459a278b18cf12f1452f9bbe3cc51b9d5c5aa743fd34a25688bf3401a26a0c658d96418c807a6e511337e07c698986cfb4726ee2f460db578e501f2aac0aff239bd7b5081b04b2ba96710a033f5b8b79c06d63ff71c8b3ad07ec51d5f1dcbf8ad77299cc34f2099578edd5c17dc5538b5323f3b9fad156c1ce50ee333573dc56cdc081773cad67163098c076fc606a5d65aaff4ea8aa873c504aa6cd269065c3564939592a692cbe4ef1f9d67c250fbabbc91a634dc0c511212756eaf5c106cab904a023012dc101ee4bf2d6280432daa35d40b38dcd07d326564ab1db25878d4c125c0d7df89308fb3db6099ad7f7177d92c533df8e5dfbdc5daefad4e2a3408891eac6947f117ef84c90b52f35287bfac3c0c22867e20c66d16a065dbfcf24edd7f3764c914affaf25cfff83a0424c8f49c20625637f85c1a8a37f60357b4f9d265459e4ccaae31fefd48faceee12816b6b379ec2126b6e4c9c466305b5698b7fbc4212279bdfab8b9cb8eeebcf938466c9c69358c4a54c758a584599249feaf8b3638687d408fb5ea3c92c63d8af31a2e05138aff2e49ddfb1faba469c0ac22f6ba18c12955f6e83338245113f64ac3eb7dfbe3a36025756155b3acacb50393396179315a0c7071cbd6f679585dc180b2d2b4a38d2a0185d2750e3264a42ece489e8cc2ec2abf24ef0f2e795e4719a440203c2b37170655df78baa58e4b811ba8570ed81ec40ef0dbbece752978be25cb41580067a6fbc235e8308e176df90432a00fad61641278d6a5ca916726a5e9a9b038286fd779546f448f6eb360321e75667aafd04cfdf550889ef1d910a6c3b702d4b93502ffe50f734cb0c4c464f90f10030daead51db75b14d3cefd46fe961e3a5868da9339c302d464caead2dbca84aa4a32b5d3c2156c2f1057b834476d28d560a6fe7d7cbcbd724e4cb2133d</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-xray">
-      <input class="hbe hbe-input-field hbe-input-field-xray" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-xray" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-xray">您好, 请输入密码.</span>
-      </label>
-      <svg class="hbe hbe-graphic hbe-graphic-xray" width="300%" height="100%" viewBox="0 0 1200 60" preserveAspectRatio="none">
-        <path d="M0,56.5c0,0,298.666,0,399.333,0C448.336,56.5,513.994,46,597,46c77.327,0,135,10.5,200.999,10.5c95.996,0,402.001,0,402.001,0"></path>
-        <path d="M0,2.5c0,0,298.666,0,399.333,0C448.336,2.5,513.994,13,597,13c77.327,0,135-10.5,200.999-10.5c95.996,0,402.001,0,402.001,0"></path>
-      </svg>
-    </div>
-  </div>
-</div>
-<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+    <title>看板娘配置过程中的一些问题</title>
+    <url>/2021/10/13/%E7%9C%8B%E6%9D%BF%E5%A8%98%E9%85%8D%E7%BD%AE%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p><strong>插件配置参考大佬文章   <a href="https://akilar.top/posts/5b8f515f/">Live2d Widget | Akilarの糖果屋</a></strong></p>
+<h1>获取插件问题</h1>
+
+<p>根据教程下载插件时报错，显示如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">found XX vulnerabilities (X low, X moderate, X high) in 2770 scanned packages</span><br><span class="line">  run `npm audit fix` to fix 1 of them.</span><br><span class="line">  XX vulnerabilities require semver-major dependency updates.</span><br><span class="line">  XXX vulnerabilities require manual review. See the full report for details.</span><br></pre></td></tr></table></figure>
+<p>根据提示执行npm audit fix 依然无法完成下载</p>
+<p>网上查阅得知解决方案如下：</p>
+<ol>
+<li>淘宝镜像源会自动修复，然后下载相关依赖包。</li>
+<li>使用<code>nrm use taobao</code>，<code>nrm</code>如果没有安装，就使用<code>npm i -g nrm</code>，然后再使用<code>nrm use taobao</code></li>
+<li>再使用<code>npm i</code> 安装一遍所有依赖包，这时候没下载的会自动下载，问题解决。</li>
+</ol>
+<h1>文件修改</h1>
+
+<p>根据教程修改 autoload.js 文件时无法打开，提示‘return’语句在函数之外。</p>
+<p>网上查询乱七八糟，后来发现系统自带打开js文件的工具是based script host</p>
+<p>解决方案：使用记事本打开文件</p>
+]]></content>
+      <tags>
+        <tag>记录</tag>
+      </tags>
   </entry>
   <entry>
     <title>First Blog</title>
@@ -1440,6 +1498,123 @@
       </categories>
       <tags>
         <tag>这是标签</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>瀚海独行</title>
+    <url>/2022/02/27/%E7%80%9A%E6%B5%B7%E7%8B%AC%E8%A1%8C/</url>
+    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉, 这个密码看着不太对, 请再试试." data-whm="抱歉, 这个文章不能被校验, 不过您还是能看看解密后的内容.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="bb2059bb80e779fd678d9bbe6039abf48592727faf1c7859cd42d79f4b9c13b3">32e625606d9bf475f5093184c24ea92ac89503c90238ae5ee411efef900b742d292f19f6dd256a293a4306e09bd43a015139d65d4f406e594d3f61f292134262eb56cc142148ef4b9dd58781c61575517db087b11eeb7845d642b54706a0f0417d1521628984d0dbc929f357423d00ac07d38902c7ff5dbc033bb6f1875cebe9337321f9ed4b2aa1aa937ee068d4e68e0d7e0bac34c8de95301bb695a3b4031ee95659605455cb47a7193e3516e9f4a81ced0172cb603526e836754c6d5924922562197e0f33163da7e9fd95b0ee2db4a0078fa44b61426ae8010ba10a3bf0a91fd8fa46657be41f6722c17cdfa207018b45ccace09efbc53e6d6b20f719a12ff71284afc52386ee9feb01648df13b21155c866a1c43f28c04a323365a18ab207694a7276d8ea72ad728a7a39e6b3f3036e5bea02278d0ae063ff9ab9373e9c6ea3a188c0d018e4f531a9b96f875b4e21b562a2d88f33f1d4dd91c4eb362c3be538f42a9e16750a2e8d1fc843bdd8be459a278b18cf12f1452f9bbe3cc51b9d5c5aa743fd34a25688bf3401a26a0c658d96418c807a6e511337e07c698986cfb4726ee2f460db578e501f2aac0aff239bd7b5081b04b2ba96710a033f5b8b79c06d63ff71c8b3ad07ec51d5f1dcbf8ad77299cc34f2099578edd5c17dc5538b5323f3b9fad156c1ce50ee333573dc56cdc081773cad67163098c076fc606a5d65aaff4ea8aa873c504aa6cd269065c3564939592a692cbe4ef1f9d67c250fbabbc91a634dc0c511212756eaf5c106cab904a023012dc101ee4bf2d6280432daa35d40b38dcd07d326564ab1db25878d4c125c0d7df89308fb3db6099ad7f7177d92c533df8e5dfbdc5daefad4e2a3408891eac6947f117ef84c90b52f35287bfac3c0c22867e20c66d16a065dbfcf24edd7f3764c914affaf25cfff83a0424c8f49c20625637f85c1a8a37f60357b4f9d265459e4ccaae31fefd48faceee12816b6b379ec2126b6e4c9c466305b5698b7fbc4212279bdfab8b9cb8eeebcf938466c9c69358c4a54c758a584599249feaf8b3638687d408fb5ea3c92c63d8af31a2e05138aff2e49ddfb1faba469c0ac22f6ba18c12955f6e83338245113f64ac3eb7dfbe3a36025756155b3acacb50393396179315a0c7071cbd6f679585dc180b2d2b4a38d2a0185d2750e3264a42ece489e8cc2ec2abf24ef0f2e795e4719a440203c2b37170655df78baa58e4b811ba8570ed81ec40ef0dbbece752978be25cb41580067a6fbc235e8308e176df90432a00fad61641278d6a5ca916726a5e9a9b038286fd779546f448f6eb360321e75667aafd04cfdf550889ef1d910a6c3b702d4b93502ffe50f734cb0c4c464f90f10030daead51db75b14d3cefd46fe961e3a5868da9339c302d464caead2dbca84aa4a32b5d3c2156c2f1057b834476d28d560a6fe7d7cbcbd724e4cb2133d</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-xray">
+      <input class="hbe hbe-input-field hbe-input-field-xray" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-xray" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-xray">您好, 请输入密码.</span>
+      </label>
+      <svg class="hbe hbe-graphic hbe-graphic-xray" width="300%" height="100%" viewBox="0 0 1200 60" preserveAspectRatio="none">
+        <path d="M0,56.5c0,0,298.666,0,399.333,0C448.336,56.5,513.994,46,597,46c77.327,0,135,10.5,200.999,10.5c95.996,0,402.001,0,402.001,0"></path>
+        <path d="M0,2.5c0,0,298.666,0,399.333,0C448.336,2.5,513.994,13,597,13c77.327,0,135-10.5,200.999-10.5c95.996,0,402.001,0,402.001,0"></path>
+      </svg>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+  </entry>
+  <entry>
+    <title>算法试做</title>
+    <url>/2022/09/12/%E7%AE%97%E6%B3%95%E8%AF%95%E5%81%9A/</url>
+    <content><![CDATA[<p>877—石子游戏（动态规划）</p>
+<blockquote>
+<p>Alice 和 Bob 用几堆石子在做游戏。一共有偶数堆石子，排成一行；每堆都有 正 整数颗石子，数目为 piles[i] 。</p>
+<p>游戏以谁手中的石子最多来决出胜负。石子的 总数 是 奇数 ，所以没有平局。</p>
+<p>Alice 和 Bob 轮流进行，Alice 先开始 。 每回合，玩家从行的 开始 或 结束 处取走整堆石头。 这种情况一直持续到没有更多的石子堆为止，此时手中 石子最多 的玩家 获胜 。</p>
+<p>假设 Alice 和 Bob 都发挥出最佳水平，当 Alice 赢得比赛时返回 true ，当 Bob 赢得比赛时返回 false 。</p>
+<p>示例 </p>
+<p>输入：piles = [5,3,4,5]<br>输出：true<br>解释：<br>Alice 先开始，只能拿前 5 颗或后 5 颗石子 。<br>假设他取了前 5 颗，这一行就变成了 [3,4,5] 。<br>如果 Bob 拿走前 3 颗，那么剩下的是 [4,5]，Alice 拿走后 5 颗赢得 10 分。<br>如果 Bob 拿走后 5 颗，那么剩下的是 [3,4]，Alice 拿走后 4 颗赢得 9 分。<br>这表明，取前 5 颗石子对 Alice 来说是一个胜利的举动，所以返回 true 。</p>
+<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode.cn/problems/stone-game">https://leetcode.cn/problems/stone-game</a></p>
+</blockquote>
+<p>题解：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//比较两数大小并返回较大的一方</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">max</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a&gt;=b?a:b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">dp[i][j]表示从第i到j堆石头，Alex（先手）能领先Lee（后手）的最大分值。</span></span><br><span class="line"><span class="comment">    1.Alex拿走第j堆，则相当于变成：Alex初始分数为piles[j-1]，第i到j-1堆，且Lee先手。</span></span><br><span class="line"><span class="comment">        dp[i][j] = piles[j-1] + (-dp[i][j-1])</span></span><br><span class="line"><span class="comment">    2.Alex拿走第i堆，则相当于变成：Alex初始分数为piles[i-1]，第i+1到j堆，且Lee先手。</span></span><br><span class="line"><span class="comment">        dp[i][j] = piles[i-1] + (-dp[i+1][j])</span></span><br><span class="line"><span class="comment">    二者取大。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">stoneGame</span><span class="params">(<span class="keyword">int</span>* piles, <span class="keyword">int</span> pilesSize)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> dp[pilesSize+<span class="number">1</span>][pilesSize+<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=pilesSize;i++)&#123;</span><br><span class="line">        dp[i][i]=piles[<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> len=<span class="number">1</span>;len&lt;pilesSize;len++)&#123;  <span class="comment">//区间长度</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i+len&lt;pilesSize;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> j = i+len;</span><br><span class="line">            dp[i][j] = max(piles[i<span class="number">-1</span>]-dp[i+<span class="number">1</span>][j],piles[j]-dp[i][j<span class="number">-1</span>]);<span class="comment">//对应上方注释</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[<span class="number">1</span>][pilesSize]&gt;=<span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>观墨识文</title>
+    <url>/2022/02/10/%E8%A7%82%E5%A2%A8%E8%AF%86%E6%96%87/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近偶尔会心生感慨，但想要记录些什么的时候却又提笔忘言，恰如此时此刻。好在互联网让人与世界得以连接，在此中我可以看到更多人与世事，阅尽千帆，尽尝百态。因做此篇，旨在记录在互联网上看到的令我有所感悟的文章，观墨识文，浅尝咸淡，略品其味。</p>
+<blockquote>
+<p>  十周年。</p>
+<p>  感谢无数朋友这么多年来，每天私信提醒我还有XX天就X周年了，让我每天都梦回那高考倒计时青春的年代。（咬牙切齿）<br>  感谢无数朋友这么多年来，每天私信询问我是否还活着，让我感受到了人性的温暖。（狗头斜视）<br>  感谢无数朋友这么多年来，每天私信和我分享他们的故事，让我可以体验不同的人生。（感恩比心）</p>
+<p>  首先是例行报告，简单概括，我还活着，身体健康，父母身体算不上好，但无大碍。只差临门一脚，就能还清债务，已经又能看见未来了，还需继续努力。</p>
+<p>  每个十年，都不过惊鸿一瞥，却是人生的一段重要旅程。<br>  这十年对我来说，也是很特殊的一段时光。我人生中很多重要的节点刻在了这十年的里程碑里，有些剧情已经落幕，有些情节还在上演。我思考了很多关于十周年的时候我会写点什么，真到了今天，突然有点语塞，静下心来回忆这十年，发现原来想说的居然有那么多，但是大部分是和我自己相关的，不值得说，有些故事适合分享，有些故事适合深藏。去年已经说了很多关于我自己的故事了，今年就不啰嗦了。<br>  今年只和大家分享一段话，致这个浮躁的年代：</p>
+<p>  你的身边，有些人停下，是为了告诉你一个有关人生的真相。有些人停下，是为了分享一些可以珍藏的秘密。生命皆因这些走走停停的过客而丰盛鲜活。当他们再起身，请用微笑道别。世上有许多事自己无法改变，但应努力做到改变一切能够改变的，千方百计适应一切无法改变的。风有风的自由，云有云的温柔，没必要模仿，认为快乐的，就去寻找，认为值得的，就去守候，认为幸福的，就去珍惜。最使人疲惫的不是道路的遥远，而是你心中的郁闷，最使人颓废的不是前途的坎坷，而是你自信的丧失，最使人痛苦的不是生活的不幸，而是你希望的破灭，最使人绝望的不是挫折的打击，而是你心灵的死亡。一切都会好起来的，即使不是在今天，总有一天会。</p>
+<p>  结语<br>  每年这个时候，我都好像又回到了十年前火车上分享这个视频的夜里，又想起来对美好生活的渴望，又重燃对光明未来的向往。所以请不要私信感谢我，我只是转载了一个视频，而是我要感谢你们，这十年的陪伴。</p>
+<p>  每年说一遍，祝大家在今后的日子里，可以看到很多美好的风景，遇到很多好的人。</p>
+<p>  一世那么长,再待十年也无妨。  </p>
+</blockquote>
+<p>——<a href=""><a href="https://www.bilibili.com/video/BV1Tx411w7pd?spm_id_from=333.999.0.0">世上最经典那段卡农，以前都是听录音，终于见到录像了！搞个彩蛋（=v=）_哔哩哔哩_bilibili</a></a>评论区</p>
+<ul>
+<li>十年，对于人生而言并不漫长，但足够经历很多事情，亦足够改变一个人。我们都是在一个个十年当中逐渐蜕变，形成如今的自己。每当目睹身边曾经亲密的人逐渐远去，走向了不同的道路，他们耀眼光彩抑或了无音信，我都不禁感慨，由衷祝福，可如今的我又是否走在曾经憧憬的道路上呢。世事变迁，这个时代日新月异，每一年都会发生许多事情，战争，疫情，坠机，于时代轻如鸿毛而与我息息相关。我狼狈的追逐时代，却不知何时终会落伍，可叹，不知十年之后又会是何等光景呢。</li>
+</ul>
+<blockquote>
+<p>知乎看多了仇男</p>
+<p>微博看多了仇女</p>
+<p>再环顾下四周的男生女生，感觉却挺好的</p>
+<p>有阳光积极的，有木讷的，有搞笑的，有可爱的，有努力的，也有成天丧丧的</p>
+<p>大家一起开黑，搬砖，吐槽老板</p>
+<p>一起撸串烫火锅，搞露营弄烧烤</p>
+<p>日常工作上的小事儿喊一声都能帮忙</p>
+<p>团建结束回家群里的男女互道平安</p>
+<p>需要花钱的地儿大家AA制</p>
+<p>遇到帅哥美女都跟着流口水出主意儿</p>
+<p>结了婚的男女同事都在愁孩子</p>
+<p>男同事下班回家顺便接单滴滴</p>
+<p>女同事下班回家忙着辅导孩子作业</p>
+<p>就，感觉，都挺好</p>
+<p>喜欢自信的男孩子</p>
+<p>也喜欢自信的女孩子</p>
+<p>没人骂你是普信男也没人侮辱你是奇趣蛋</p>
+<p>都是干干净净支棱起来的年轻人</p>
+<p>单位上的小夫妻小两口</p>
+<p>一起存钱结婚买房的挺多</p>
+<p>也没遇到啥高价彩礼要了几代人老命的案例</p>
+<p>咋就到了微博知乎</p>
+<p>深仇大恨，杀人父母掘人祖坟一样</p>
+<p>公司一个老财务大哥说：</p>
+<p>有些人是真的身在戾气中无法自拔，不自救，也没人救，索性胡乱扒拉，把岸边的人全拉下沼泽。</p>
+<p>我觉得这群打拳搞对立的人就是这种想法，不但自己打拳，还会把那些不想打拳的人扣个理中客的帽子一起拉下水，然后骂你假清高，泼你一身脏水，最后告诉你，这世界就是这样，赶紧毁灭，加速毁灭。</p>
+<p>可这个世界挺好的，生活挺好的，勤劳不一定致富但一定能脱贫，想好好生活的人也一定能安心睡觉吃的香睡得着，也有爱人相伴。</p>
+<p>祝愿大家都能有幸福安乐的生活，老人健朗，子女平安，你们恩爱。</p>
+</blockquote>
+<p>摘自网络，出处暂时不明</p>
+<ul>
+<li><p>用一句俗套的话来说，这是一个浮躁的时代，人们的内心充满焦虑。诸如男女对立的话题，早已见怪不怪了，但它确实放大了人们心中的焦虑，以此养富了一群人，更扭曲了一群人的思想。</p>
+<p>我们应该知道身边的世界并没有那么美好，它的黑暗深不见底，但也不应错过其中的善良。远离 “戾气” 的侵扰，投身于朴实的生活，不也挺好吗。</p>
+<p>——————</p>
+<p>2022年4月，北京晚报发文“挥舞大棒的假女权是时候管管了”，随后共青团中央于微博发文“极端女权已成为网络毒瘤”，在我看来是对乱象的谴责，没想到被一群人“口诛笔伐”，太魔幻了。网络非法外之地，做事须谨言慎行，“言论自由”不代表没有底线，两败俱伤之时必有渔翁得利。</p>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>记录</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>诗集</title>
+    <url>/2021/12/26/%E8%AF%97%E9%9B%86/</url>
+    <content><![CDATA[<div class='poem'><div class='poem-title'>[读山海经]</div><div class='poem-author'>[陶渊明]</div><p>精卫衔微木，将以填沧海。</p>
+<p>刑天舞干戚，猛志固常在。</p>
+<p>同物既无虑，化去不复悔。</p>
+<p>徒设在昔心，良辰讵可待！</p>
+</div>
+<hr>
+
+<div class='poem'><div class='poem-title'>[虞美人]</div><div class='poem-author'>[纳兰性德]</div><p>残灯风灭炉烟冷，相伴唯孤影。<br>判叫狼藉醉清樽，为问世间醒眼是何人。<br>难逢易散花间酒，饮罢空搔首。<br>闲愁总付醉来眠，只恐醒时依旧到樽前。</p>
+</div>]]></content>
+      <tags>
+        <tag>诗词</tag>
       </tags>
   </entry>
   <entry>
@@ -2085,179 +2260,6 @@
 ]]></content>
       <tags>
         <tag>思考</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>看板娘配置过程中的一些问题</title>
-    <url>/2021/10/13/%E7%9C%8B%E6%9D%BF%E5%A8%98%E9%85%8D%E7%BD%AE%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p><strong>插件配置参考大佬文章   <a href="https://akilar.top/posts/5b8f515f/">Live2d Widget | Akilarの糖果屋</a></strong></p>
-<h1>获取插件问题</h1>
-
-<p>根据教程下载插件时报错，显示如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">found XX vulnerabilities (X low, X moderate, X high) in 2770 scanned packages</span><br><span class="line">  run `npm audit fix` to fix 1 of them.</span><br><span class="line">  XX vulnerabilities require semver-major dependency updates.</span><br><span class="line">  XXX vulnerabilities require manual review. See the full report for details.</span><br></pre></td></tr></table></figure>
-<p>根据提示执行npm audit fix 依然无法完成下载</p>
-<p>网上查阅得知解决方案如下：</p>
-<ol>
-<li>淘宝镜像源会自动修复，然后下载相关依赖包。</li>
-<li>使用<code>nrm use taobao</code>，<code>nrm</code>如果没有安装，就使用<code>npm i -g nrm</code>，然后再使用<code>nrm use taobao</code></li>
-<li>再使用<code>npm i</code> 安装一遍所有依赖包，这时候没下载的会自动下载，问题解决。</li>
-</ol>
-<h1>文件修改</h1>
-
-<p>根据教程修改 autoload.js 文件时无法打开，提示‘return’语句在函数之外。</p>
-<p>网上查询乱七八糟，后来发现系统自带打开js文件的工具是based script host</p>
-<p>解决方案：使用记事本打开文件</p>
-]]></content>
-      <tags>
-        <tag>记录</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>算法试做</title>
-    <url>/2022/09/12/%E7%AE%97%E6%B3%95%E8%AF%95%E5%81%9A/</url>
-    <content><![CDATA[<p>877—石子游戏（动态规划）</p>
-<blockquote>
-<p>Alice 和 Bob 用几堆石子在做游戏。一共有偶数堆石子，排成一行；每堆都有 正 整数颗石子，数目为 piles[i] 。</p>
-<p>游戏以谁手中的石子最多来决出胜负。石子的 总数 是 奇数 ，所以没有平局。</p>
-<p>Alice 和 Bob 轮流进行，Alice 先开始 。 每回合，玩家从行的 开始 或 结束 处取走整堆石头。 这种情况一直持续到没有更多的石子堆为止，此时手中 石子最多 的玩家 获胜 。</p>
-<p>假设 Alice 和 Bob 都发挥出最佳水平，当 Alice 赢得比赛时返回 true ，当 Bob 赢得比赛时返回 false 。</p>
-<p>示例 </p>
-<p>输入：piles = [5,3,4,5]<br>输出：true<br>解释：<br>Alice 先开始，只能拿前 5 颗或后 5 颗石子 。<br>假设他取了前 5 颗，这一行就变成了 [3,4,5] 。<br>如果 Bob 拿走前 3 颗，那么剩下的是 [4,5]，Alice 拿走后 5 颗赢得 10 分。<br>如果 Bob 拿走后 5 颗，那么剩下的是 [3,4]，Alice 拿走后 4 颗赢得 9 分。<br>这表明，取前 5 颗石子对 Alice 来说是一个胜利的举动，所以返回 true 。</p>
-<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode.cn/problems/stone-game">https://leetcode.cn/problems/stone-game</a></p>
-</blockquote>
-<p>题解：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//比较两数大小并返回较大的一方</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">max</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a&gt;=b?a:b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">dp[i][j]表示从第i到j堆石头，Alex（先手）能领先Lee（后手）的最大分值。</span></span><br><span class="line"><span class="comment">    1.Alex拿走第j堆，则相当于变成：Alex初始分数为piles[j-1]，第i到j-1堆，且Lee先手。</span></span><br><span class="line"><span class="comment">        dp[i][j] = piles[j-1] + (-dp[i][j-1])</span></span><br><span class="line"><span class="comment">    2.Alex拿走第i堆，则相当于变成：Alex初始分数为piles[i-1]，第i+1到j堆，且Lee先手。</span></span><br><span class="line"><span class="comment">        dp[i][j] = piles[i-1] + (-dp[i+1][j])</span></span><br><span class="line"><span class="comment">    二者取大。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">stoneGame</span><span class="params">(<span class="keyword">int</span>* piles, <span class="keyword">int</span> pilesSize)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> dp[pilesSize+<span class="number">1</span>][pilesSize+<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=pilesSize;i++)&#123;</span><br><span class="line">        dp[i][i]=piles[<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> len=<span class="number">1</span>;len&lt;pilesSize;len++)&#123;  <span class="comment">//区间长度</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i+len&lt;pilesSize;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> j = i+len;</span><br><span class="line">            dp[i][j] = max(piles[i<span class="number">-1</span>]-dp[i+<span class="number">1</span>][j],piles[j]-dp[i][j<span class="number">-1</span>]);<span class="comment">//对应上方注释</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[<span class="number">1</span>][pilesSize]&gt;=<span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>编程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>观墨识文</title>
-    <url>/2022/02/10/%E8%A7%82%E5%A2%A8%E8%AF%86%E6%96%87/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近偶尔会心生感慨，但想要记录些什么的时候却又提笔忘言，恰如此时此刻。好在互联网让人与世界得以连接，在此中我可以看到更多人与世事，阅尽千帆，尽尝百态。因做此篇，旨在记录在互联网上看到的令我有所感悟的文章，观墨识文，浅尝咸淡，略品其味。</p>
-<blockquote>
-<p>  十周年。</p>
-<p>  感谢无数朋友这么多年来，每天私信提醒我还有XX天就X周年了，让我每天都梦回那高考倒计时青春的年代。（咬牙切齿）<br>  感谢无数朋友这么多年来，每天私信询问我是否还活着，让我感受到了人性的温暖。（狗头斜视）<br>  感谢无数朋友这么多年来，每天私信和我分享他们的故事，让我可以体验不同的人生。（感恩比心）</p>
-<p>  首先是例行报告，简单概括，我还活着，身体健康，父母身体算不上好，但无大碍。只差临门一脚，就能还清债务，已经又能看见未来了，还需继续努力。</p>
-<p>  每个十年，都不过惊鸿一瞥，却是人生的一段重要旅程。<br>  这十年对我来说，也是很特殊的一段时光。我人生中很多重要的节点刻在了这十年的里程碑里，有些剧情已经落幕，有些情节还在上演。我思考了很多关于十周年的时候我会写点什么，真到了今天，突然有点语塞，静下心来回忆这十年，发现原来想说的居然有那么多，但是大部分是和我自己相关的，不值得说，有些故事适合分享，有些故事适合深藏。去年已经说了很多关于我自己的故事了，今年就不啰嗦了。<br>  今年只和大家分享一段话，致这个浮躁的年代：</p>
-<p>  你的身边，有些人停下，是为了告诉你一个有关人生的真相。有些人停下，是为了分享一些可以珍藏的秘密。生命皆因这些走走停停的过客而丰盛鲜活。当他们再起身，请用微笑道别。世上有许多事自己无法改变，但应努力做到改变一切能够改变的，千方百计适应一切无法改变的。风有风的自由，云有云的温柔，没必要模仿，认为快乐的，就去寻找，认为值得的，就去守候，认为幸福的，就去珍惜。最使人疲惫的不是道路的遥远，而是你心中的郁闷，最使人颓废的不是前途的坎坷，而是你自信的丧失，最使人痛苦的不是生活的不幸，而是你希望的破灭，最使人绝望的不是挫折的打击，而是你心灵的死亡。一切都会好起来的，即使不是在今天，总有一天会。</p>
-<p>  结语<br>  每年这个时候，我都好像又回到了十年前火车上分享这个视频的夜里，又想起来对美好生活的渴望，又重燃对光明未来的向往。所以请不要私信感谢我，我只是转载了一个视频，而是我要感谢你们，这十年的陪伴。</p>
-<p>  每年说一遍，祝大家在今后的日子里，可以看到很多美好的风景，遇到很多好的人。</p>
-<p>  一世那么长,再待十年也无妨。  </p>
-</blockquote>
-<p>——<a href=""><a href="https://www.bilibili.com/video/BV1Tx411w7pd?spm_id_from=333.999.0.0">世上最经典那段卡农，以前都是听录音，终于见到录像了！搞个彩蛋（=v=）_哔哩哔哩_bilibili</a></a>评论区</p>
-<ul>
-<li>十年，对于人生而言并不漫长，但足够经历很多事情，亦足够改变一个人。我们都是在一个个十年当中逐渐蜕变，形成如今的自己。每当目睹身边曾经亲密的人逐渐远去，走向了不同的道路，他们耀眼光彩抑或了无音信，我都不禁感慨，由衷祝福，可如今的我又是否走在曾经憧憬的道路上呢。世事变迁，这个时代日新月异，每一年都会发生许多事情，战争，疫情，坠机，于时代轻如鸿毛而与我息息相关。我狼狈的追逐时代，却不知何时终会落伍，可叹，不知十年之后又会是何等光景呢。</li>
-</ul>
-<blockquote>
-<p>知乎看多了仇男</p>
-<p>微博看多了仇女</p>
-<p>再环顾下四周的男生女生，感觉却挺好的</p>
-<p>有阳光积极的，有木讷的，有搞笑的，有可爱的，有努力的，也有成天丧丧的</p>
-<p>大家一起开黑，搬砖，吐槽老板</p>
-<p>一起撸串烫火锅，搞露营弄烧烤</p>
-<p>日常工作上的小事儿喊一声都能帮忙</p>
-<p>团建结束回家群里的男女互道平安</p>
-<p>需要花钱的地儿大家AA制</p>
-<p>遇到帅哥美女都跟着流口水出主意儿</p>
-<p>结了婚的男女同事都在愁孩子</p>
-<p>男同事下班回家顺便接单滴滴</p>
-<p>女同事下班回家忙着辅导孩子作业</p>
-<p>就，感觉，都挺好</p>
-<p>喜欢自信的男孩子</p>
-<p>也喜欢自信的女孩子</p>
-<p>没人骂你是普信男也没人侮辱你是奇趣蛋</p>
-<p>都是干干净净支棱起来的年轻人</p>
-<p>单位上的小夫妻小两口</p>
-<p>一起存钱结婚买房的挺多</p>
-<p>也没遇到啥高价彩礼要了几代人老命的案例</p>
-<p>咋就到了微博知乎</p>
-<p>深仇大恨，杀人父母掘人祖坟一样</p>
-<p>公司一个老财务大哥说：</p>
-<p>有些人是真的身在戾气中无法自拔，不自救，也没人救，索性胡乱扒拉，把岸边的人全拉下沼泽。</p>
-<p>我觉得这群打拳搞对立的人就是这种想法，不但自己打拳，还会把那些不想打拳的人扣个理中客的帽子一起拉下水，然后骂你假清高，泼你一身脏水，最后告诉你，这世界就是这样，赶紧毁灭，加速毁灭。</p>
-<p>可这个世界挺好的，生活挺好的，勤劳不一定致富但一定能脱贫，想好好生活的人也一定能安心睡觉吃的香睡得着，也有爱人相伴。</p>
-<p>祝愿大家都能有幸福安乐的生活，老人健朗，子女平安，你们恩爱。</p>
-</blockquote>
-<p>摘自网络，出处暂时不明</p>
-<ul>
-<li><p>用一句俗套的话来说，这是一个浮躁的时代，人们的内心充满焦虑。诸如男女对立的话题，早已见怪不怪了，但它确实放大了人们心中的焦虑，以此养富了一群人，更扭曲了一群人的思想。</p>
-<p>我们应该知道身边的世界并没有那么美好，它的黑暗深不见底，但也不应错过其中的善良。远离 “戾气” 的侵扰，投身于朴实的生活，不也挺好吗。</p>
-<p>——————</p>
-<p>2022年4月，北京晚报发文“挥舞大棒的假女权是时候管管了”，随后共青团中央于微博发文“极端女权已成为网络毒瘤”，在我看来是对乱象的谴责，没想到被一群人“口诛笔伐”，太魔幻了。网络非法外之地，做事须谨言慎行，“言论自由”不代表没有底线，两败俱伤之时必有渔翁得利。</p>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>记录</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>诗集</title>
-    <url>/2021/12/26/%E8%AF%97%E9%9B%86/</url>
-    <content><![CDATA[<div class='poem'><div class='poem-title'>[读山海经]</div><div class='poem-author'>[陶渊明]</div><p>精卫衔微木，将以填沧海。</p>
-<p>刑天舞干戚，猛志固常在。</p>
-<p>同物既无虑，化去不复悔。</p>
-<p>徒设在昔心，良辰讵可待！</p>
-</div>
-<hr>
-
-<div class='poem'><div class='poem-title'>[虞美人]</div><div class='poem-author'>[纳兰性德]</div><p>残灯风灭炉烟冷，相伴唯孤影。<br>判叫狼藉醉清樽，为问世间醒眼是何人。<br>难逢易散花间酒，饮罢空搔首。<br>闲愁总付醉来眠，只恐醒时依旧到樽前。</p>
-</div>]]></content>
-      <tags>
-        <tag>诗词</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>音乐赏</title>
-    <url>/2022/02/14/%E9%9F%B3%E4%B9%90%E8%B5%8F/</url>
-    <content><![CDATA[<blockquote>
-<p>生命如花朵绽放</p>
-<p>或许遥远，或许就在路边</p>
-</blockquote>
-
-    <div id="aplayer-MJRnteSK" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="1815684465" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
-    ></div>
-<blockquote>
-<p>梦里不觉秋已深，余情岂是为他人</p>
-</blockquote>
-
-    <div id="aplayer-rOtaMZhy" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="27594398" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
-    ></div>
-<blockquote>
-<p>那就是我曾经统治的世界</p>
-</blockquote>
-
-    <div id="aplayer-ZTreIlPn" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="5139948" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
-    ></div>
-<blockquote>
-<p>不畏惧风沙满目皆繁华</p>
-</blockquote>
-
-    <div id="aplayer-dzUokIfJ" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="1889103238" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
-    ></div>
-<blockquote>
-<p>I’ll try hard to soar to the heaven I dreamed.</p>
-<p>为了梦中彼岸，我要全力飞翔</p>
-</blockquote>
-
-    <div id="aplayer-VUtrTHuw" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="1375725396" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
-    ></div>
-<blockquote>
-<p>这年头，谁还没点副业啊，握艹！</p>
-</blockquote>
-
-    <div id="aplayer-GIECFySX" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="1886218396" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
-    ></div>]]></content>
-      <tags>
-        <tag>音乐</tag>
       </tags>
   </entry>
   <entry>
@@ -5782,56 +5784,54 @@
       </tags>
   </entry>
   <entry>
-    <title>LeetCode每日一题(一)</title>
-    <url>/2023/02/01/LeetCode%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-%E4%B8%80/</url>
-    <content><![CDATA[<h3 id="剑指-Offer-II-002-二进制加法"><a href="#剑指-Offer-II-002-二进制加法" class="headerlink" title="剑指 Offer II 002. 二进制加法"></a><a href="https://leetcode.cn/problems/JFETK5/">剑指 Offer II 002. 二进制加法</a></h3><p>难度：简单</p>
-<p>给定两个 01 字符串 <code>a</code> 和 <code>b</code> ，请计算它们的和，并以二进制字符串的形式输出。</p>
-<p>输入为 <strong>非空</strong> 字符串且只包含数字 <code>1</code> 和 <code>0</code>。</p>
-<blockquote>
-<p>示例 1:</p>
-<p>输入: a = “11”, b = “10”<br>输出: “101”</p>
-<p>示例 2:</p>
-<p>输入: a = “1010”, b = “1011”<br>输出: “10101”</p>
-<p>提示：每个字符串仅由字符 ‘0’ 或 ‘1’ 组成。<br>1 &lt;= a.length, b.length &lt;= 10^4<br>字符串如果不是 “0” ，就都不含前导零。</p>
+    <title>音乐赏</title>
+    <url>/2022/02/14/%E9%9F%B3%E4%B9%90%E8%B5%8F/</url>
+    <content><![CDATA[<blockquote>
+<p>生命如花朵绽放</p>
+<p>或许遥远，或许就在路边</p>
 </blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//将两个字符串的末位分别相加，如有进位用temp标记，将结果插入一个新的字符串的首位类似于进栈</span></span><br><span class="line"><span class="comment">//注意，字符char-&#x27;0&#x27;的使用，若char为整型的字符形式，该计算结果得到其int值，如&#x27;6&#x27;-&#x27;0&#x27;=6(int)</span></span><br><span class="line"><span class="comment">//另有一种算法，将两字符串每位相加得到新字符串，再进行逐字符进位计算</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">addBinary</span><span class="params">(String a, String b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> longa = a.length() - <span class="number">1</span> , longb = b.length()-<span class="number">1</span> , temp = <span class="number">0</span>;</span><br><span class="line">        StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        <span class="keyword">while</span>(longa&gt;=<span class="number">0</span>||longb&gt;=<span class="number">0</span>||temp!=<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">int</span> num1 = longa&gt;=<span class="number">0</span>?a.charAt(longa)-<span class="string">&#x27;0&#x27;</span>:<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> num2 = longb&gt;=<span class="number">0</span>?b.charAt(longb)-<span class="string">&#x27;0&#x27;</span>:<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> add = num1 + num2 + temp;</span><br><span class="line">            temp = add/<span class="number">2</span>;</span><br><span class="line">            sb.insert(<span class="number">0</span>,add%<span class="number">2</span>);</span><br><span class="line">            longa--;</span><br><span class="line">            longb--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sb.toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="剑指-Offer-II-003-前-n-个数字二进制中-1-的个数"><a href="#剑指-Offer-II-003-前-n-个数字二进制中-1-的个数" class="headerlink" title="剑指 Offer II 003. 前 n 个数字二进制中 1 的个数"></a><a href="https://leetcode.cn/problems/w3tCBm/">剑指 Offer II 003. 前 n 个数字二进制中 1 的个数</a></h3><p>难度简单114收藏分享切换为英文接收动态反馈</p>
-<p>给定一个非负整数 <code>n</code> ，请计算 <code>0</code> 到 <code>n</code> 之间的每个数字的二进制表示中 1 的个数，并输出一个数组。</p>
+
+    <div id="aplayer-YqTZLAza" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="1815684465" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
+    ></div>
 <blockquote>
-<p><strong>示例 1:</strong></p>
-<p>输入: n = 2<br>输出: [0,1,1]<br>解释:<br>0 —&gt; 0<br>1 —&gt; 1<br>2 —&gt; 10</p>
-<p><strong>示例 2:</strong></p>
-<p>输入: n = 5<br>输出: [0,1,1,2,1,2]<br>解释:<br>0 —&gt; 0<br>1 —&gt; 1<br>2 —&gt; 10<br>3 —&gt; 11<br>4 —&gt; 100<br>5 —&gt; 101</p>
+<p>梦里不觉秋已深，余情岂是为他人</p>
 </blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//奇数：二进制表示中，奇数一定比前面那个偶数多一个 1，因为多的就是最低位的 1。</span></span><br><span class="line"><span class="comment">//偶数：二进制表示中，偶数中 1 的个数一定和除以 2 之后的那个数一样多。因为最低位是 0，除以 2 就是右移一位，也就是把那个 0 抹掉而已，所以 1 的个数是不变的。</span></span><br><span class="line"><span class="comment">//dp[i] = dp[i/2] + i % 2</span></span><br><span class="line"><span class="comment">//通过位运算进一步优化：</span></span><br><span class="line"><span class="comment">//i / 2 可以通过 i &gt;&gt; 1 得到；</span></span><br><span class="line"><span class="comment">//i % 2 可以通过 i &amp; 1 得到；</span></span><br><span class="line"><span class="comment">//&amp;是按位与，对应位都为1时该位得1，否则得0。</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] countBits(<span class="keyword">int</span> n) &#123;</span><br><span class="line">        <span class="keyword">int</span>[] ans = <span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=n;i++)&#123;</span><br><span class="line">            ans[i] = ans[i&gt;&gt;<span class="number">1</span>]+(i&amp;<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="剑指-Offer-II-005-单词长度的最大乘积"><a href="#剑指-Offer-II-005-单词长度的最大乘积" class="headerlink" title="剑指 Offer II 005. 单词长度的最大乘积"></a><a href="https://leetcode.cn/problems/aseY1I/">剑指 Offer II 005. 单词长度的最大乘积</a></h3><p>难度中等122收藏分享切换为英文接收动态反馈</p>
-<p>给定一个字符串数组 <code>words</code>，请计算当两个字符串 <code>words[i]</code> 和 <code>words[j]</code> 不包含相同字符时，它们长度的乘积的最大值。假设字符串中只包含英语的小写字母。如果没有不包含相同字符的一对字符串，返回 0。</p>
+
+    <div id="aplayer-cjimtgye" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="27594398" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
+    ></div>
 <blockquote>
-<p><strong>示例 1:</strong></p>
-<p>输入: words = [“abcw”,”baz”,”foo”,”bar”,”fxyz”,”abcdef”]<br>输出: 16<br>解释: 这两个单词为 “abcw”, “fxyz”。它们不包含相同字符，且长度的乘积最大。</p>
-<p><strong>示例 2:</strong></p>
-<p>输入: words = [“a”,”ab”,”abc”,”d”,”cd”,”bcd”,”abcd”]<br>输出: 4<br>解释: 这两个单词为 “ab”, “cd”。</p>
-<p><strong>示例 3:</strong></p>
-<p>输入: words = [“a”,”aa”,”aaa”,”aaaa”]<br>输出: 0<br>解释: 不存在这样的两个单词。</p>
+<p>那就是我曾经统治的世界</p>
 </blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//将字符串中字符出现情况用二进制数表示，即字符a~z对应二进制数第0~25位，哪个字符出现就将二进制数对应位置1。这样的话对于不含相同字符的字符串，它们的二进制表示进行与运算结果就为0，否则结果就不为0，位运算能大大加快算法速度。</span></span><br><span class="line"><span class="comment">//本解法运用位运算和与或算法结合，如binary[i] |=(1&lt;&lt;(words[i].charAt(j)-&#x27;a&#x27;));</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProduct</span><span class="params">(String[] words)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = words.length,ans=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span>[] binary = <span class="keyword">new</span> <span class="keyword">int</span>[len];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;words[i].length();j++)&#123;</span><br><span class="line">                binary[i] |=(<span class="number">1</span>&lt;&lt;(words[i].charAt(j)-<span class="string">&#x27;a&#x27;</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len-<span class="number">1</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>;j&lt;len;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>((binary[i]&amp;binary[j])==<span class="number">0</span>) ans = Math.max(ans,(words[i].length()*words[j].length()));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="剑指-Offer-II-007-数组中和为-0-的三个数"><a href="#剑指-Offer-II-007-数组中和为-0-的三个数" class="headerlink" title="剑指 Offer II 007. 数组中和为 0 的三个数"></a><a href="https://leetcode.cn/problems/1fGaJU/">剑指 Offer II 007. 数组中和为 0 的三个数</a></h3><p>给你一个整数数组 <code>nums</code> ，判断是否存在三元组 <code>[nums[i], nums[j], nums[k]]</code> 满足 <code>i != j</code>、<code>i != k</code> 且 <code>j != k</code> ，同时还满足 <code>nums[i] + nums[j] + nums[k] == 0</code> 。请</p>
-<p>你返回所有和为 <code>0</code> 且不重复的三元组。</p>
-<p><strong>注意：</strong>答案中不可以包含重复的三元组。</p>
+
+    <div id="aplayer-FVNvLAEx" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="5139948" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
+    ></div>
 <blockquote>
-<p><strong>示例 1：</strong></p>
-<p>输入：nums = [-1,0,1,2,-1,-4]<br>输出：[[-1,-1,2],[-1,0,1]]<br>解释：<br>nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0 。<br>nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0 。<br>nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0 。<br>不同的三元组是 [-1,0,1] 和 [-1,-1,2] 。<br>注意，输出的顺序和三元组的顺序并不重要。</p>
-<p><strong>示例 2：</strong></p>
-<p>输入：nums = [0,1,1]<br>输出：[]<br>解释：唯一可能的三元组和不为 0 。</p>
-<p><strong>示例 3：</strong></p>
-<p>输入：nums = [0,0,0]<br>输出：[[0,0,0]]<br>解释：唯一可能的三元组和为 0 。</p>
+<p>不畏惧风沙满目皆繁华</p>
 </blockquote>
-<p>遥闻海水梦幽幽，君愁相思我亦愁</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//经典的双指针算法，固定一个数字i，从i+1到n-1下标中找到j和k，使得nums[i]+nums[j]+nums[k]=0</span></span><br><span class="line"><span class="comment">//本题关键在于去重，遍历nums时要去除相同数字。</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; threeSum(<span class="keyword">int</span>[] nums) &#123;</span><br><span class="line">        Arrays.sort(nums);</span><br><span class="line">        List&lt;List&lt;Integer&gt;&gt; ans = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">int</span> n = nums.length-<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;n-<span class="number">1</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(i&gt;<span class="number">0</span>&amp;&amp;nums[i]==nums[i-<span class="number">1</span>]) <span class="keyword">continue</span>; <span class="comment">//去重</span></span><br><span class="line">            <span class="keyword">int</span> j = i+<span class="number">1</span>,k = n;</span><br><span class="line">            <span class="keyword">while</span>(j &lt; k)&#123;</span><br><span class="line">                <span class="keyword">int</span> nownum = nums[i] + nums[j] + nums[k];</span><br><span class="line">                <span class="keyword">if</span>(nownum == <span class="number">0</span>)&#123;</span><br><span class="line">                    List&lt;Integer&gt; temp = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">                    temp.add(nums[i]);</span><br><span class="line">                    temp.add(nums[j]);</span><br><span class="line">                    temp.add(nums[k]);</span><br><span class="line">                    ans.add(temp);</span><br><span class="line">                    <span class="keyword">while</span>(j&lt;k&amp;&amp;nums[j+<span class="number">1</span>]==nums[j]) j++;  <span class="comment">//去重</span></span><br><span class="line">                    j++;</span><br><span class="line">                    <span class="keyword">while</span>(j&lt;k&amp;&amp;nums[k-<span class="number">1</span>]==nums[k]) k--;</span><br><span class="line">                    k--;</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span>(nownum&lt;<span class="number">0</span>)&#123;</span><br><span class="line">                    j++;</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span>(nownum&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                    k--;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
+
+    <div id="aplayer-gjOOySkG" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="1889103238" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
+    ></div>
+<blockquote>
+<p>I’ll try hard to soar to the heaven I dreamed.</p>
+<p>为了梦中彼岸，我要全力飞翔</p>
+</blockquote>
+
+    <div id="aplayer-TvfDlqnY" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="1375725396" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
+    ></div>
+<blockquote>
+<p>这年头，谁还没点副业啊，握艹！</p>
+</blockquote>
+
+    <div id="aplayer-KvCZmujs" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="1886218396" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
+    ></div>]]></content>
       <tags>
-        <tag>记录</tag>
-        <tag>编程</tag>
+        <tag>音乐</tag>
       </tags>
   </entry>
 </search>
