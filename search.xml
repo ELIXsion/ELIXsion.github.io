@@ -131,6 +131,67 @@
 </blockquote>
 <p>遥闻海水梦幽幽，君愁相思我亦愁</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//经典的双指针算法，固定一个数字i，从i+1到n-1下标中找到j和k，使得nums[i]+nums[j]+nums[k]=0</span></span><br><span class="line"><span class="comment">//本题关键在于去重，遍历nums时要去除相同数字。</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; threeSum(<span class="keyword">int</span>[] nums) &#123;</span><br><span class="line">        Arrays.sort(nums);</span><br><span class="line">        List&lt;List&lt;Integer&gt;&gt; ans = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">int</span> n = nums.length-<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;n-<span class="number">1</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(i&gt;<span class="number">0</span>&amp;&amp;nums[i]==nums[i-<span class="number">1</span>]) <span class="keyword">continue</span>; <span class="comment">//去重</span></span><br><span class="line">            <span class="keyword">int</span> j = i+<span class="number">1</span>,k = n;</span><br><span class="line">            <span class="keyword">while</span>(j &lt; k)&#123;</span><br><span class="line">                <span class="keyword">int</span> nownum = nums[i] + nums[j] + nums[k];</span><br><span class="line">                <span class="keyword">if</span>(nownum == <span class="number">0</span>)&#123;</span><br><span class="line">                    List&lt;Integer&gt; temp = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">                    temp.add(nums[i]);</span><br><span class="line">                    temp.add(nums[j]);</span><br><span class="line">                    temp.add(nums[k]);</span><br><span class="line">                    ans.add(temp);</span><br><span class="line">                    <span class="keyword">while</span>(j&lt;k&amp;&amp;nums[j+<span class="number">1</span>]==nums[j]) j++;  <span class="comment">//去重</span></span><br><span class="line">                    j++;</span><br><span class="line">                    <span class="keyword">while</span>(j&lt;k&amp;&amp;nums[k-<span class="number">1</span>]==nums[k]) k--;</span><br><span class="line">                    k--;</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span>(nownum&lt;<span class="number">0</span>)&#123;</span><br><span class="line">                    j++;</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span>(nownum&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                    k--;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="剑指-Offer-II-008-和大于等于-target-的最短子数组"><a href="#剑指-Offer-II-008-和大于等于-target-的最短子数组" class="headerlink" title="剑指 Offer II 008. 和大于等于 target 的最短子数组"></a><a href="https://leetcode.cn/problems/2VG8Kg/">剑指 Offer II 008. 和大于等于 target 的最短子数组</a></h4><p>难度中等96收藏分享切换为英文接收动态反馈</p>
+<p>给定一个含有 <code>n</code> 个正整数的数组和一个正整数 <code>target</code> <strong>。</strong></p>
+<p>找出该数组中满足其和 <code>≥ target</code> 的长度最小的 <strong>连续子数组</strong> <code>[numsl, numsl+1, ..., numsr-1, numsr]</code> ，并返回其长度<strong>。</strong>如果不存在符合条件的子数组，返回 <code>0</code> 。</p>
+<blockquote>
+<p><strong>示例 1：</strong></p>
+<p>输入：target = 7, nums = [2,3,1,2,4,3]<br>输出：2<br>解释：子数组 [4,3] 是该条件下的长度最小的子数组。</p>
+<p><strong>示例 2：</strong></p>
+<p>输入：target = 4, nums = [1,4,4]<br>输出：1</p>
+<p><strong>示例 3：</strong></p>
+<p>输入：target = 11, nums = [1,1,1,1,1,1,1,1]<br>输出：0</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="comment">//双指针法，类似于滑动窗口</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minSubArrayLen</span><span class="params">(<span class="keyword">int</span> target, <span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//设置初始最小值</span></span><br><span class="line">        <span class="keyword">int</span> min=Integer.MAX_VALUE;</span><br><span class="line">        <span class="comment">//初始化数组和</span></span><br><span class="line">        <span class="keyword">int</span> sum=<span class="number">0</span>;</span><br><span class="line">        <span class="comment">//定义两个变量i、j(类似于滑动窗口的感觉)</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>,j=<span class="number">0</span>;j&lt;nums.length;j++)&#123;</span><br><span class="line">            <span class="comment">//扩大窗口</span></span><br><span class="line">            sum+=nums[j];</span><br><span class="line">            <span class="keyword">while</span>(i&lt;=j &amp;&amp; sum&gt;=target)&#123;</span><br><span class="line">                <span class="comment">//更新最小值</span></span><br><span class="line">                min=Math.min(min,j-i+<span class="number">1</span>);</span><br><span class="line">                <span class="comment">//缩小窗口</span></span><br><span class="line">                sum-=nums[i++];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//若所有数组和都小于target,则返回0，否则返回更新值</span></span><br><span class="line">        <span class="keyword">return</span> min==Integer.MAX_VALUE?<span class="number">0</span>:min;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="剑指-Offer-II-009-乘积小于-K-的子数组"><a href="#剑指-Offer-II-009-乘积小于-K-的子数组" class="headerlink" title="剑指 Offer II 009. 乘积小于 K 的子数组"></a><a href="https://leetcode.cn/problems/ZVAVXX/">剑指 Offer II 009. 乘积小于 K 的子数组</a></h3><p>难度中等119收藏分享切换为英文接收动态反馈</p>
+<p>给定一个正整数数组 <code>nums</code>和整数 <code>k</code> ，请找出该数组内乘积小于 <code>k</code> 的连续的子数组的个数。</p>
+<blockquote>
+<p><strong>示例 1:</strong></p>
+<p>输入: nums = [10,5,2,6], k = 100<br>输出: 8<br>解释: 8 个乘积小于 100 的子数组分别为: [10], [5], [2], [6], [10,5], [5,2], [2,6], [5,2,6]。<br>需要注意的是 [10,5,2] 并不是乘积小于100的子数组。</p>
+<p><strong>示例 2:</strong></p>
+<p>输入: nums = [1,2,3], k = 0<br>输出: 0</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//滑动窗口，一开始用双指针循环遍历计算总是出错</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numSubarrayProductLessThanK</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> Start = <span class="number">0</span>,End = <span class="number">0</span>,ans= <span class="number">0</span>,tmpMulti = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(; End&lt;nums.length; End++)&#123;</span><br><span class="line">            tmpMulti *= nums[End];</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 积&gt;=k则移动Start, 其他处理相同</span></span><br><span class="line">            <span class="keyword">while</span>(Start &lt;= End &amp;&amp; tmpMulti &gt;= k)&#123;</span><br><span class="line">                tmpMulti /= nums[Start++];</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            ans += End - Start + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="剑指-Offer-II-010-和为-k-的子数组"><a href="#剑指-Offer-II-010-和为-k-的子数组" class="headerlink" title="剑指 Offer II 010. 和为 k 的子数组"></a><a href="https://leetcode.cn/problems/QTMn0o/">剑指 Offer II 010. 和为 k 的子数组</a></h3><p>难度中等127收藏分享切换为英文接收动态反馈</p>
+<p>给定一个整数数组和一个整数 <code>k</code> <strong>，</strong>请找到该数组中和为 <code>k</code> 的连续子数组的个数。</p>
+<blockquote>
+<p><strong>示例 1：</strong></p>
+<p>输入:nums = [1,1,1], k = 2<br>输出: 2<br>解释: 此题 [1,1] 与 [1,1] 为两种不同的情况</p>
+<p><strong>示例 2：</strong></p>
+<p>输入:nums = [1,2,3], k = 3<br>输出: 2</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//一开始想用滑动窗口，但滑动窗口的数组中不能存在负数，因为这样将不能保证窗口移动时元素和是固定增大或减小的。因此改用前缀和</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">subarraySum</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        Map&lt;Integer,Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();  <span class="comment">//分别代表前缀和，出现次数</span></span><br><span class="line">        map.put(<span class="number">0</span>,<span class="number">1</span>);  <span class="comment">//即不包含任何元素下的和为0的次数为1</span></span><br><span class="line">        <span class="keyword">int</span> pre = <span class="number">0</span>, ans = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> n : nums)&#123;</span><br><span class="line">            pre += n;</span><br><span class="line">            <span class="comment">//getOrDefault() 方法获取指定 key 对应对 value，如果找不到 key ，则返回设置的默认值</span></span><br><span class="line">            ans += map.getOrDefault(pre-k,<span class="number">0</span>);  <span class="comment">// 已知当前的前缀pre和之前某个前缀X，且要求pre-X=k，那么X=pre-k。X的出现次数就是此时以n结尾的子数组的合法次数</span></span><br><span class="line">            map.put(pre,map.getOrDefault(pre,<span class="number">0</span>)+<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="剑指-Offer-II-011-0-和-1-个数相同的子数组"><a href="#剑指-Offer-II-011-0-和-1-个数相同的子数组" class="headerlink" title="剑指 Offer II 011. 0 和 1 个数相同的子数组"></a><a href="https://leetcode.cn/problems/A1NYOS/">剑指 Offer II 011. 0 和 1 个数相同的子数组</a></h3><p>给定一个二进制数组 <code>nums</code> , 找到含有相同数量的 <code>0</code> 和 <code>1</code> 的最长连续子数组，并返回该子数组的长度。</p>
+<blockquote>
+<p><strong>示例 1：</strong></p>
+<p>输入: nums = [0,1]<br>输出: 2<br>说明: [0, 1] 是具有相同数量 0 和 1 的最长连续子数组。</p>
+<p><strong>示例 2：</strong></p>
+<p>输入: nums = [0,1,0]<br>输出: 2<br>说明: [0, 1] (或 [1, 0]) 是具有相同数量 0 和 1 的最长连续子数组。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//前缀和+哈希表，难点在于理解题目和想到把0用-1表示</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">findMaxLength</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> pre = <span class="number">0</span>,ans = <span class="number">0</span>;</span><br><span class="line">        Map&lt;Integer,Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;nums.length;i++)&#123;</span><br><span class="line">            <span class="comment">//如果nums[i]==0，则改为0以求前缀和</span></span><br><span class="line">            pre += nums[i]==<span class="number">0</span>?-<span class="number">1</span>:<span class="number">1</span>;</span><br><span class="line">            <span class="comment">//前缀和为0，说明从第零位到当前位0和1数量相等，符合题目要求</span></span><br><span class="line">            <span class="keyword">if</span>(pre == <span class="number">0</span>) ans = i+<span class="number">1</span>;</span><br><span class="line">            <span class="comment">//前缀和重复，那么这两个前缀和之间的数组一定是0，符合要求</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(map.containsKey(pre)) ans = Math.max(ans,i - map.get(pre));</span><br><span class="line">            <span class="comment">//前缀和未出现过，记录</span></span><br><span class="line">            <span class="keyword">else</span> map.put(pre,i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="剑指-Offer-II-013-二维子矩阵的和"><a href="#剑指-Offer-II-013-二维子矩阵的和" class="headerlink" title="剑指 Offer II 013. 二维子矩阵的和"></a><a href="https://leetcode.cn/problems/O4NDxx/">剑指 Offer II 013. 二维子矩阵的和</a></h3><p>难度中等68收藏分享切换为英文接收动态反馈</p>
+<p>给定一个二维矩阵 <code>matrix</code>，以下类型的多个请求：</p>
+<ul>
+<li>计算其子矩形范围内元素的总和，该子矩阵的左上角为 <code>(row1, col1)</code> ，右下角为 <code>(row2, col2)</code> 。</li>
+</ul>
+<p>实现 <code>NumMatrix</code> 类：</p>
+<ul>
+<li><p><code>NumMatrix(int[][] matrix)</code> 给定整数矩阵 <code>matrix</code> 进行初始化</p>
+</li>
+<li><p><code>int sumRegion(int row1, int col1, int row2, int col2)</code> 返回左上角 <code>(row1, col1)</code> 、右下角 <code>(row2, col2)</code> 的子矩阵的元素总和。</p>
+</li>
+<li><p><strong>示例 1：</strong></p>
+<p><img src="https://pic.leetcode-cn.com/1626332422-wUpUHT-image.png" alt="img"></p>
+</li>
+</ul>
+<blockquote>
+<p>输入:<br>[“NumMatrix”,”sumRegion”,”sumRegion”,”sumRegion”][[[[3,0,1,4,2],[5,6,3,2,1],[1,2,0,1,5],[4,1,0,1,7],[1,0,3,0,5]]],[2,1,4,3],[1,1,2,2],[1,2,2,4]]<br>输出:<br>[null, 8, 11, 12]</p>
+<p>解释:<br>NumMatrix numMatrix = new NumMatrix([[3,0,1,4,2],[5,6,3,2,1],[1,2,0,1,5],[4,1,0,1,7],[1,0,3,0,5]]]);<br>numMatrix.sumRegion(2, 1, 4, 3); // return 8 (红色矩形框的元素总和)<br>numMatrix.sumRegion(1, 1, 2, 2); // return 11 (绿色矩形框的元素总和)<br>numMatrix.sumRegion(1, 2, 2, 4); // return 12 (蓝色矩形框的元素总和)</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//通过右下角记录一个子矩阵的和</span></span><br><span class="line"><span class="comment">//pre[i][j]记录的是（0，0）到（i，j）的子矩阵的元素和</span></span><br><span class="line"><span class="comment">//为方便计算，pre的第一行和第一列初始化为0</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NumMatrix</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[][] pre;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NumMatrix</span><span class="params">(<span class="keyword">int</span>[][] matrix)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> m = matrix.length,n = matrix[<span class="number">0</span>].length;</span><br><span class="line">        pre = <span class="keyword">new</span> <span class="keyword">int</span>[m+<span class="number">1</span>][n+<span class="number">1</span>];</span><br><span class="line">        <span class="comment">//记录每行元素的前缀和</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;m;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j =<span class="number">0</span>;j&lt;n;j++)&#123;</span><br><span class="line">                count += matrix[i][j];</span><br><span class="line">                <span class="comment">//上一行对应子矩阵和加上本行元素和</span></span><br><span class="line">                pre[i+<span class="number">1</span>][j+<span class="number">1</span>] = pre[i][j+<span class="number">1</span>] + count;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sumRegion</span><span class="params">(<span class="keyword">int</span> row1, <span class="keyword">int</span> col1, <span class="keyword">int</span> row2, <span class="keyword">int</span> col2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> pre[row2+<span class="number">1</span>][col2+<span class="number">1</span>] - pre[row2+<span class="number">1</span>][col1] - pre[row1][col2+<span class="number">1</span>] + pre[row1][col1];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Your NumMatrix object will be instantiated and called as such:</span></span><br><span class="line"><span class="comment"> * NumMatrix obj = new NumMatrix(matrix);</span></span><br><span class="line"><span class="comment"> * int param_1 = obj.sumRegion(row1,col1,row2,col2);</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://pic.leetcode-cn.com/1633223209-XPUpHh-juzhen.png" alt="juzhen.png"></p>
+<p><img src="https://pic.leetcode-cn.com/1631325968-MpXHbg-image.png" alt="image.png"></p>
+<p>这破题想了半天。</p>
 ]]></content>
       <tags>
         <tag>记录</tag>
@@ -5791,28 +5852,28 @@
 <p>或许遥远，或许就在路边</p>
 </blockquote>
 
-    <div id="aplayer-YqTZLAza" class="aplayer aplayer-tag-marker meting-tag-marker"
+    <div id="aplayer-BirgIHPe" class="aplayer aplayer-tag-marker meting-tag-marker"
          data-id="1815684465" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
     ></div>
 <blockquote>
 <p>梦里不觉秋已深，余情岂是为他人</p>
 </blockquote>
 
-    <div id="aplayer-cjimtgye" class="aplayer aplayer-tag-marker meting-tag-marker"
+    <div id="aplayer-DsHumqlC" class="aplayer aplayer-tag-marker meting-tag-marker"
          data-id="27594398" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
     ></div>
 <blockquote>
 <p>那就是我曾经统治的世界</p>
 </blockquote>
 
-    <div id="aplayer-FVNvLAEx" class="aplayer aplayer-tag-marker meting-tag-marker"
+    <div id="aplayer-LDbraOnk" class="aplayer aplayer-tag-marker meting-tag-marker"
          data-id="5139948" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
     ></div>
 <blockquote>
 <p>不畏惧风沙满目皆繁华</p>
 </blockquote>
 
-    <div id="aplayer-gjOOySkG" class="aplayer aplayer-tag-marker meting-tag-marker"
+    <div id="aplayer-eVTExLCQ" class="aplayer aplayer-tag-marker meting-tag-marker"
          data-id="1889103238" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
     ></div>
 <blockquote>
@@ -5820,16 +5881,10 @@
 <p>为了梦中彼岸，我要全力飞翔</p>
 </blockquote>
 
-    <div id="aplayer-TvfDlqnY" class="aplayer aplayer-tag-marker meting-tag-marker"
+    <div id="aplayer-DqpxhLvz" class="aplayer aplayer-tag-marker meting-tag-marker"
          data-id="1375725396" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
     ></div>
-<blockquote>
-<p>这年头，谁还没点副业啊，握艹！</p>
-</blockquote>
-
-    <div id="aplayer-KvCZmujs" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="1886218396" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="false" data-theme="#e6d0b2"
-    ></div>]]></content>
+]]></content>
       <tags>
         <tag>音乐</tag>
       </tags>
