@@ -1,0 +1,786 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>inky语法备忘 | ELIX的博客</title><meta name="keywords" content="记录"><meta name="author" content="ELIX"><meta name="copyright" content="ELIX"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="INKYink 是一门围绕标记纯文本展开的脚本语言，以生成互动脚本。 最简单的，它能让你写出一个 Choose Your Own 风格的故事，或有分支的对话树。但它真正的优势在于大量选项的复杂对话，以及大量故事线的编组。 ink 提供了一些特性能让非技术人员也能随心分支，写好每一个分支的后续，同时搞定主线与支线，而不必手忙脚乱。故事线则尽可能地以声明式描述。（注，声明式是告诉机器“做什么 what">
+<meta property="og:type" content="article">
+<meta property="og:title" content="inky语法备忘">
+<meta property="og:url" content="https://elixsion.github.io/2022/03/19/inky%E8%AF%AD%E6%B3%95%E5%A4%87%E5%BF%98/index.html">
+<meta property="og:site_name" content="ELIX的博客">
+<meta property="og:description" content="INKYink 是一门围绕标记纯文本展开的脚本语言，以生成互动脚本。 最简单的，它能让你写出一个 Choose Your Own 风格的故事，或有分支的对话树。但它真正的优势在于大量选项的复杂对话，以及大量故事线的编组。 ink 提供了一些特性能让非技术人员也能随心分支，写好每一个分支的后续，同时搞定主线与支线，而不必手忙脚乱。故事线则尽可能地以声明式描述。（注，声明式是告诉机器“做什么 what">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/ELIXsion/pictureck@master/pictureck/image6.767lx7is6b00.webp">
+<meta property="article:published_time" content="2022-03-19T09:58:13.000Z">
+<meta property="article:modified_time" content="2023-03-16T07:35:57.038Z">
+<meta property="article:author" content="ELIX">
+<meta property="article:tag" content="记录">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.staticaly.com/gh/ELIXsion/pictureck@master/pictureck/image6.767lx7is6b00.webp"><link rel="shortcut icon" href="/mysource/xingxi.png"><link rel="canonical" href="https://elixsion.github.io/2022/03/19/inky%E8%AF%AD%E6%B3%95%E5%A4%87%E5%BF%98/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'inky语法备忘',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-03-16 15:35:57'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    document.addEventListener('pjax:complete', detectApple)})(window)</script><link rel="stylesheet" href="/css/mycss.css"><link rel="stylesheet" href="/css/custom.css"  media="defer" onload="this.media='all'"><link rel="stylesheet" href="/css/card_botui.css" /><link rel="stylesheet" href="/css/copyright.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-butterfly-footer-beautify@1.0.0/lib/runtime.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/l-lin/font-awesome-animation/dist/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/hexo-butterfly-tag-plugins-plus@latest/lib/carousel-touch.min.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/mysource/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">51</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://guidance.vercel.app/"><i class="fa-fw fas fa-directions"></i><span> 导航</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 影音</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-chair"></i><span> 生活</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/picture/"><i class="fa-fw fas fa-camera"></i><span> 图库</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.staticaly.com/gh/ELIXsion/pictureck@master/pictureck/image6.767lx7is6b00.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">ELIX的博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://guidance.vercel.app/"><i class="fa-fw fas fa-directions"></i><span> 导航</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 影音</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-chair"></i><span> 生活</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/picture/"><i class="fa-fw fas fa-camera"></i><span> 图库</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">inky语法备忘</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-03-19T09:58:13.000Z" title="发表于 2022-03-19 17:58:13">2022-03-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-16T07:35:57.038Z" title="更新于 2023-03-16 15:35:57">2023-03-16</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">15k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>48分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="INKY"><a href="#INKY" class="headerlink" title="INKY"></a>INKY</h2><p>ink 是一门围绕标记纯文本展开的脚本语言，以生成互动脚本。</p>
+<p>最简单的，它能让你写出一个 Choose Your Own 风格的故事，或有分支的对话树。但它真正的优势在于大量选项的复杂对话，以及大量故事线的编组。</p>
+<p>ink 提供了一些特性能让非技术人员也能随心分支，写好每一个分支的后续，同时搞定主线与支线，而不必手忙脚乱。故事线则尽可能地以声明式描述。（注，声明式是告诉机器“做什么 what to do”，与其相对的命令式则是告诉机器“怎么做 how to do”。）</p>
+<p>ink 的目标是让一切清新有逻辑地排序，“用眼”就能检查每条对话分支。</p>
+<p>它在设计时也考虑了想法在头脑中思考的过程，因此编写一个故事线是非常快的</p>
+<div class="fs-4 mb-3">
+ <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
+  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+</svg>
+    <a href = "https://github.com/inkle/inky/releases/tag/0.11.0">项目地址</a>
+            </div>
+
+
+
+<p>（某天在网上冲浪的时候看到了一个很有趣的互动文字冒险，在关于界面找到了这款软件，发现意外的容易上手，于是找到相关教程并记录备忘。）</p>
+<p>（光有工具也没用啊，贫瘠的艺术细胞限制了我，哭死。）</p>
+<h2 id="使用文档"><a href="#使用文档" class="headerlink" title="使用文档"></a>使用文档</h2><h1 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h1><p>现在，让我们看门见山，来看一个简单的故事示例。</p>
+<p>若你以前从未接触过编程（很多符号！），下方截屏中的蓝色标记最初可能让人望而生畏。但我们会逐步介绍它们，以便你了解它们的组合方式。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1573979027210-d014aced-9bcd-4900-a14e-992eda5e37f2.png" alt="img"></p>
+<p>请将下方内容复制到 Inky 的左栏中，然后在右栏中预览。右上角的单箭头是<strong>后退</strong>，双箭头是<strong>重置</strong>预览的故事。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">伦敦，1872年</span><br><span class="line">Phileas Fogg 先生的住所。</span><br><span class="line"></span><br><span class="line">-&gt; london</span><br><span class="line"></span><br><span class="line">=== london === //这是节点</span><br><span class="line">Phileas Fogg 先生早早从改革俱乐部回到了家，并乘坐了新型的蒸汽运输机！   </span><br><span class="line">“领航,” 他喊到。 &quot;我们去环游世界！&quot;</span><br><span class="line"></span><br><span class="line">+ “环游世界，先生？” </span><br><span class="line">    我大吃一惊。</span><br><span class="line">    </span><br><span class="line">    -&gt; astonished</span><br><span class="line">    </span><br><span class="line">+ [点头。] -&gt; nod</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">=== astonished ===</span><br><span class="line">“你在开玩笑！” 我认真地对他说。“你一定是在和我开玩笑，先生。” </span><br><span class="line">“我很认真。” </span><br><span class="line"></span><br><span class="line">+ “好吧。”</span><br><span class="line"></span><br><span class="line">    -&gt; ending</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">=== nod ===</span><br><span class="line">我点了点头，但不相信一个字。</span><br><span class="line"></span><br><span class="line">-&gt; ending</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">=== ending //这也是节点</span><br><span class="line"></span><br><span class="line"># CLASS: end</span><br><span class="line">“我们将在八十天内环游地球。” 他很平静地提出了这个近乎疯狂地计划“我们8:25去巴黎。一小时后。”</span><br><span class="line"></span><br><span class="line">-&gt; END</span><br></pre></td></tr></table></figure>
+<p>预览时，调整左栏的内容，右栏预览也会实时更新，即使你正处于故事中。你甚至可以点击右栏中的某个单词，它会选中左栏中的源文本（当故事变得非常复杂时，这非常有用！）。你也可以先看这个故事，用默认模板发布到到网页的效果，<a target="_blank" rel="noopener" href="https://inky-example.netlify.com/">点我运行体验</a>。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1574394256758-a0a19c80-c679-4253-b449-4c0571065f68.png" alt="img"></p>
+<h3 id="学会注释"><a href="#学会注释" class="headerlink" title="学会注释*"></a>学会注释*</h3><p>好记性不如烂笔头。你可以在任何地方，用 <code>//</code> ，或 <code>/* …… */</code> 帮你插入注释，记住你想记住的东西，避免一觉醒来就忘记“这是什么东西”。注释内容不会在故事运行时显示给玩家，也不会影响周围的其他内容。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">“你怎么看？” 她问。</span><br><span class="line"></span><br><span class="line">// 一行注释</span><br><span class="line"></span><br><span class="line">“我无法评论，”我答。</span><br><span class="line"></span><br><span class="line">/*</span><br><span class="line">	……或者一段注释</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+<p>还有一种更强的注释 <code>TODO:</code>，帮你提醒要做什么。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TODO: 认真写这一节！</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1573991366205-6cf1add7-6cca-40d2-ad5c-33cfc7196ae2.png" alt="img"></p>
+<p>在这个简单的故事中，你只需要简单的了解三个部分：<strong>结点</strong>、<strong>跳转</strong>和<strong>选项</strong>。</p>
+<h2 id="1-结点-knots"><a href="#1-结点-knots" class="headerlink" title="1. 结点 knots"></a>1. 结点 knots</h2><p>故事是由多个相互链接的部分构成的，在 INK 中我们称其为结点（knots）。结点名称的<strong>左侧**</strong>至少<strong>**需要两个等号</strong>（<code>==</code>）进行标记，右侧的则是可选的（例如 <code>=== london ===</code>）。Inky 中会用蓝色突出显示已识别的标记，提示书写正确，并与其他内容区分。结点标记下面的内容都属于这个结点。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">=== london === //这是节点</span><br><span class="line">Phileas Fogg 先生早早从改革俱乐部回到了家，并乘坐了新型的蒸汽运输机！   </span><br><span class="line">“领航,” 他喊到。 “我们去环游世界！”</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1573976398199-ecdc40f2-65b8-4e86-9c32-99b00db7c27a.png" alt="img"></p>
+<p>结点的名称（<strong>不能有空格、中文</strong>）不会在运行故事时显示。</p>
+<p>而当我们想要把不同部分链接的在一起时，会用到它们。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1573974175692-2bad0e25-335b-4c6c-8bb6-ed376cde3f27.png" alt="img"></p>
+<h2 id="2-跳转-divert"><a href="#2-跳转-divert" class="headerlink" title="2. 跳转 divert"></a>2. 跳转 divert</h2><p>现在谈谈链接，我们称之为跳转（divert）。<code>-&gt; london</code></p>
+<p>使用<strong>跳转箭头</strong>（输入”减”与”右尖括号”），告诉故事去另一个结点。运行故事时，跳转是自动的且不会显示给玩家。</p>
+<p>因此，在故事的开头，显示了介绍性段落之后，就有 <code>-&gt; london</code> 的跳转，可将玩家直接跳入该名称的结点中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">伦敦，1872年</span><br><span class="line">Phileas Fogg 先生的住所。</span><br><span class="line"></span><br><span class="line">-&gt; london //这是跳转</span><br><span class="line"></span><br><span class="line">=== london === //这是节点</span><br><span class="line">Phileas Fogg 先生早早从改革俱乐部回到了家，并乘坐了新型的蒸汽运输机！   </span><br><span class="line">“领航，” 他喊到。 “我们去环游世界！”</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1573976428053-12900656-703c-4127-814e-a8749cb3a9b6.png" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1573975510052-2885bcdf-ce95-4838-9460-3508f94fea67.png" alt="img"></p>
+<h3 id="特殊：END"><a href="#特殊：END" class="headerlink" title="特殊：END"></a>特殊：END</h3><p>这个故事的结尾，还有一种特殊的跳转。如果你跳转到“ <code>END</code>”，会告诉 INK 我们完成了，这里是<strong>结局</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">=== ending //这也是节点 开始</span><br><span class="line">“我们将在八十天内环游地球。” 他很平静地提出了这个近乎疯狂地计划“我们8:25去巴黎。一小时后。”</span><br><span class="line"></span><br><span class="line">-&gt; END //特殊的跳转 结局</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1573976466710-71f71ac1-fcb6-4a5a-b4fe-5caa8f495378.png" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1573976130461-3b53fb83-0249-4cef-bcbe-51e88841110d.png" alt="img"></p>
+<p>试着删除例子中该有的 <code>-&gt; END</code> ，Inky 将在边缘显示错误。若将鼠标悬停在警告上，会提示你“loose end”。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1573976364029-5506ce09-cc93-48dd-9cfa-42a4e61fad20.png" alt="img"></p>
+<p>这是 Inky 的一个重要的帮助功能，当你故事越来越复杂时，这些警告可提醒你仍要编写哪些部分。</p>
+<h3 id="胶水-glue"><a href="#胶水-glue" class="headerlink" title="胶水* glue"></a>胶水* glue</h3><p>如必须让内容在同一行显示，还可以使用胶水（glue） <code>&lt;&gt;</code> 将其强制黏在同一行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">我们回家&lt;&gt; </span><br><span class="line">-&gt; to_savile_row </span><br><span class="line"></span><br><span class="line">=== to_savile_row ===</span><br><span class="line">去萨维尔街&lt;&gt;</span><br><span class="line">-&gt; as_fast_as_we_could</span><br><span class="line"></span><br><span class="line">=== as_fast_as_we_could ===</span><br><span class="line">尽可能的快</span><br></pre></td></tr></table></figure>
+<p>你会在预览看到  <code>我们回家去萨维尔街尽可能的快</code> ，而非分三行显示。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1574060159019-c0b3ac4b-8380-48ab-a105-eab38634d0c3.png" alt="img"></p>
+<h2 id="3-选项-choices"><a href="#3-选项-choices" class="headerlink" title="3. 选项 choices"></a>3. 选项 choices</h2><p>谈到分歧，为了使互动小说更有趣，我们需要的最后一个关键功能当然是选项（choices）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ “环游世界，先生？” </span><br></pre></td></tr></table></figure>
+<p>选项看起来是 INK 中最重要的元素。通常它们会与跳转直接结合在一起，以便能创造一个直接跳转到故事其他地方的选项。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ [点头。] -&gt; nod</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1573981901328-894dd45e-d99a-40b3-816c-1081c07674ea.png" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1573981932950-da1aac14-00b3-4948-8c4d-e100b7fba968.png" alt="img"></p>
+<p>我们编写这些内容时，需要注意几件事：</p>
+<p>通常，你输入的选项内容既会成为可点击的选项，也会成为你点击后出现的文本的一部分。但是，如果你想要一个“无声的”（如动作）选项，则可以将选项放在<code>[</code>方括号中<code>]</code>，如上方第二个示例所示。</p>
+<p>这可以用于某些形式，像是不同的叙述风格。例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+ [草率的点头]     -&gt; nod</span><br><span class="line">+ 我草率的点了点头，  -&gt; nod</span><br><span class="line"></span><br><span class="line">== nod ==</span><br><span class="line">这有些不可思议。</span><br></pre></td></tr></table></figure>
+<p>第一个选项只会显示，“这有些不可思议。”；而第二个会显示“我草率的点了点头，这有些不可思议。”</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/gif/262531/1573982192901-ba58f144-8d28-4ac3-8aee-df54c1e0c3d6.gif" alt="img"></p>
+<p>你还可以在选项下添加额外的文本行。这将在选择后显示。例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+ “环游世界，先生？” </span><br><span class="line">    我大吃一惊。</span><br><span class="line">    “你在开玩笑！” 我认真地对他说。“你一定是在和我开玩笑，先生。” </span><br><span class="line">    </span><br><span class="line">    -&gt; astonished</span><br><span class="line">    </span><br><span class="line">=== astonished ===</span><br><span class="line"></span><br><span class="line">略……</span><br></pre></td></tr></table></figure>
+<p>等同于——</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+ “环游世界，先生？”  -&gt; astonished</span><br><span class="line"></span><br><span class="line">=== astonished ===</span><br><span class="line">我大吃一惊。</span><br><span class="line">“你在开玩笑！” 我认真地对他说。“你一定是在和我开玩笑，先生。” </span><br><span class="line"></span><br><span class="line">略……</span><br></pre></td></tr></table></figure>
+<p>INK 是非常灵活的，它可以让你有很多不同的方式来构建你的故事。</p>
+<p>事实上*，<code>]</code> 之前的部分会被显示为选项，<code>[]</code> 内的内容会在选择后隐藏。你也可以把 <code>[]</code> 当作选项与选择之后内容的分隔符，便于快速输入，这些内容会显示在同一行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ 我草率的点了点头，[]这有些不可思议。</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/gif/262531/1574058322249-1e7c1c0f-b46e-4d78-aa68-235d03013077.gif" alt="img"></p>
+<p>小技巧，你也可以试试 <code>“就是死我也不会吃的[！”]……真香！”</code> ，体验下选择前后的语气变化，这种细节在某些叙事风格种很有用。</p>
+<h3 id="一次性选项"><a href="#一次性选项" class="headerlink" title="一次性选项*"></a>一次性选项*</h3><p>如想要选项只能被被玩家点一次，最简单的方式就是把选项的 <code>+</code> 改成 <code>*</code> 。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* “环游世界，先生？”</span><br></pre></td></tr></table></figure>
+<p>举个例子，你会发现下图中的一次性选项“2 Hello back!”不见了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">-&gt;hello</span><br><span class="line"></span><br><span class="line">== hello</span><br><span class="line"></span><br><span class="line">Hello world!</span><br><span class="line">+	1 Hello back! //普通选项</span><br><span class="line">	Nice to hear from you! -&gt;hello</span><br><span class="line">	</span><br><span class="line">*	2 Hello back!//一次性选项</span><br><span class="line">	Nice to hear from you! -&gt;hello</span><br><span class="line">	</span><br><span class="line">+	3 Hello back!</span><br><span class="line">	Nice to hear from you! -&gt;hello</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/gif/262531/1573984212426-9aee6a82-4341-428d-bb2f-eaf2b6187c9f.gif" alt="img"></p>
+<h3 id="结构说明"><a href="#结构说明" class="headerlink" title="结构说明"></a>结构说明</h3><p>关于 INK 整体结构最后的说明：INK 始终从文件的顶部开始，然后一直向下运行。但如果你将所有内容拆分为结点，则务必确保在文件顶部至少有一个<strong>初始跳转</strong>（如<code>-&gt; top_knot</code>），以告诉它以哪个结点开始（修改初始跳转，可更方便的进行测试）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-&gt; top_knot //初始跳转</span><br><span class="line"></span><br><span class="line">=== top_knot ===</span><br><span class="line">Hello world!</span><br><span class="line">-&gt; END</span><br></pre></td></tr></table></figure>
+<p>现在，为什么不尝试续写个故事呢？尝试插入更多的结点，更多的跳转，更多的选项，更多的结局，看看会发生什么！作为练习的开始，也许先试着把介绍性段落变成你的结点？</p>
+<h2 id="4-条件内容"><a href="#4-条件内容" class="headerlink" title="4. 条件内容"></a>4. 条件内容</h2><p>到目前为止，我们编写的所有内容，都能写成可发布的互动小说。但如果我们想根据玩家之前的经历不同，显示不同的文本和选项呢？</p>
+<p>INK 会记录运行中玩家经历的每个内容，以便你今后查询。例如，要确定玩家是否经过了称为（地下墓穴）的特定结点 <code>catacombs</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123; catacombs: //条件：经过地下墓穴</span><br><span class="line">    这里比巴黎的地下墓穴还要暗。</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个<code>&#123;</code>大括号中<code>&#125;</code> ，你可以包含多行内容，甚至是跳转和选项（只有玩家<strong>经过</strong>了“catacombs”这个结点，大括号里的内容才会被显示）。</p>
+<p>但是，一个更简洁的编写条件选项的方法如下，仅当玩家经过某个结点后才显示特定选项的方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ &#123;catacombs&#125; [告诉她你的发现] -&gt; tell_her</span><br></pre></td></tr></table></figure>
+<p>如果你想反转这个条件，换句话说，如果你想确认玩家没有经过地下墓穴，你只需在前面简单地加上：<code>not</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ &#123;not catacombs&#125; [前往地下墓穴] -&gt; catacombs</span><br></pre></td></tr></table></figure>
+<p>最后，你可用 <code>and</code> 和 <code>or</code> 形成更复杂的判定条件，并且用小括号来阐明逻辑的细节。几个例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123; catacombs and not pick_up_ring: //条件：经过地下墓穴且没经过捡起戒指</span><br><span class="line">    “所以你之后没找到它？”她质问到。</span><br><span class="line">    + [抱歉] -&gt; apologise</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123; (catacombs or cross_river or sing_in_rain) and not buy_new_shoes: </span><br><span class="line">		//条件：（经过地下墓穴或穿过河或在雨中唱歌）且没经过买新鞋</span><br><span class="line">    那天我的鞋子早就烂了。</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再看个例子*，你能发现选“白色的”虽然和灰色的后面走的是一样的结点，但显示的内容变多了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">你想买什么颜色的狼？</span><br><span class="line"></span><br><span class="line">+ 白色的…… -&gt; white</span><br><span class="line">+ 灰色的…… -&gt; gray</span><br><span class="line"></span><br><span class="line">== white</span><br><span class="line"></span><br><span class="line">让我找找看。</span><br><span class="line"></span><br><span class="line">-&gt; gray</span><br><span class="line"></span><br><span class="line">== gray</span><br><span class="line"></span><br><span class="line">&#123; white:白色的狼卖没了。 &#125;要买灰色的狼吗?</span><br><span class="line"></span><br><span class="line">+ &#123;white&#125;我一定要白色的狼-&gt;wolf</span><br><span class="line">+ 好的，买灰色的狼-&gt;wolf</span><br><span class="line"></span><br><span class="line">== wolf</span><br><span class="line"></span><br><span class="line">……略</span><br><span class="line"></span><br><span class="line">-&gt; END</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/gif/262531/1574678637567-6fc85742-97ee-4785-babd-f8dfdcbc194d.gif" alt="img"></p>
+<hr>
+<h1 id="高阶-INK"><a href="#高阶-INK" class="headerlink" title="高阶 INK"></a>高阶 INK</h1><p>我们只介绍了 INK 中强大功能的一小部分。如你想阅读更多或只是深入了解已经看到的东西，看看<a target="_blank" rel="noopener" href="https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md">官方文件</a>：</p>
+<ul>
+<li>与任何编程语言一样，你可以创建自定义<a target="_blank" rel="noopener" href="https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md#part-3-variables-and-logic">变量</a>并执行数学计算。</li>
+<li>我们一直在使用<code>+</code>作为选项符号，但通常我们建议使用<code>*</code>。区别在于，<code>*</code>选项只能选择一次，非常适合需要重复浏览，但你不希望重复选择的选项。</li>
+<li>一个有点难学但易于编写的系统，称为“<a target="_blank" rel="noopener" href="https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md#part-2-weave">编织</a>（weave）”，用于编写复杂分支，不需要你自己命名每个部分。我们的大多数游戏像80天，都是用这种系统编写的。</li>
+<li>在结点中，你还可以包含称为“<a target="_blank" rel="noopener" href="https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md#6-includes-and-stitches">针脚</a>（stitches）”的子结点。</li>
+<li>写不同的内容和分支的中间内容是可能的，也是直截了当的（？）。</li>
+<li>你可将 INK 文件拆分为多个连在一起的较小文件。</li>
+<li>……</li>
+</ul>
+<p>到这里为止，你已经掌握了 Inky 书写故事最最基础的语法。现在试着考验下自己：</p>
+<p>写一段游戏中常见的“询问NPC”剧情。基础要求至少有三个可以问NPC的选项，且可以问完所有问题。</p>
+<p>进一步要求，玩家至少问一个问题后才能继续剧情，玩家问完所有问题后会直接继续剧情……</p>
+<p>是不是觉得有些难（或麻烦）呢？这也是为什么会有高阶 INK 的原因。强烈建议你读一下“编织”，这个问题的答案就在编织那块的底部。你会发现，INK 应对这种内容其实游刃有余，或者说 INK 就是为写这种故事而生的，简单而流畅。事实也是如此，大部分 INK 的故事都是用编织写主要部分的，而非最基础的语法。</p>
+<p>为此，我翻译了官方文档的部分内容，便于你选择性了解，<a target="_blank" rel="noopener" href="https://www.yuque.com/apsno9/pcke0w/kpet2k">点我阅读</a>。</p>
+<hr>
+<h1 id="导出作品"><a href="#导出作品" class="headerlink" title="导出作品"></a>导出作品</h1><p>下一步是将我们的故事保存到一组文件中，这些文件可以作为网页上传到网上。要在 Inky 中执行此操作，请选择“File”，然后选择“Export for web…”，然后选下故事的名称。你选择的名称将同时用于网页上的标题（因此，请适当的用空格和大写字母），以及保存到的<strong>文件夹</strong>的名称。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1573995959422-19ec47ae-a082-4a31-95a0-b1c4fb60fd06.png" alt="img"></p>
+<p>当你对故事进行更改后，尤其是你对外观更改后（参见下文），你应该选择“Export story.js only…”，将其保存到相同的位置并覆盖“ 故事名字.js”。这是更新 INK 内容后<strong>唯一需要更新</strong>的文件，其余的文件都只是 Web 模板的一部分。因此，若你更改了模板的外观，这样就不会意外覆盖。</p>
+<p>至此，你已经完成了！如果愿意，你可以直接跳到“发布到网页”的步骤。</p>
+<p>但是，如果你还想添加图像，修改外观，请继续阅读！</p>
+<hr>
+<h1 id="页面美化"><a href="#页面美化" class="headerlink" title="页面美化"></a>页面美化</h1><p>INK 被设计成尽可能的专注于一项任务：编写交互式文本。为了在功能性、灵活性和简洁性保持良好的平衡，我们抵制了可能使语言超载的额外功能。</p>
+<p>因此，INK 语言中没有用于插入图像之类的任何内置工具，这完全取决于你创造的故事类型。如你正在为3D游戏编写对话，那么指定要显示的图像则不一定有意义。</p>
+<p>但是，Inky 确实提供了一些<strong>额外的功能</strong>，这些功能可在导出 Web 后可用（自0.10.0版本开始）。这些额外功能都用的是 INK 的标签系统，它允许你为每个行提供特殊的文本注释，在行的开头或上方。标签是玩家不可见的，但可以由系统或 Web 模板读取。</p>
+<h2 id="1-插入图片"><a href="#1-插入图片" class="headerlink" title="1. 插入图片"></a>1. 插入图片</h2><p>插入图片的方法如下（图片会在导出web后显示）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># IMAGE: imageName.jpg</span><br></pre></td></tr></table></figure>
+<p>图像文件应与其他文件位于同一文件夹中，或者如果需要，可以使用<strong>相对路径</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># IMAGE: myImages/imageName.jpg</span><br></pre></td></tr></table></figure>
+<p>你也可以在行尾添加图片标签。该图像将始终显示在游戏<strong>文本上方</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The above picture is a dog.     # IMAGE: wolf.jpg</span><br></pre></td></tr></table></figure>
+<p>（因为所有标记都与特定的文本行相关联，且当单独在某行放个标记时，它将与其下方的文本行关联。）</p>
+<h2 id="2-清空屏幕"><a href="#2-清空屏幕" class="headerlink" title="2. 清空屏幕"></a>2. 清空屏幕</h2><p>Inky 的 Web 模板另一个特有功能是 clear 标签：<code># CLEAR</code></p>
+<p>这将清空当前显示的所有文本，从页面顶部重新开始。建议仅在<strong>选项后直接插入</strong>！如果插入到文本中间，则部分内容将在看到之前就被清除。</p>
+<h2 id="3-深色主题与作者"><a href="#3-深色主题与作者" class="headerlink" title="3. 深色主题与作者"></a>3. 深色主题与作者</h2><p>要用深色主题，只需将其放在  INK 文件的最顶部：<code># theme: dark</code></p>
+<p>Web模板能够读取它作为一个全局标签，并内置了样式来改变主题（它使用”dark”作为整个页面的类。当你在 CSS 文件中看到 <code>.dark</code> 选择器的使用时，这些是深色主题的重写。）</p>
+<p>要设置作者姓名，请将其放在 INK 文件的顶部：<code># author: 你的名字</code></p>
+<p>这将用到 Inky 的 Web 模板种，并位于主标题的正下方。</p>
+<h2 id="4-自定义CSS类"><a href="#4-自定义CSS类" class="headerlink" title="4. 自定义CSS类"></a>4. 自定义CSS类</h2><p>你还可以使用CSS类完全自定义各行文本的外观。在 INK 中，如下添加标签到文本行里：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">你进入了森林。</span><br><span class="line">地上有一滩血。   # CLASS: danger</span><br></pre></td></tr></table></figure>
+<p>然后，可以通过向你的 <code>style.css</code> 文件中添加以下内容，来告诉浏览器“danger”CSS类的外观：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.danger &#123;</span><br><span class="line">   color: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>圆点后跟一个单词，是我们在CSS中定义样式类的方式。我们之前的大多数示例都没有点，因为这些元素内置，如”p”表示”段落”。这些也可以组合使用，因此 <code>p.danger</code> 意味着“危险的段落”，并且在我们的示例中同样适用。</p>
+<h3 id="示例：END"><a href="#示例：END" class="headerlink" title="示例：END"></a>示例：END</h3><p>如要以居中粗体显示结尾的“全剧终”，可用 Inky 模板包含的 <code>end</code> 的内置样式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># CLASS: end</span><br><span class="line">全剧终</span><br><span class="line">-&gt; END</span><br></pre></td></tr></table></figure>
+<p>回顾下：</p>
+<ul>
+<li>中间一行是文本本身。</li>
+<li>第一行将 CSS 类”end”应用于文本。</li>
+<li>最后一行告诉 INK ，我们完成了，这不是一个“<a href="#5jLih">loose end</a>”。</li>
+</ul>
+<p>要调整 end CSS 类的样式，请在 CSS 文件底部查找 <code>.end</code> 。</p>
+<h2 id="5-重启故事"><a href="#5-重启故事" class="headerlink" title="5. 重启故事"></a>5. 重启故事</h2><p>Inky 的 Web 模板还具有一个内置功能，如果插入 <code># RESTART</code> 标签，它将立即重置故事的进度（包括玩家选择的<strong>所有经历和变量</strong>），并从头开始。由于它会立刻生效，建议你放在一个选项后，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">你死啦！</span><br><span class="line">+ 从头来过。</span><br><span class="line">    # RESTART</span><br><span class="line">    -&gt; END</span><br></pre></td></tr></table></figure>
+<p> <code>-&gt; END</code> 跳转实际上从未到达，但它是个好办法：防止 INK 抱怨你“<a href="#5jLih">loose end</a>”。</p>
+<h2 id="6-定制外观"><a href="#6-定制外观" class="headerlink" title="6. 定制外观"></a>6. 定制外观</h2><p>本指南面向初学者 ，假定他对 Web 技术一无所知。</p>
+<h3 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构"></a>文件结构</h3><p>上面的导出步骤应已保存出包含以下文件的文件夹（分享故事请分享<strong>整个文件夹</strong>）：</p>
+<ul>
+<li><strong>index.html</strong> - HTML 文件将其他文件绑定在一起，如你想运行你的故事，双击该文件。它告诉浏览器页面的结构，并告诉它加载其他文件。</li>
+<li><strong>main.js</strong> - 这是主要的 JavaScript 文件，你可在其中自定义故事的呈现方式<em>。</em></li>
+<li><strong>style.css</strong> - 这是主要的 CSS 文件，它定义诸如颜色、字体以及大小调整和间距信息（如段落的宽度和边距）之类的内容。我们还可以定义过渡，例如段落淡入的方式。</li>
+<li><strong>故事名字.js</strong> - 这是你 INK 的实际内容，由 Inky 导出。这是你故事的唯一文件，而非 Inky 保存的通用模板的一部分。<strong>请勿直接编辑此文件</strong>。</li>
+<li><strong>ink.js</strong> - 这是 INK <a target="_blank" rel="noopener" href="https://github.com/y-lohse/inkjs">引擎本身的 JavaScript 端口</a>。</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1574394427268-5c08a18f-84eb-4590-a190-a7c5d66cf173.png" alt="img"></p>
+<p>要修改任何文件，应在纯文本编辑器中打开，如 <a target="_blank" rel="noopener" href="https://code.visualstudio.com/">VS Code</a> 而非 Word！</p>
+<h3 id="更改字体和颜色"><a href="#更改字体和颜色" class="headerlink" title="更改字体和颜色"></a>更改字体和颜色</h3><p>字体和颜色均由CSS文件 <strong>style.css</strong> 控制。如果打开文件，你将看到一系列类似下面的块：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">body &#123;</span><br><span class="line">    font-family: &#x27;Open Sans&#x27;, sans-serif;</span><br><span class="line">    font-weight: lighter;</span><br><span class="line">    background: white;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>每个名称都以“ body”或“ h1”之类的名称开头。在CSS中，这称为选择器<em>，</em>因为它选择网页的特定部分进行样式设置。在上述情况下，它选择正文，实际上是整个页面。</p>
+<p>字体列表 <code>font-family</code> 按优先顺序排列，这取决于用户计算机上的可用内容。在上面的示例中，Open Sans 是一种网络字体，是在文件顶部导入的，只需访问 <a target="_blank" rel="noopener" href="https://fonts.google.com/">fonts.google.com</a> 进行选择即可选择，并说明如何使用它们（它为你提供了几个<code>@import</code>，你可以自己粘贴）。如由于某些原因无法下载该字体，它将退回到 sans-serif 选项。</p>
+<p>你还可以使用用户系统中自带的字体，但是问题是，一定都有的字体 <a target="_blank" rel="noopener" href="https://www.w3schools.com/cssref/css_websafe_fonts.asp">非常有限</a>。因此通常字体最后都会写上<code>sans-serif</code>。</p>
+<p>强烈建议*前往 <a target="_blank" rel="noopener" href="https://www.w3school.com.cn/css/index.asp">W3C School</a>，花些时间简单的自学下CSS教程，再看下方阴影部分更容易上手。</p>
+<p>文件中的一些CSS选择器和规则包括：</p>
+<ul>
+<li><code>h1</code>-代表“一级标题”-即最大的标题，用于页面顶部故事的主要标题。如果要更改标题的大小，可在<code>font-size</code>更改属性。同样，这<code>h1, h2</code>是一次可同时在两个选择器上设置规则的快捷方式，即一级二级标题。如果<code># author: 你的名字</code> 在 INK 顶部有标签，则后者用于副标题。</li>
+<li><code>.header</code>-以点开头的名称是类名称。这个特定的示例选择一个元素，该元素只是title和 <a target="_blank" rel="noopener" href="https://www.inklestudios.com/ink/web-tutorial/#globalTags">byline</a> 的容器。通常，在 HTML/CSS 中，元素被赋予容器来帮助构建或对间距和布局进行精细控制。</li>
+<li><code>p</code>-这代表“段落”。它是页面上主体文本的选择器。因此，这是你要更改字体大小，文本颜色等的地方。</li>
+<li><code>a</code>-这代表锚标记，锚标记是可点击链接的HTML术语-这些标记仅在我们的页面上用于可点击的选择，但也可以是任何东西。</li>
+<li><code>p.choice</code>-“具有’choice’类的段落”。如果只是<code>.choice</code>，那就意味着“任何选项类”。我们页面上的选择实际上是按特殊样式设计的段落，其中包含可单击的链接（锚标记）。</li>
+<li><code>a:hover</code>-这里<code>:hover</code>称为伪类，它用于当用户的鼠标指针悬停该元素上时选择一个元素。</li>
+</ul>
+<p>CSS根据优先级应用样式，优先级基于选择器的具体程度（更具体的是更高的优先级）和文件中的位置（更低的是较高优先级）。这使你可以首先使用粗笔画定义样式，然后逐步覆盖它们。例如，我们<code>h2</code>先定义，然后下移<code>.dark h2</code>覆盖h2样式的一部分：当深色主题处于活动状态（<code>.dark</code>类分配给整个页面-）时，我们更改颜色。</p>
+<p>有关可以单独使用CSS更改样式的所有其他方式的更多信息，请尝试使用搜索“ CSS教程”，那里有大量的资源！</p>
+<h3 id="例子：花哨标题"><a href="#例子：花哨标题" class="headerlink" title="例子：花哨标题"></a>例子：花哨标题</h3><p>在 <a target="_blank" rel="noopener" href="https://fonts.google.com/">Google字体</a> 上选择字体，然后插入 CSS 文件顶部的行，例如：<code>@import</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@import url(&#x27;https://fonts.googleapis.com/css?family=Lobster&#x27;);</span><br></pre></td></tr></table></figure>
+<p>然后，将规则更改为类似的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">h1 &#123;</span><br><span class="line">    font-family: &#x27;Lobster&#x27;, cursive;</span><br><span class="line">    font-size: 80pt;</span><br><span class="line">    text-align: center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="发布到网页"><a href="#发布到网页" class="headerlink" title="发布到网页*"></a>发布到网页*</h1><p>原文此部分介绍的是发布到 <code>itch.io</code> ，但好消息是，你几乎可以把 Inky 导出的 Web 托管到任何可以放静态网页的地方，如 netlify，github page，coding…… 和你的服务器上。</p>
+<h2 id="Netlify"><a href="#Netlify" class="headerlink" title="Netlify*"></a>Netlify*</h2><ol>
+<li>注册 <a target="_blank" rel="noopener" href="https://app.netlify.com/">netlify</a> ；</li>
+<li>将你的故事文件夹拖动到“Want to deploy a new site without connecting to Git?Drag and drop your site folder here”的框里。显示绿色的发布网址后，即发布成功，点击网址访问你的故事。</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/gif/262531/1574053609287-4409cb8a-344d-44e3-ac5f-25444a6c39a0.gif" alt="img"></p>
+<ol>
+<li>点击 Domain Setting ，可修改你故事的网址。</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/gif/262531/1574054000386-e5e3b045-8a56-4ff0-83f2-bae3b0af693c.gif" alt="img"></p>
+<ol>
+<li>如需更新故事，选择 Depolys ，将更新后的文件夹拖入框里即可。（事实上，你一开始也可以通过连接Github，完成全自动的更新发布，这里不再赘述了。)</li>
+</ol>
+<p>看一下我们刚发布的 <a target="_blank" rel="noopener" href="https://inky-example.netlify.com/">example</a> 。<a target="_blank" rel="noopener" href="https://app.netlify.com/sites/inky-example/deploys"><img src="https://cdn.nlark.com/yuque/0/2019/svg/262531/1574054336160-43d81bb4-054b-40ef-aa7d-97ce369fdec3.svg" alt="img"></a></p>
+<h2 id="App"><a href="#App" class="headerlink" title="App*"></a>App*</h2><p>将网页打包成安装包是件很容易的事。</p>
+<p>你可尝试用 <a target="_blank" rel="noopener" href="https://www.dcloud.io/hbuilderx.html">HBuilderX</a> 创建“5+App”项目进行云打包，这里不再赘述了。</p>
+<p>另一种思路，也可以选择创建“Wap2App”项目，将托管的网页设成“wap站首页地址”，更新与打包更容易些。</p>
+<h2 id="评论系统"><a href="#评论系统" class="headerlink" title="评论系统*"></a>评论系统*</h2><p>为网页插入评论系统里是容易的，同理为 Inky 生成的网页插入评论系统也是容易的。</p>
+<p>这里有一个将 <a target="_blank" rel="noopener" href="https://github.com/gitalk/gitalk/blob/master/readme-cn.md">Gitlak</a> 评论系统插入的 <a target="_blank" rel="noopener" href="https://github.com/volfclub/inkytalk">例子</a>，<a target="_blank" rel="noopener" href="https://inky-gitalk.netlify.com/">点我运行体验</a>。</p>
+<p>当然如果你愿意，甚至还能插入 <a target="_blank" rel="noopener" href="http://www.daovoice.io/">DaoVoice</a> 这样的客服系统。</p>
+<h2 id="统计代码"><a href="#统计代码" class="headerlink" title="统计代码*"></a>统计代码*</h2><p>想知道有多少人玩，最简单的方式就是插入统计代码。方法和插入到网页一样，这里不再赘述了。</p>
+<h2 id="itch-io"><a href="#itch-io" class="headerlink" title="itch.io"></a>itch.io</h2><p>你已经完成了你的杰作！是时候与世界分享它了。</p>
+<p>你可以选择将文件上传到允许你托管网页的任何地方，但我们建议 <strong>itch.io，</strong>因为它是一个拥有独立游戏开发者的伟大社区，它是少数几个允许你上传纯 Web 内容的地方之一，最重要的是，它是免费的！如果你愿意，你甚至可以选择出售你的内容。</p>
+<p>itch.io 还允许你上传游戏内容为私有草稿，以便在发布之前测试该过程。</p>
+<p>最后，<a target="_blank" rel="noopener" href="https://itch.io/jam/inkjam">Inkjam</a> 是从 itch.io 托管的，如果你已经将游戏上传到平台上，就可以轻松加入。</p>
+<h1 id="高阶-Inky-残卷"><a href="#高阶-Inky-残卷" class="headerlink" title="高阶 Inky 残卷"></a>高阶 Inky 残卷</h1><p>INK 最初被设计为游戏引擎的脚本插件，因此具有丰富而强大的功能。我将官方文档中，部分我有兴趣，且对你使用 Inky 可能有帮助的内容翻译至此。如你发现“好像少了些什么”，或想进一步了解，请阅读<a target="_blank" rel="noopener" href="https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md">官方文档</a>。</p>
+<h1 id="1-基础"><a href="#1-基础" class="headerlink" title="1. 基础"></a>1. 基础</h1><h2 id="1-1-Inky-基础教程"><a href="#1-1-Inky-基础教程" class="headerlink" title="1.1 Inky 基础教程"></a>1.1 <a target="_blank" rel="noopener" href="https://www.yuque.com/apsno9/pcke0w/gix3ga">Inky 基础教程</a></h2><h2 id="1-2-针脚-stitches"><a href="#1-2-针脚-stitches" class="headerlink" title="1.2 针脚 stitches"></a>1.2 <a target="_blank" rel="noopener" href="https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md#6-includes-and-stitches">针脚 stitches</a></h2><h3 id="结点可有子节点"><a href="#结点可有子节点" class="headerlink" title="结点可有子节点"></a>结点可有子节点</h3><p>随着故事变长，在没有其他结构的情况下，它们会越来越乱，难以井井有条。</p>
+<p>结点可以包括称为“针脚”（stitches）的子结点，这些使用<strong>单个等号</strong>（<code>=</code>）标记。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">=== the_orient_express === //东方快车 结点</span><br><span class="line">= in_first_class //头等厢 针脚</span><br><span class="line">	...</span><br><span class="line">= in_third_class //三等厢 针脚</span><br><span class="line">	...</span><br><span class="line">= in_the_guards_van //警务车厢 针脚</span><br><span class="line">	...</span><br><span class="line">= missed_the_train //错过火车 针脚</span><br><span class="line">	...</span><br></pre></td></tr></table></figure>
+<p>例如，可以使用一个结点来写拍摄场景，用结点里的多个针脚来写场景中的事件。</p>
+<h3 id="针脚有唯一的名称"><a href="#针脚有唯一的名称" class="headerlink" title="针脚有唯一的名称"></a>针脚有唯一的名称</h3><p>针脚可被用于跳转的地址。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">*	[前往三等厢]</span><br><span class="line">	-&gt; the_orient_express.in_third_class //跳转到 东方快车结点 下的 三等舱针脚</span><br><span class="line"></span><br><span class="line">*	[前往警务车厢]</span><br><span class="line">	-&gt; the_orient_express.in_the_guards_van //跳转到 东方快车结点 下的 警务车厢针脚</span><br></pre></td></tr></table></figure>
+<h3 id="第一个是默认针脚"><a href="#第一个是默认针脚" class="headerlink" title="第一个是默认针脚"></a>第一个是默认针脚</h3><p>如果结点包含针脚，默认跳转到第一个针脚。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">*	[前往头等厢]</span><br><span class="line">	“头等厢, 先生。 还有其他地方吗？”</span><br><span class="line">	-&gt; the_orient_express</span><br></pre></td></tr></table></figure>
+<p>等同于（…除非我们改变结点内针脚的顺序！）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">*	[前往头等厢]</span><br><span class="line">	“头等厢, 先生。 还有其他地方吗？”</span><br><span class="line">	-&gt; the_orient_express.in_first_class </span><br></pre></td></tr></table></figure>
+<p>你还可以在针脚外的顶部加入任何内容，但注意此时不会自动运行第一个针脚。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">=== the_orient_express === </span><br><span class="line"></span><br><span class="line">我们上车了，但是去哪？</span><br><span class="line">*	[头等厢] -&gt; in_first_class</span><br><span class="line">*	[二等厢] -&gt; in_second_class</span><br><span class="line"></span><br><span class="line">= in_first_class //不会自动运行第一个针脚</span><br><span class="line">	...</span><br><span class="line">= in_second_class</span><br><span class="line">	...</span><br></pre></td></tr></table></figure>
+<h3 id="本地跳转"><a href="#本地跳转" class="headerlink" title="本地跳转"></a>本地跳转</h3><p>在结点内部，你无需完整的针脚地址。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-&gt; the_orient_express</span><br><span class="line">=== the_orient_express ===</span><br><span class="line">= in_first_class </span><br><span class="line">	我安顿好我的主人。</span><br><span class="line">	*	[前往三等厢]</span><br><span class="line">		-&gt; in_third_class</span><br><span class="line">= in_third_class</span><br><span class="line">	我坐下来了。</span><br></pre></td></tr></table></figure>
+<p>这意味着针脚和结点的名称不能相同，但是不同的结点里可以有相同名称的针脚。（你不能把某个车厢也叫东方快车，但东方快车和蒙古专列里都可以有头等舱。）如果使用了不明确的名称，编译器发出警告。</p>
+<h3 id="引用其他-INK-文件"><a href="#引用其他-INK-文件" class="headerlink" title="引用其他 INK 文件"></a><a target="_blank" rel="noopener" href="https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md#script-files-can-be-combined">引用其他 INK 文件</a></h3><p>您还可以根据需要将 <code>ink</code> 文件拆分为多个文件，然后使用 <code>INCLUDE</code> 语句引用它们。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">INCLUDE newspaper.ink</span><br><span class="line">INCLUDE cities/vienna.ink</span><br><span class="line">INCLUDE journeys/orient_express.ink</span><br></pre></td></tr></table></figure>
+<p><code>INCLUDE</code> 语句应始终位于文件的顶部，而不是在内部其他地方。</p>
+<p>对于将结点转移到哪个文件，或者说 <code>INK</code> 文件的拆分没有限制规则（换句话说，拆分文件不会影响游戏的命名空间，和在同一个文件中编写没有区别）。</p>
+<h2 id="1-3-选项-choices"><a href="#1-3-选项-choices" class="headerlink" title="1.3 选项 choices"></a>1.3 选项 choices</h2><h3 id="后备选项-fallback-choices"><a href="#后备选项-fallback-choices" class="headerlink" title="后备选项 fallback choices"></a><a target="_blank" rel="noopener" href="https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md#fallback-choices">后备选项 fallback choices</a></h3><p>如果某个地方都是一次性选项，那么多次经历后，可能会出现“内容用光（ran out of content）”的错误。</p>
+<p>我们可通过“后备选择”解决问题。后备选项不会直接显示给玩家，但如果没有其他选项可选是，则游戏会自动选择。</p>
+<p>后备选项只是“没有选项时的选择”：<code>*    -&gt; out_of_options</code></p>
+<p>并且，在轻微滥用语法下，我们可以使其中的内容做出默认选择：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">* 	-&gt; </span><br><span class="line">	穆德无法解释他是怎么从那辆燃烧着的货车里出来的。 -&gt; season_2</span><br></pre></td></tr></table></figure>
+<p>举个例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">=== find_help ===</span><br><span class="line">	你在人群中拼命地寻找一张友好的脸。 </span><br><span class="line">	*	戴帽子的女人[？] 粗暴地把你推到一边。 -&gt; find_help</span><br><span class="line">	*	拿公文包的男人[？] 很厌恶的从旁边匆匆而过。 -&gt; find_help </span><br><span class="line">  </span><br><span class="line">	*	-&gt;  //后备选项</span><br><span class="line">		但为时已晚：你倒在站台上。一切都结束了。</span><br><span class="line">		-&gt; END</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/gif/262531/1574067425919-b245ce8c-d8c7-42f7-89cf-ab0c7c67ff9e.gif" alt="img"></p>
+<h2 id="1-4-可变文本-variable-text"><a href="#1-4-可变文本-variable-text" class="headerlink" title="1.4 可变文本 variable text"></a>1.4 <a target="_blank" rel="noopener" href="https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md#6-variable-text">可变文本</a> variable text</h2><h3 id="序列"><a href="#序列" class="headerlink" title="序列"></a>序列</h3><p>序列（默认）每次都会显示下一个元素。当“没有下一个”时，它将继续显示最后一个元素。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">电台嘶嘶作响。 &#123;“三！”|“二！”|“一！”|传来了爆炸的响声。|这只有些噪声&#125;</span><br><span class="line"></span><br><span class="line">&#123;我用五磅钞票给我买了杯咖啡。|我买了第二杯咖啡给朋友。|我没钱买咖啡了。&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="周期，一次性，随机"><a href="#周期，一次性，随机" class="headerlink" title="周期，一次性，随机"></a>周期，一次性，随机</h3><p>循环（标记 <code>&amp;</code>）就像序列，但它循环内容。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">今天是 &#123;&amp;周一|周二|周三|周四|周五|周六|周日&#125;。</span><br></pre></td></tr></table></figure>
+<p>一次性（标记 <code>!</code>）也像序列，但当“没有下一个时”，它将不显示。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">他给我讲了个笑话。</span><br><span class="line">&#123;!我有礼貌的笑了。|我微笑了。|我做了下鬼脸。|我不想再做出反应了。&#125;</span><br></pre></td></tr></table></figure>
+<p>随机（标记 <code>~</code>）随机显示内容。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">我掷了枚硬币。 &#123;~字面|花面&#125;。</span><br></pre></td></tr></table></figure>
+<h3 id="更多技巧"><a href="#更多技巧" class="headerlink" title="更多技巧"></a>更多技巧</h3><p>可以包含空元素。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">我向前迈了一步 &#123;!||||然后灯火熄灭了。 -&gt; eek&#125;</span><br></pre></td></tr></table></figure>
+<p>可以进行嵌套。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">这个怪兽&#123;&amp;&#123;没浪费时间|&#125;打|爪&#125;&#123;&amp;你|进你&#123;&amp;的腿|的胳膊|的胸&#125;&#125;。</span><br></pre></td></tr></table></figure>
+<p>可插入跳转。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">我&#123;在等。|等了一会|打盹了。|醒来又等了会。|放弃并离开了 -&gt; leave_post_office&#125;</span><br></pre></td></tr></table></figure>
+<p>也可在选项中使用。（注意，<code>&#123;</code>不能出现在选项开头，会与条件选项混淆；<code>/</code> 出现在里面可能出现错误。）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ 	“您好, &#123;&amp;主人|Fogg先生|你|棕眼&#125;!”[] 我喊道。</span><br></pre></td></tr></table></figure>
+<p>可变文字可以在循环内使用，让游戏看起来很智能，而无需特别的工作。</p>
+<p>这里是一个单结点版的”打地鼠”，<a target="_blank" rel="noopener" href="https://inky-mole.netlify.com/">体验故事运行</a>。我们使用一次性和后备选项，阻止“地鼠逃走”，游戏始终会结束。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">-&gt;whack_a_mole</span><br><span class="line"></span><br><span class="line">=== whack_a_mole ===</span><br><span class="line">	&#123;我举起了锤子。|&#123;~没打中！|没有！|不好，它在哪？| 偏了！| 见鬼…| 啊，手滑了！| 嗷呜！|啊哈，抓住了！-&gt; over &#125;&#125;</span><br><span class="line">	这个&#123;&amp;地鼠|&#123;&amp;不友好的|可恶的|低级的&#125;&#123;&amp;生物|啮齿动物&#125;&#125;&#123;在某处|藏在某处|仍然逍遥法外|嘲笑我|依旧没打中|注定会失败&#125;。 &lt;&gt;</span><br><span class="line">	&#123;!我会抓住它！|但这次它逃不掉了。&#125;</span><br><span class="line">	* 	[&#123;~打|砸|尝试&#125;左上角] 	-&gt; whack_a_mole</span><br><span class="line">	*  [&#123;~就是|暴击|猛击&#125;右上角] -&gt; whack_a_mole</span><br><span class="line">	*  [&#123;~砍|锤&#125;中间] -&gt; whack_a_mole</span><br><span class="line">	*  [&#123;~痛击|肯定是&#125;左下角] 	-&gt; whack_a_mole</span><br><span class="line">	*  [&#123;~掀开|重击&#125;右下角] 	-&gt; whack_a_mole</span><br><span class="line">	* -&gt; </span><br><span class="line">	你累坏了！地鼠击败了你！-&gt;over</span><br><span class="line">	</span><br><span class="line">= over</span><br><span class="line"># CLASS: end</span><br><span class="line">……全剧终</span><br><span class="line"></span><br><span class="line">+ 从头再来？</span><br><span class="line">    # RESTART</span><br><span class="line">    </span><br><span class="line">-&gt; END</span><br></pre></td></tr></table></figure>
+<p>这里有一些生活建议。请注意选项，电视的吸引力永远不会消失：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">=== turn_on_television ===  </span><br><span class="line">我打开电视&#123;一次|两次|三次|更多次&#125;，但电视上 &#123;没啥有意思的东西，所以关上了电视|依旧没什么有意思的东西|比以前更不能吸引我的兴趣了|只有垃圾|演关于鲨鱼的节目我并不喜欢鲨鱼|什么都没有&#125;。</span><br><span class="line">+ [再试试]    -&gt; turn_on_television</span><br><span class="line">* [去外面] -&gt; go_outside_instead</span><br><span class="line">=== go_outside_instead ===</span><br><span class="line">-&gt; END</span><br></pre></td></tr></table></figure>
+<h2 id="1-5-查询-queries"><a href="#1-5-查询-queries" class="headerlink" title="1.5 查询 queries"></a>1.5 <a target="_blank" rel="noopener" href="https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md#7-game-queries-and-functions">查询</a> queries</h2><p>INK 提供了一些有用的关于游戏状态“game level”查询，用于条件逻辑。它们不是语言的一部分，但它们总是有用的，并且不能由作者编辑。从某种意义上说，它们是语言的“标准库函数”。惯例是用大写字母来命名。</p>
+<h3 id="CHOICE-COUNT"><a href="#CHOICE-COUNT" class="headerlink" title="CHOICE_COUNT()"></a>CHOICE_COUNT()</h3><p><code>CHOICE_COUNT</code> 返回到目前为止，当前区域内的选项数，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">*	&#123;false&#125; Option A</span><br><span class="line">* &#123;true&#125; Option B</span><br><span class="line">* &#123;CHOICE_COUNT() == 1&#125; Option C</span><br></pre></td></tr></table></figure>
+<p>false 表示不生成此选项，因此计数是1，显示的B和C（？）。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1574084928723-3f196da5-79aa-476b-9dc2-ee86aa5bafb6.png" alt="img"></p>
+<h3 id="TURNS"><a href="#TURNS" class="headerlink" title="TURNS()"></a>TURNS()</h3><p><code>TURNS</code> 返回自游戏开始以来的回合数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">您总共经历了&#123;TURNS()&#125;个结点。</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1574085516084-7768dd9c-3279-4f98-b451-16774b27e164.png" alt="img"></p>
+<h3 id="TURNS-SINCE-gt-knot"><a href="#TURNS-SINCE-gt-knot" class="headerlink" title="TURNS_SINCE(-&gt; knot)"></a>TURNS_SINCE(-&gt; knot)</h3><p><code>TURNS_SINCE</code> 返回自上次访问特定结点或针脚的跳转次数（玩家输入的）。</p>
+<p>值为 0 表示”在经历这个区域”。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">==laugh</span><br><span class="line">你笑个不停……</span><br><span class="line">+   哈哈哈…… -&gt; laugh</span><br><span class="line">* 	&#123;TURNS_SINCE(-&gt; laugh) == 0&#125; 你尝试不笑了-&gt;END</span><br></pre></td></tr></table></figure>
+<p>值为 -1 表示”从未经历过”，其他任何正值都意味着“经历过多次了”。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*	&#123;TURNS_SINCE(-&gt; sleeping.intro) &gt; 10&#125; 你觉得很累…… -&gt; sleeping </span><br></pre></td></tr></table></figure>
+<p>注意，这里实际只是向<code>TURNS_SINCE</code> 传递一个参数<code>“转移的目标”</code>，而非是跳转至结点地址，此处不进行节点跳转。</p>
+<h3 id="SEED-RANDOM"><a href="#SEED-RANDOM" class="headerlink" title="SEED_RANDOM()"></a>SEED_RANDOM()</h3><p><code>SEED_RANDOM</code> 出于测试目的，固定随机数生成器通常很有用，这会让每次播运行 INK 都固定产生相同的结果。你可以通过“种子”随机系统来实现。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~ SEED_RANDOM(235)</span><br></pre></td></tr></table></figure>
+<p>传递给种子函数的数字可以是任意的，不同的种子将导致不同结果的序列。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1574087802137-5cedc46e-1072-4255-b0d3-36ea47ad95ad.png" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1574087910175-142e504c-8512-463f-81eb-aa8ee53dd38b.png" alt="img"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1574087982421-449644d7-4d0d-48ef-9596-e537f561e64e.png" alt="img"></p>
+<hr>
+<h1 id="2-编织-weave"><a href="#2-编织-weave" class="headerlink" title="2. 编织 weave"></a>2. <a target="_blank" rel="noopener" href="https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md#part-2-weave">编织</a> weave</h1><p>到目前为止，我们一直以最基础的方式构建故事的分支，从“选项”到“页面”。</p>
+<p>但这要求我们命名故事中的每个目的地且保持唯一性，可能会减慢编写速度并阻挠较小的分支。</p>
+<p>INK 拥有更为强大的语法，旨在简化始终向前的故事流（写起来像大多数的故事，而非计算机程序）。</p>
+<p>这种系统称为“编织”（weave），它由基础语法和选项语法，以及两个新功能构成：“收束标记 <code>-</code> ”，“选项与收束的嵌套”。</p>
+<h2 id="2-1-收束-gathers"><a href="#2-1-收束-gathers" class="headerlink" title="2.1 收束 gathers"></a>2.1 收束 gathers</h2><p>收束（gathers） <code>-</code> 将小分支收回到一起。让我们看这个例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">“怎么了？”我的主人问。</span><br><span class="line">	*	“我有些累。”[]我重复道。</span><br><span class="line">		“确实，” 他答道。 “这太糟了。”</span><br><span class="line">	*	“没事，先生！”[] 我回应道。</span><br><span class="line">	*  我说，这次旅行真可怕。”[] 我不想再继续了。”</span><br><span class="line">		“啊，” 他有些动容。 &quot;你看起来很沮丧。明天，情况会好些的。&quot;</span><br></pre></td></tr></table></figure>
+<p>在真正的游戏中，这三个选项都可能导致相同的结果，Fogg 先生离开了房间。我们可用收束来执行此操作，而无需创建任何新结点或新跳转。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">“怎么了？”我的主人问。</span><br><span class="line">	*	“我有些累。”[]我重复道。</span><br><span class="line">		“确实，” 他答道。 “这太糟了。”</span><br><span class="line">	*	“没事，先生！”[] 我回应道。</span><br><span class="line">	*  我说，这次旅行真可怕。”[] 我不想再继续了。”</span><br><span class="line">		“啊，” 他有些动容。 &quot;你看起来很沮丧。明天，情况会好些的。&quot;</span><br><span class="line">    </span><br><span class="line">    -	Fogg 先生离开了房间。</span><br></pre></td></tr></table></figure>
+<p>我们可将这些“收束和分支”串在一起，让故事始终向前运行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">=== escape === </span><br><span class="line">我跑出森林，狗跟在我后面。</span><br><span class="line"></span><br><span class="line">	* 我检查了下珠宝[]，都还在我的钱包里，这感觉就像步入了春天。 &lt;&gt;</span><br><span class="line">	</span><br><span class="line">	* 我没停下来喘口气[]，继续向前跑。&lt;&gt;</span><br><span class="line"></span><br><span class="line">	*	我欢呼了出来。 &lt;&gt;</span><br><span class="line"></span><br><span class="line">- 	路没多远了！Mackie 会发动引擎，然后我就安全了。//收束</span><br><span class="line">  </span><br><span class="line">	*	我来到路边四处张望[]。 你能相信吗？</span><br><span class="line">	* 我不该总是说，Mackie一直很可靠[]。他从未让我失望过。更确切地说，从来没有，直到那晚前。</span><br><span class="line"></span><br><span class="line">-	路旁边是空的。 Mackie 不见了。//再次收束</span><br></pre></td></tr></table></figure>
+<p>这是最基本的编织。本节后面还详细介绍了编织的嵌套、包含选项和跳转、内部跳转、以及根据前面的经历来影响后续的内容。</p>
+<h3 id="编织的哲学"><a href="#编织的哲学" class="headerlink" title="编织的哲学"></a>编织的哲学</h3><p>编织不仅仅是方便分支收束，也是一种强大的内容创作的方式。上面的示例就已有4种路线，甚至可能会更复杂。使用普通的跳转，必须点到点的检查分支，且很容易出错。</p>
+<p>通过编织，只需从顶部开始，就能运行到故事底部。在基本编织结构中，不会有跳转错误，编写的文本也很容易浏览。这意味着无需测试游戏中的所有分支，就能确保它们都能按预期工作。</p>
+<p>使用编织还可以轻松修改选项，拆开故事并插入其他选项，而无需重新设计任何流程。</p>
+<h2 id="2-2-嵌套"><a href="#2-2-嵌套" class="headerlink" title="2.2 嵌套"></a>2.2 嵌套</h2><p>上面展示的编织是非常简单的“扁平”结构。不管玩家选什么，他们都要经历相同的回合数才能从上到下。但是，有时某些选项需要深或复。因此，编织可以嵌套。</p>
+<p>注意，编织的嵌套非常强大且紧凑，但你可能需要一些时间来适应！</p>
+<h3 id="选项收束均可"><a href="#选项收束均可" class="headerlink" title="选项收束均可"></a>选项收束均可</h3><p>选项嵌套看下方的场景：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- “好吧，Poirot？谋杀还是自杀？”</span><br><span class="line">*	“谋杀！”</span><br><span class="line">* “自杀！”</span><br><span class="line">-	Christie 女士片刻后放下手抄。台下的评委们都目瞪口呆。</span><br></pre></td></tr></table></figure>
+<p>提出的问题首选是“谋杀！” 或“自杀！”。如果 Poirot 宣布自杀，就没有其他事情可做了。但是在谋杀案中，还需要一个后续问题，“他怀疑是谁？”</p>
+<p>我们可以通过一组嵌套的子选项来添加新选项。通过使用两个星号（<code>**</code>）而非是一个星号，告诉 INK 这些新选项是另一个选择的一部分。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-  “好吧，Poirot？谋杀还是自杀？”</span><br><span class="line">	*	“谋杀！”</span><br><span class="line">		“那么，你怀疑谁？”</span><br><span class="line">		* *  “日本探长！”</span><br><span class="line">		* *  “船长 Hastings！”</span><br><span class="line">		* *  “我自己！”</span><br><span class="line">	* “自杀！”</span><br><span class="line">-	Christie 女士片刻后放下手抄。台下的评委们都目瞪口呆。</span><br></pre></td></tr></table></figure>
+<p>（用缩进显示嵌套关系是个不错的习惯，即使编译器不在乎这些。）</p>
+<p>如果我们想向另一条路线添加新的子选项，可以按类似的方式做。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">-  “好吧，Poirot？谋杀还是自杀？”</span><br><span class="line">	*	“谋杀！”</span><br><span class="line">	“那么，你怀疑谁？”</span><br><span class="line">		* *  “日本探长！”</span><br><span class="line">		* *  “船长 Hastings！”</span><br><span class="line">		* *  “我自己！”	</span><br><span class="line">	* “自杀！”</span><br><span class="line">	“真的吗，Poirot？你确定吗？</span><br><span class="line">		* *  “确定。”</span><br><span class="line">		* *  “这很明显。”</span><br><span class="line">-	Christie 女士片刻后放下手抄。台下的评委们都目瞪口呆。</span><br></pre></td></tr></table></figure>
+<p>现在，无论前面选择什么，最后都能收到 Christie 女士的出场。</p>
+<p>有时不只是更多的选项，可能还有更多的剧情。我们可以用收束嵌套解决这个问题。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">-  “好吧，Poirot？谋杀还是自杀？”</span><br><span class="line">	*	“谋杀！”</span><br><span class="line">	“那么，你怀疑谁？”</span><br><span class="line">		* *  “日本探长！”</span><br><span class="line">		* *  “船长 Hastings！”</span><br><span class="line">		* *  “我自己！”	</span><br><span class="line">    - -  “你一定是在开玩笑！”</span><br><span class="line">    * *  “朋友，我是认真的！”	</span><br><span class="line">    * *  “要是……”	</span><br><span class="line">	* “自杀！”</span><br><span class="line">	“真的吗，Poirot？你确定吗？</span><br><span class="line">		* *  “确定。”</span><br><span class="line">		* *  “这很明显。”</span><br><span class="line">-	Christie 女士片刻后放下手抄。台下的评委们都目瞪口呆。</span><br></pre></td></tr></table></figure>
+<p>如果玩家选择谋杀，在这一分支后面会有两组选项，完全是“扁平”编织的。<img src="https://cdn.nlark.com/yuque/0/2019/gif/262531/1574171238244-e472627d-0e0d-4ae3-9389-795719dee627.gif" alt="img"></p>
+<p>收束是直观的，但它们的行为很难说出来：通常在选择之后，故事会找到下一个非更低级的收束，并移动下来。基本思想是：选项将故事的支线分开，并通过收束将它们重新合在一起。（因此，这被称为“编织”！）</p>
+<h3 id="嵌套可以很多层"><a href="#嵌套可以很多层" class="headerlink" title="嵌套可以很多层"></a>嵌套可以很多层</h3><p>上面我们使用了两层嵌套。事实上，你深入嵌套多少层都没有限制。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-	“讲个故事，船长！”</span><br><span class="line">	*	“好吧，你们这些海狗。 有个故事...”</span><br><span class="line">		* * 	“一个漆黑狂风暴雨的夜晚...”</span><br><span class="line">				* * * 	“...船员们都很不安...”</span><br><span class="line">						* * * *  “... 他们对船长说...&quot;”</span><br><span class="line">								* * * * *		“...给我们讲个故事，”</span><br><span class="line">	*	“不，已经过了你们睡觉的时间。”</span><br><span class="line">-	作为一个人，船员们开始打起哈欠。</span><br></pre></td></tr></table></figure>
+<p>这样下去，整个嵌套都会变得难以阅读或操作。因此，如果子选项变得笨拙，跳转到新针脚上是一种好习惯。</p>
+<p>但至少在理论上，你可以把你整个故事都写成一个编织。</p>
+<p>再看一个更长的例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">- 我看着 Fogg 先生</span><br><span class="line">*	... 我再也控制不住自己了。</span><br><span class="line">	“先生，我们这次旅行的目的是什么？”</span><br><span class="line">	“打赌，”他答道。</span><br><span class="line">	* * 	“打赌！”[]我回应道。</span><br><span class="line">			他点了点头。 </span><br><span class="line">			* * * 	“但这确实很蠢！”</span><br><span class="line">			* * *   “这太糟了吧？”</span><br><span class="line">			- - - 	他又点了点头。</span><br><span class="line">			* * *		“可是我们能赢吗？”</span><br><span class="line">							“这正是我们要努力实现的。” 他回答道。</span><br><span class="line">			* * *		“我猜，赌注很明智？”</span><br><span class="line">							“两万英镑，”他回答得直截了当。</span><br><span class="line">			* * * 	我当时没在问他别的[]，他礼貌得咳嗽了一声，也没在对我说什么。 &lt;&gt;</span><br><span class="line">	* * 	“啊[。”]，” 我回应道，不确定我在想什么。</span><br><span class="line">	- - 	之后， &lt;&gt;</span><br><span class="line">*	... 但我什么也没说[]。&lt;&gt; </span><br><span class="line">- 我们在沉默中度过了这一天。</span><br><span class="line">- -&gt; END</span><br></pre></td></tr></table></figure>
+<p>这里验证了之前的哲学：编织提供了一种紧凑的方式，在有大量分支大量选择的同时，故事依然能顺利的从头走到尾！</p>
+<h2 id="2-3-编织定位"><a href="#2-3-编织定位" class="headerlink" title="2.3 编织定位"></a>2.3 编织定位</h2><p>有时候只是编织结构就足够了，但有时我们还需要更多的控制权。</p>
+<p>在默认情况下，编织中的内容没有地址或标签，这意味着它们不能被跳转到，也无法对其进行测试。在最基本的编织结构中，选项会改变玩家经历；可一旦走过编织，这些经历就会被遗忘。</p>
+<p>但如果我们想记录玩家的经历，我们可贴上“标签语法”(label_name)。</p>
+<h3 id="贴标签-label-name"><a href="#贴标签-label-name" class="headerlink" title="贴标签 (label_name)"></a>贴标签 (label_name)</h3><p>任何层嵌套的收束都可以使用括号贴标签。<code>-  (top)</code></p>
+<p>贴上标签后，可以跳转至此或进行测试，就像结点和针脚一样。这意味着在编织中你可使用之前的语法来管理内容，同时保持清晰稳定的优点。</p>
+<p>选项也可以用括号贴标签，就像收束一样。标签括号应位于条件之前。</p>
+<p>这些地址也可用于条件测试中，这对测试“由其他选项解锁的选项”很有用。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">=== meet_guard ===</span><br><span class="line">卫兵在盯着你。</span><br><span class="line"></span><br><span class="line">* 	(greet) [打招呼]</span><br><span class="line">	“早。”</span><br><span class="line">*	(get_out) “让开[。”]，” 你对卫兵说。</span><br><span class="line"></span><br><span class="line">- 	“嗯，”卫兵回应道。</span><br><span class="line"></span><br><span class="line">*	&#123;greet&#125; 	“天气不错哈？” // 当你选打招呼</span><br><span class="line"></span><br><span class="line">* 	“咦？”[] 你回应道？</span><br><span class="line"></span><br><span class="line">*	&#123;get_out&#125; [把他推到一旁] 	 // 当你威胁他时</span><br><span class="line">	你把他推到一旁。作为礼尚往来，卫兵直接拔出了剑。</span><br><span class="line">	-&gt; fight_guard 			// 跳出编织</span><br><span class="line"></span><br><span class="line">-	“嗯。” 卫兵给你一个小纸袋。“太妃糖？”</span><br></pre></td></tr></table></figure>
+<h3 id="范围"><a href="#范围" class="headerlink" title="范围"></a>范围</h3><p>在同一块编织内，你可只简单的写标签名称；到外面则需要写路径，像同个结点下的不同针脚：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">=== knot ===</span><br><span class="line">= stitch_one </span><br><span class="line">	- (gatherpoint) Some content.</span><br><span class="line">= stitch_two </span><br><span class="line">	*	&#123;stitch_one.gatherpoint&#125; Option</span><br></pre></td></tr></table></figure>
+<p>或到另一个结点：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">=== knot_one ===</span><br><span class="line">-	(gather_one)</span><br><span class="line">	* &#123;knot_two.stitch_two.gather_two&#125; Option</span><br><span class="line">	</span><br><span class="line">=== knot_two ===</span><br><span class="line">= stitch_two </span><br><span class="line">	- (gather_two) </span><br><span class="line">		*	&#123;knot_one.gather_one&#125; Option</span><br></pre></td></tr></table></figure>
+<h3 id="更多技巧-1"><a href="#更多技巧-1" class="headerlink" title="更多技巧"></a>更多技巧</h3><p>事实上，即使没有看到收束，INK 内的所有内容都是在编织中的。这意味着游戏中的所有选项都可贴标签，然后使用它的地址。特别的，这意味着你可以测试玩家为达到特定结果，选了哪个选项。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">=== fight_guard ===</span><br><span class="line">...</span><br><span class="line">= throw_something </span><br><span class="line">*	(rock) [丢石头] -&gt; throw</span><br><span class="line">* (sand) [扔沙子] -&gt; throw</span><br><span class="line"></span><br><span class="line">= throw</span><br><span class="line">你向卫兵扔了&#123;throw_something.rock:一块石头|一把沙子&#125;。</span><br></pre></td></tr></table></figure>
+<p>我们能用贴标签创建内部循环，这是询问NPC的标准模式，<a target="_blank" rel="noopener" href="https://inky-guard.netlify.com/">体验故事运行</a>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">- (opts)</span><br><span class="line">	*	“我从哪能弄到制服吗？”[] 你询问快乐的卫兵。</span><br><span class="line">		“当然，在储物柜那。”他笑着说。 “不过可能不太合身。”</span><br><span class="line">	*	“告诉我安防系统。”</span><br><span class="line">		“他很老，” 卫兵向你保证。 “就像古董一样老。”</span><br><span class="line">	*	“这里的狗？”</span><br><span class="line">		“很多很多。” 卫兵答道，并咧嘴一笑。 “也都是饿鬼。”</span><br><span class="line">	//要求玩家至少问一个问题</span><br><span class="line">	*	&#123;loop&#125; [问够了] </span><br><span class="line">		-&gt; done</span><br><span class="line">- (loop) // 在警卫厌烦前循环几圈</span><br><span class="line">	&#123; -&gt; opts | -&gt; opts | &#125; //序列可变文本控制卫兵是否厌烦</span><br><span class="line">	他挠挠头，</span><br><span class="line">	“好吧，不能整天只站着说话。”他说到。</span><br><span class="line">- (done)</span><br><span class="line">	你谢过警卫，便离开了。</span><br></pre></td></tr></table></figure>
+<p>选项也可以被跳转到，就好像选择了该选项一样。因此，显示的内容会忽略 <code>[]</code> 中的文本，并如果该选项是一次性选项，它将被用掉。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">- (opts)</span><br><span class="line">*	[做鬼脸]</span><br><span class="line">	你做鬼脸，士兵就冲你来了！ -&gt; shove</span><br><span class="line"></span><br><span class="line">*	(shove) [把警卫推到一旁] 你把卫兵推到一旁，但他回来了。</span><br><span class="line">*	&#123;shove&#125; [进入战斗] -&gt; fight_the_guard</span><br><span class="line"></span><br><span class="line">- 	-&gt; opts</span><br></pre></td></tr></table></figure>
+<p>选项中可直接收束。注意下方第一个选项下二级收束并没其收束作用，而是方便第二个选项的跳转。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">*	“还好吧，先生”[]我问。</span><br><span class="line">	- - (quitewell) “挺好的，”他答道。 </span><br><span class="line">*	“你填字游戏怎么样，先生？”[]我问。</span><br><span class="line">	-&gt; quitewell </span><br><span class="line">*	我什么也没说[]，我的主人什么也没说。</span><br><span class="line">-	我们又感到了一次倍感亲切的沉默。</span><br></pre></td></tr></table></figure>
+<hr>
+<p>后面的内容较为复杂，本文只选取了部分简单的内容进行翻译。如有兴趣请浏览<a target="_blank" rel="noopener" href="https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md">官方文档</a>。</p>
+<h1 id="3-变量与逻辑"><a href="#3-变量与逻辑" class="headerlink" title="3. 变量与逻辑"></a>3. <a target="_blank" rel="noopener" href="https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md#part-3-variables-and-logic">变量与逻辑</a></h1><p>到目前为止，我们已经根据玩家看到的东西，做出了条件文本与条件选项。</p>
+<p>INK 还支持临时变量与全局变量，存储数字和内容数据，甚至故事流命令；逻辑功能也很齐全，并包含一些额外的结构，以帮助组织更复杂的故事结构。</p>
+<h2 id="3-1-全局变量-global-variables"><a href="#3-1-全局变量-global-variables" class="headerlink" title="3.1 全局变量 global variables"></a>3.1 <a target="_blank" rel="noopener" href="https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md#1-global-variables">全局变量</a> global variables</h2><p>最强大的变量，储存游戏某些独特状态属性的变量，对每个故事来说可能都最有用的——从主人公口袋里的钱，到主人公精神状态的SAN值。</p>
+<p>这种变量称为全局变量（<code>global variables</code>），因为可以从故事中的任何位置访问（包括设置和读取）它。（传统情况下，编程会试图避免这种情况，因为它可能会相互冲突。但故事有所不同，有一些事物贯穿始终，全局需要并一直存在。 ）</p>
+<p>全局变量可以通过语句 VAR 定义在任何地方。给它们指定一个初始值，定义它们是哪种类型的变量：整数、浮点（十进制）、内容或故事的地址。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">VAR knowledge_of_the_cure = false</span><br><span class="line">VAR players_name = &quot;Emilia&quot;</span><br><span class="line">VAR number_of_infected_people = 521</span><br><span class="line">VAR current_epilogue = -&gt; they_all_die_of_the_plague</span><br></pre></td></tr></table></figure>
+<p>我们可以控制全局变量以控制选项，并控制条件文本。方式与之前看到的类似。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">=== the_train ===</span><br><span class="line">	火车颠簸了一下。 &#123; mood &gt; 0:我觉得还好，没介意奇怪的颠簸|这超出了我所能承受的&#125;。</span><br><span class="line">	*	&#123; not knows_about_wager &#125; “但是，先生，我们为什么要旅行？”[] 我问道。</span><br><span class="line">	* 	&#123; knows_about_wager&#125; 我考虑了我们有些离奇的冒险[]。这可能吗？</span><br></pre></td></tr></table></figure>
+<p>变量的值可用类似于序列和条件文本的语法显示出来，这在调试时也很有用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">VAR friendly_name_of_player = &quot;Jackie&quot;</span><br><span class="line">VAR age = 23</span><br><span class="line"></span><br><span class="line">我叫 Jean Passepartout，但朋友都叫我 &#123;friendly_name_of_player&#125;。 我&#123;age&#125;岁了。</span><br></pre></td></tr></table></figure>
+<p>你可能注意到，上面我们将变量称为能够包含“内容”而非“字符串”。这是有意的，因为在 INK 中定义的字符串能包含 INK ，尽管它始终会计算为字符串（很赞）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">VAR a_colour = &quot;&quot;</span><br><span class="line"></span><br><span class="line">~ a_colour = &quot;&#123;~红色|蓝色|绿色|黄色&#125;&quot; </span><br><span class="line"></span><br><span class="line">&#123;a_colour&#125; </span><br></pre></td></tr></table></figure>
+<p>输出“红色，蓝色，绿色或黄色”中的一种颜色。注意，一旦输出了这样的内容，其值就是“确定的”。（量子状态崩溃。）因此，下面内容不会产生有趣的效果。（如果你希望这样做，请使用可变文本！）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">呆子撞到了你，你眼冒金星， &#123;a_colour&#125;和&#123;a_colour&#125;闪烁。</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1574253169542-a6dd40b9-9eb0-4009-9398-37531144947c.png" alt="img"></p>
+<p>这也是为什么 <code>VAR a_colour = &quot;&#123;~red|blue|green|yellow&#125;&quot;</code> 是不推荐的，它会影响到你的整个游戏。</p>
+<h2 id="3-2-逻辑运算-logic"><a href="#3-2-逻辑运算-logic" class="headerlink" title="3.2 逻辑运算 logic"></a>3.2 逻辑运算 logic</h2><p>显然，我们的全局变量并非为常量，因此我们需要一种语法来改变它们。</p>
+<p>默认情况下，INK 中的任何文本都直接显示到屏幕上。因此我们用 <code>~</code> 来标记表示某行是在进行数值工作。</p>
+<p>以下均是为变量分配值：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">=== set_some_variables ===</span><br><span class="line">	~ knows_about_wager = true	</span><br><span class="line">	~ x = (x * x) - (y * y) + c</span><br><span class="line">	~ y = 2 * x * y</span><br></pre></td></tr></table></figure>
+<p>以下是测试用的条件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123; x == 1.2 &#125;</span><br><span class="line">&#123; x / 2 &gt; 4 &#125;</span><br><span class="line">&#123; y - 1 &lt;= x * x &#125;</span><br></pre></td></tr></table></figure>
+<p>INK 支持数学四则运算（<code>+</code>，<code>-</code>，<code>*</code>和<code>/</code>），以及 % （或 <code>mod</code> ）进行求余。还支持 <code>POW</code> （幂）运算：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;POW(3, 2)&#125; is 9. </span><br><span class="line">&#123;POW(16, 0.5)&#125; is 4. </span><br></pre></td></tr></table></figure>
+<p>还可以用 <code>RANDOM</code> 函数来生成随机整数。RANDOM 就像掷骰子，因此最小值和最大值都包括在内。（ <code>temp</code> 为<a href="#A1UDf">临时变量</a>）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">~ temp dice_roll = RANDOM(1, 6) </span><br><span class="line">~ temp lazy_grading_for_test_paper = RANDOM(30, 75)  </span><br><span class="line">~ temp number_of_heads_the_serpent_has = RANDOM(3, 8)</span><br></pre></td></tr></table></figure>
+<p>可用上文的 <a href="#P9O3i">SEED_RANDOM()</a> 进行测试。</p>
+<p>INK 作为文字游戏引擎，奇怪的是并没有那么多字符串查询（string queries）方式。这有三种基本查询，相等，不相等和子字符串。以下全部返回 true：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123; &quot;Yes, please.&quot; == &quot;Yes, please.&quot; &#125;</span><br><span class="line">&#123; &quot;No, thank you.&quot; != &quot;Yes, please.&quot; &#125;</span><br><span class="line">&#123; &quot;Yes, please&quot; ? &quot;ease&quot; &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-3-条件块-if-else"><a href="#3-3-条件块-if-else" class="headerlink" title="3.3 条件块 if/else"></a>3.3 <a target="_blank" rel="noopener" href="https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md#3-conditional-blocks-ifelse">条件块</a> if/else</h2><p>我们已经看到了用于控制选项和故事内容的条件内容，而 <code>ink</code> 还提供了与常规 <code>if/else - if/else</code> 结构等效的功能。</p>
+<p>单纯使用 <code>if</code> —— 简单而有效的判断：</p>
+<p><code>if</code> 语法的判断条件，是从开始到现在为止产生的条件线索，而 <code>&#123;</code>… <code>&#125;</code> 语法表示正在测试某些内容。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123; x &gt; 0:</span><br><span class="line">	~ y = x -1</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>或者加上其他条件 <code>else</code> :</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123; x &gt; 0:</span><br><span class="line">	~ y = x - 1</span><br><span class="line">- else:</span><br><span class="line">	~ y = x + 1</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>扩展 <code>if/else - if/else</code> 条件块：</p>
+<p>上面的语法也可更改形式为另一种结构方式，类似于编程语言中的 <code>switch</code> 语句格式。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123; </span><br><span class="line">	- x &gt; 0:</span><br><span class="line">		~ y = x - 1</span><br><span class="line">	- else:</span><br><span class="line">		~ y = x + 1</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在此格式基础之上进一步拓展，我们还可以实现 <code>else-if</code> 形式的条件判断：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123; </span><br><span class="line">	- x == 0:</span><br><span class="line">  	~ y = 0</span><br><span class="line">	- x &gt; 0:</span><br><span class="line">		~ y = x - 1</span><br><span class="line">	- else:</span><br><span class="line">		~ y = x + 1</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>（请注意，与其他所有内容一样，空格仅出于可读性考虑，没有语法含义。）</p>
+<p><strong>Switch Block （开关座：选择性判断语句）：</strong></p>
+<p>实际上 ink 的确有和其他编程语言中 <code>switch</code> 类似的语句。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123; x:</span><br><span class="line">	- 0:	zero</span><br><span class="line">	- 1:	one</span><br><span class="line">  - 2:	two</span><br><span class="line">  - else:	lots</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>示例：关联上下文内容</strong></p>
+<p>请注意，这里的判断条件除了可以使用变量之外，还可以使用玩家是否经历过结点作为条件，并且这种条件使用频繁，例如要做一些与当前游戏状态相关的内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">=== dream ===</span><br><span class="line">	&#123;</span><br><span class="line">		- visited_snakes &amp;&amp; not dream_about_snakes:</span><br><span class="line">			~ fear++</span><br><span class="line">			-&gt; dream_about_snakes</span><br><span class="line"></span><br><span class="line">		- visited_poland &amp;&amp; not dream_about_polish_beer:</span><br><span class="line">			~ fear--</span><br><span class="line">			-&gt; dream_about_polish_beer </span><br><span class="line"></span><br><span class="line">		- else:</span><br><span class="line">			// 清晨的梦只是梦境</span><br><span class="line">			-&gt; dream_about_marmalade</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>此语法具有易于拓展的优势，优先选择使用此语法。</p>
+<p><strong>条件块中不仅限于逻辑运算</strong></p>
+<p>条件块可以用于控制故事内容以及发展走向：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">我望着 Fogg 先生。</span><br><span class="line">&#123; know_about_wager:</span><br><span class="line">	&lt;&gt; “但你一定不是认真的吧？” 我诧异道。</span><br><span class="line">- else:</span><br><span class="line">	&lt;&gt; “但这次旅行一定是有一个原因，”我说。</span><br><span class="line">&#125;</span><br><span class="line">他什么也没有回答，只是像昆虫学家研究他最新的发现那样，一丝不苟地研究他的报纸。</span><br></pre></td></tr></table></figure>
+<p>你甚至可以将选项放在条件块中：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123; door_open:</span><br><span class="line">	* 	我大步走出车厢 [] 并且我仿佛听见我的主人在低声地自言自语。 			-&gt; go_outside </span><br><span class="line">- else:</span><br><span class="line">	*		我请求离开 [] 并且 Fogg 先生显得很惊奇。 	-&gt; open_door </span><br><span class="line">	* 	我站起来打开了门 [] 。Fogg 先生似乎对这种小小的反抗并没有感到不安。 -&gt; open_door</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是请注意，上面的示例中没有出现编织语法和嵌套语法不是偶然：为了避免嵌套带来的内容混淆，不允许在条件块中加入 <code>gathers</code> 收束点。</p>
+<p><strong>实现多种特殊功能的多行块 Multiline blocks</strong></p>
+<p>它们是另一种特殊的代码块，可以分别实现不同的功能：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">// 顺序执行：根据每次的跳转依次执行，全部执行后持续执行显示最后一行</span><br><span class="line">&#123; stopping:</span><br><span class="line">	-   我进入了赌场。</span><br><span class="line">	-   我又一次进入了赌场。</span><br><span class="line">	-   我又一次走了进去。</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 随机洗牌：随机显示执行其中一行</span><br><span class="line">在桌子上，我画了一张卡片。 &lt;&gt;</span><br><span class="line">&#123; shuffle:</span><br><span class="line">	- 	红心王牌。</span><br><span class="line">	- 	黑桃王牌。</span><br><span class="line">	- 	方块2。</span><br><span class="line">		“你这次输了！”赌场庄家欢叫着。</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 循环执行：顺序显示执行，并循环如此</span><br><span class="line">&#123; cycle:</span><br><span class="line">	-   我屏住呼吸。</span><br><span class="line">	-   我不耐烦地等着。</span><br><span class="line">	-   我停顿了一下。</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 一次执行：顺序显示执行，每个分支只显示执行一次，全部显示执行后不再显示执行</span><br><span class="line">&#123; once:</span><br><span class="line">	-   我的运气好吗？</span><br><span class="line">	-   我能赢吗？</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/gif/447250/1575183925923-4d586d7c-a2e8-438f-af60-02521431da76.gif" alt="img"></p>
+<p><strong>高级：修改的随机洗牌</strong></p>
+<p>上面的随机洗牌，实际上是 <code>shuffle cycle</code> 循环随机洗牌；它每次随机选择内容，显示内容，然后重新随机显示内容，显示内容。</p>
+<p>随机洗牌还有两种方式：</p>
+<p><code>shuffle once</code> 随机显示执行内容，只显示执行一次，之后不会再执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123; shuffle once: </span><br><span class="line">	-	太阳很晒。 </span><br><span class="line">	- 天气很热。</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>shuffle stopping</code> 随机显示执行内容（最后一条除外），当其他项全部随机执行完毕后，将一直保持在最后一条</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123; shuffle stopping:</span><br><span class="line">	- 一辆银色宝马车呼啸而过。</span><br><span class="line">	-	一辆亮黄色的野马车在转弯。</span><br><span class="line">	- 这里有很多车。</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-4-临时变量-Temporary-Variables"><a href="#3-4-临时变量-Temporary-Variables" class="headerlink" title="3.4 临时变量 Temporary Variables"></a>3.4 <a target="_blank" rel="noopener" href="https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md#4-temporary-variables">临时变量</a> Temporary Variables</h2><p><strong>临时变量用于临时计算</strong></p>
+<p>有时，全局变量无法满足我们的临时需求，这时候 ink 为我们提供了临时变量 <code>Temporary Variables</code> 。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">=== near_north_pole ===</span><br><span class="line">	~ temp number_of_warm_things = 0</span><br><span class="line">	&#123; blanket:</span><br><span class="line">		~ number_of_warm_things++</span><br><span class="line">	&#125;</span><br><span class="line">	&#123; ear_muffs:</span><br><span class="line">		~ number_of_warm_things++</span><br><span class="line">	&#125;</span><br><span class="line">	&#123; gloves:</span><br><span class="line">		~ number_of_warm_things++</span><br><span class="line">	&#125;</span><br><span class="line">	&#123; number_of_warm_things &gt; 2:</span><br><span class="line">		尽管下雪了，但我还是感到无比舒适。</span><br><span class="line">	- else:</span><br><span class="line">		那天晚上我感觉比以往任何时候都冷。</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>临时变量只在其定义的当前结点生效，离开结点后临时变量将被丢弃。</p>
+<p><strong>结点和针脚可以拥有参数</strong></p>
+<p>临时变量有一种非常实用的形式，就是作为传递给任意结点或针脚的一个参数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">*	[Accuse Hasting]</span><br><span class="line">		-&gt; accuse(&quot;Hastings&quot;)</span><br><span class="line">*	[Accuse Mrs Black]</span><br><span class="line">		-&gt; accuse(&quot;Claudia&quot;)</span><br><span class="line">*	[Accuse myself] </span><br><span class="line">		-&gt; accuse(&quot;myself&quot;)</span><br><span class="line">		</span><br><span class="line">=== accuse(who) ===</span><br><span class="line">	&quot;我控诉 &#123;who&#125;!&quot; 波洛宣布。</span><br><span class="line">	“真的吗？” Japp 回道。 “&#123;who == &quot;myself&quot;:你要这么做？|&#123;who&#125;？&#125;”</span><br><span class="line">	“为什么不可以？” 波洛回击道。 </span><br></pre></td></tr></table></figure>
+<p>如果要将临时变量从一个针脚传递给另一个针脚，就要用参数。</p>
+<p><strong>示例：递归节点中的定义</strong></p>
+<p>临时变量可以放心的在递归中使用（与全局变量不同，全局变量改变后递归过程中都会变为改变后的值），因此可以执行下面的内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">-&gt; add_one_to_one_hundred(0, 1)</span><br><span class="line"></span><br><span class="line">=== add_one_to_one_hundred(total, x) ===</span><br><span class="line">	~ total = total + x</span><br><span class="line">	&#123; x == 100:</span><br><span class="line">		-&gt; finished(total)</span><br><span class="line">	- else:</span><br><span class="line">		-&gt; add_one_to_one_hundred(total, x + 1)</span><br><span class="line">	&#125;	</span><br><span class="line">	</span><br><span class="line">=== finished(total) ===</span><br><span class="line">	“结果是 &#123;total&#125;！” 你宣布。</span><br><span class="line">	高斯惊恐地盯着你。</span><br><span class="line">	-&gt; END</span><br></pre></td></tr></table></figure>
+<p>实际上，这种递归节点中的定义非常实用，也因此 <code>ink</code> 中提供了一种特殊的结点，一个 <code>function</code> 。它有一定的限制，并且可以返回一个值，请参阅以下部分。</p>
+<p><strong>高级：将</strong> <code>**divert targets**</code> <strong>（跳转目标）作为参数传递</strong></p>
+<p>结点、针脚的地址也是一种类型的值，用 <code>-&gt;</code> 符号表示，可以传递与存储。因此以下的内容是正常的，并且非常有用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">=== sleeping_in_hut ===</span><br><span class="line">	你躺下闭上了眼睛。</span><br><span class="line">	-&gt; generic_sleep (-&gt; waking_in_the_hut)</span><br><span class="line"></span><br><span class="line">===	 generic_sleep (-&gt; waking)</span><br><span class="line">	你偶尔会做梦之类的。</span><br><span class="line">	-&gt; waking</span><br><span class="line"></span><br><span class="line">=== waking_in_the_hut</span><br><span class="line">	你重新站起来，准备继续你的旅程。</span><br></pre></td></tr></table></figure>
+<p>要注意的是，在 <code>generic_sleep</code> 的定义中，是有 <code>-&gt;</code> 符号存在的。因为这里是作为一个参数值存在，如果不加 <code>-&gt;</code> 符号，就会变成下面这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">=== sleeping_in_hut ===</span><br><span class="line">	你躺下闭上了眼睛。</span><br><span class="line">	-&gt; generic_sleep (waking_in_the_hut)</span><br></pre></td></tr></table></figure>
+<p>这种情况下， <code>ink</code> 会将 <code>waking_in_the_hut</code> 的结点数字传递给 <code>sleeping</code> 结点，并且尝试跳转到此结点。</p>
+<h2 id="3-5-函数-Functions"><a href="#3-5-函数-Functions" class="headerlink" title="3.5 函数 Functions"></a>3.5 <a target="_blank" rel="noopener" href="https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md#5-functions">函数</a> Functions</h2><h2 id="3-6-常数-Constants"><a href="#3-6-常数-Constants" class="headerlink" title="3.6 常数 Constants"></a>3.6<a target="_blank" rel="noopener" href="https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md#4-temporary-variables"> 常数</a> Constants</h2><hr>
+<h2 id="4-1-隧道（？）tunnels"><a href="#4-1-隧道（？）tunnels" class="headerlink" title="4.1 隧道（？）tunnels"></a>4.1 <a target="_blank" rel="noopener" href="https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md#1-tunnels">隧道</a>（？）tunnels</h2><p>狼也不知道这里 <code>tunnels</code> 翻译成什么更恰当。无端的想起马里奥中可以往返隐藏区域的“管道”。但最后决定还是直译成了“隧道”。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/262531/1574257344388-5e62b910-d25d-4320-9e05-0efcb7af7aed.png" alt="img"></p>
+<p>INK 故事的默认结构是“扁平”的树状结构，分支又重新收束回一起，也许还有循环，但故事始终位于“某个位置”。</p>
+<p>但是这种扁平结构会使某些事情变得困难：想象一个游戏，可能发生以下的相互作用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">=== crossing_the_date_line ===</span><br><span class="line">*	“先生！”[] 我突然感到震惊。&quot;我才意识到，我们已经穿过了国际日期变更线！&quot;</span><br><span class="line">-	Fogg 先生轻轻抬起了眉毛。“我已经调整过了。”</span><br><span class="line">*	我擦了擦额头上的汗水[]。松了口气！</span><br><span class="line">* 我轻轻的点头[]。他当然会做的。</span><br><span class="line">* 我在心里抱怨[]。 我又被小看了一次。</span><br></pre></td></tr></table></figure>
+<p>…但它可能发生在故事中的几个不同地方。我不想为不同的地方写相同内容，但是当内容完成后，它还需要知道返回到哪里。我们可以使用参数来做到这一点：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">=== crossing_the_date_line(-&gt; return_to) ===</span><br><span class="line">...</span><br><span class="line">-		-&gt; return_to </span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">=== outside_honolulu ===</span><br><span class="line">我们到了Honolulu 最大的岛。</span><br><span class="line">- (postscript) </span><br><span class="line">		-&gt; crossing_the_date_line(-&gt; done)</span><br><span class="line">- (done)</span><br><span class="line">		-&gt; END </span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">=== outside_pitcairn_island ===</span><br><span class="line">船在水上驶向小岛。</span><br><span class="line">- (postscript) </span><br><span class="line">		-&gt; crossing_the_date_line(-&gt; done)</span><br><span class="line">- (done)</span><br><span class="line">		-&gt; END </span><br></pre></td></tr></table></figure>
+<p>这两个位置都调用并执行相同的故事片段，一旦完成，它们就会回到下一步要去的地方。</p>
+<p>但如果这个“故事的部分”更复杂怎么办？如果跨越多个结点怎么办？使用上面的方法，我们必须不断地将“ return-to”参数从一个结点传递到另一个结点，以确保我们始终知道该返回的位置。</p>
+<p>因此，INK 把跳转和新功能结合到起来加语言中，其功能类似于子程序，称为”隧道”（tunnels）。</p>
+<p>隧道的语法看起来很像跳转，末尾还有另一个跳转：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-&gt; crossing_the_date_line -&gt;</span><br></pre></td></tr></table></figure>
+<p>这意味着运行一个“crossing_the_date_line 的故事”，然后从这继续。</p>
+<p>在隧道内部，语法展示进行了简化：用 <code>-&gt;-&gt;</code> 语句结束隧道，实质上意味着“继续”。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">=== crossing_the_date_line === </span><br><span class="line">// 这里是隧道！</span><br><span class="line">...</span><br><span class="line">- 	-&gt;-&gt;</span><br></pre></td></tr></table></figure>
+<p>注意，隧道结点和普通的结点不同，编译器将不会检查隧道是否真的以“-&gt;-&gt;”语句结尾，除非在运行时。因此，您需要仔检查进出隧道的跳转。</p>
+<p>隧道可串在一起，也可在普通跳转上：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">... </span><br><span class="line">// 这里运行了隧道，然后跳转到 done</span><br><span class="line">-&gt; crossing_the_date_line -&gt; done</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">... </span><br><span class="line">//这里运行了第一个隧道，第二个隧道，然后跳转到 done</span><br><span class="line">-&gt; crossing_the_date_line -&gt; check_foggs_health -&gt; done</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>隧道可以嵌套，因此以下内容也行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">=== plains ===</span><br><span class="line">= night_time </span><br><span class="line">	脚边是深色柔软的草丛。</span><br><span class="line">	+	[休息]</span><br><span class="line">		-&gt; sleep_here -&gt; wake_here -&gt; day_time</span><br><span class="line">= day_time </span><br><span class="line">	到了该动身的时间了。</span><br><span class="line">	</span><br><span class="line">=== wake_here ===</span><br><span class="line">	你随太阳一同醒来。</span><br><span class="line">	+	[吃些东西]</span><br><span class="line">		-&gt; eat_something -&gt;</span><br><span class="line">	+	[该动身了]</span><br><span class="line">	-	-&gt;-&gt;</span><br><span class="line"></span><br><span class="line">=== sleep_here ===</span><br><span class="line">	你躺下并闭上双眼。</span><br><span class="line">	-&gt; monster_attacks -&gt; </span><br><span class="line">	接着该睡觉了。</span><br><span class="line">	-&gt; dream -&gt;</span><br><span class="line">	-&gt;-&gt;</span><br><span class="line">​```xxxxxxxxxx === plains ==== night_time     脚边是深色柔软的草丛。    +   [休息]        -&gt; sleep_here -&gt; wake_here -&gt; day_time= day_time     到了该动身的时间了。    === wake_here ===    你随太阳一同醒来。    +   [吃些东西]        -&gt; eat_something -&gt;    +   [该动身了]    -   -&gt;-&gt;=== sleep_here ===    你躺下并闭上双眼。    -&gt; monster_attacks -&gt;     接着该睡觉了。    -&gt; dream -&gt;    -&gt;-&gt;</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h>inky语法备忘</h></span></div><div class="post-copyright__type"><span class="post-copyright-info"><a href="https://elixsion.github.io/2022/03/19/inky%E8%AF%AD%E6%B3%95%E5%A4%87%E5%BF%98/">https://elixsion.github.io/2022/03/19/inky%E8%AF%AD%E6%B3%95%E5%A4%87%E5%BF%98/</a></span></div><div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a" style="display: inline-block;width: 120px"><h>作者</h><div class="post-copyright-cc-info"><h>ELIX</h></div></div><div class="post-copyright-c" style="display: inline-block;width: 120px"><h>发布于</h><div class="post-copyright-cc-info"><h>2022-03-19</h></div></div><div class="post-copyright-u" style="display: inline-block;width: 120px"><h>更新于</h><div class="post-copyright-cc-info"><h>2023-03-16</h></div></div><div class="post-copyright-c" style="display: inline-block;width: 120px"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a rel="noopener" target="_blank" title="CC BY 4.0" href="https://creativecommons.org/licenses/by/4.0/deed.zh">CC BY 4.0</a></div></div></div></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%B0%E5%BD%95/">记录</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.staticaly.com/gh/ELIXsion/pictureck@master/pictureck/image6.767lx7is6b00.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/03/31/%E8%89%BE%E8%8E%B2%E6%97%A5%E8%AE%B0%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/"><img class="prev-cover" src="https://cdn.staticaly.com/gh/ELIXsion/pictureck@master/pictureck/屏幕截图-2022-03-31-183520.52ox3j9tejk0.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">艾莲日记（转载）</div></div></a></div><div class="next-post pull-right"><a href="/2022/02/28/%E4%B8%80%E9%81%93%E9%80%BB%E8%BE%91%E9%A2%98/"><img class="next-cover" src="https://cdn.staticaly.com/gh/ELIXsion/pictureck@master/pictureck/image17.c126vtx3jmg.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">布洛斯谜题</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/05/23/Docker%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="Docker使用手册"><img class="cover" src="https://www.2008php.com/2014_Website_appreciate/2014-02-16/20140216234113ngqbIngqbI.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-23</div><div class="title">Docker使用手册</div></div></a></div><div><a href="/2021/10/20/Gallery%E7%9B%AE%E5%BD%95%E9%97%AE%E9%A2%98/" title="Gallery目录问题"><img class="cover" src="https://www.2008php.com/2014_Website_appreciate/2014-02-16/20140216234113ngqbIngqbI.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-20</div><div class="title">Gallery目录问题</div></div></a></div><div><a href="/2023/02/20/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Java学习笔记"><img class="cover" src="https://cdn.staticaly.com/gh/ELIXsion/pictureck@master/pictureck/image8.4bw9mnuwjqc0.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-02-20</div><div class="title">Java学习笔记</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Gitalk</span><span class="switch-btn"></span><span class="second-comment">Twikoo</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/mysource/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">ELIX</div><div class="author-info__description">浮世梦游，不过芸芸众生</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">51</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ELIXsion"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="mailto:1034599877@qq.com.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎来到这里</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#INKY"><span class="toc-number">1.</span> <span class="toc-text">INKY</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3"><span class="toc-number">2.</span> <span class="toc-text">使用文档</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BE%E4%B8%AA%E4%BE%8B%E5%AD%90"><span class="toc-number"></span> <span class="toc-text">举个例子</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%A6%E4%BC%9A%E6%B3%A8%E9%87%8A"><span class="toc-number">0.1.</span> <span class="toc-text">学会注释*</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%BB%93%E7%82%B9-knots"><span class="toc-number">1.</span> <span class="toc-text">1. 结点 knots</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%B7%B3%E8%BD%AC-divert"><span class="toc-number">2.</span> <span class="toc-text">2. 跳转 divert</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E6%AE%8A%EF%BC%9AEND"><span class="toc-number">2.1.</span> <span class="toc-text">特殊：END</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%83%B6%E6%B0%B4-glue"><span class="toc-number">2.2.</span> <span class="toc-text">胶水* glue</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E9%80%89%E9%A1%B9-choices"><span class="toc-number">3.</span> <span class="toc-text">3. 选项 choices</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E6%AC%A1%E6%80%A7%E9%80%89%E9%A1%B9"><span class="toc-number">3.1.</span> <span class="toc-text">一次性选项*</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E8%AF%B4%E6%98%8E"><span class="toc-number">3.2.</span> <span class="toc-text">结构说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%9D%A1%E4%BB%B6%E5%86%85%E5%AE%B9"><span class="toc-number">4.</span> <span class="toc-text">4. 条件内容</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%AB%98%E9%98%B6-INK"><span class="toc-number"></span> <span class="toc-text">高阶 INK</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AF%BC%E5%87%BA%E4%BD%9C%E5%93%81"><span class="toc-number"></span> <span class="toc-text">导出作品</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%A1%B5%E9%9D%A2%E7%BE%8E%E5%8C%96"><span class="toc-number"></span> <span class="toc-text">页面美化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87"><span class="toc-number">1.</span> <span class="toc-text">1. 插入图片</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%B8%85%E7%A9%BA%E5%B1%8F%E5%B9%95"><span class="toc-number">2.</span> <span class="toc-text">2. 清空屏幕</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%B7%B1%E8%89%B2%E4%B8%BB%E9%A2%98%E4%B8%8E%E4%BD%9C%E8%80%85"><span class="toc-number">3.</span> <span class="toc-text">3. 深色主题与作者</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E8%87%AA%E5%AE%9A%E4%B9%89CSS%E7%B1%BB"><span class="toc-number">4.</span> <span class="toc-text">4. 自定义CSS类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%EF%BC%9AEND"><span class="toc-number">4.1.</span> <span class="toc-text">示例：END</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E9%87%8D%E5%90%AF%E6%95%85%E4%BA%8B"><span class="toc-number">5.</span> <span class="toc-text">5. 重启故事</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%AE%9A%E5%88%B6%E5%A4%96%E8%A7%82"><span class="toc-number">6.</span> <span class="toc-text">6. 定制外观</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">6.1.</span> <span class="toc-text">文件结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9%E5%AD%97%E4%BD%93%E5%92%8C%E9%A2%9C%E8%89%B2"><span class="toc-number">6.2.</span> <span class="toc-text">更改字体和颜色</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90%EF%BC%9A%E8%8A%B1%E5%93%A8%E6%A0%87%E9%A2%98"><span class="toc-number">6.3.</span> <span class="toc-text">例子：花哨标题</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%91%E5%B8%83%E5%88%B0%E7%BD%91%E9%A1%B5"><span class="toc-number"></span> <span class="toc-text">发布到网页*</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Netlify"><span class="toc-number">1.</span> <span class="toc-text">Netlify*</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#App"><span class="toc-number">2.</span> <span class="toc-text">App*</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F"><span class="toc-number">3.</span> <span class="toc-text">评论系统*</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%9F%E8%AE%A1%E4%BB%A3%E7%A0%81"><span class="toc-number">4.</span> <span class="toc-text">统计代码*</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#itch-io"><span class="toc-number">5.</span> <span class="toc-text">itch.io</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%AB%98%E9%98%B6-Inky-%E6%AE%8B%E5%8D%B7"><span class="toc-number"></span> <span class="toc-text">高阶 Inky 残卷</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E5%9F%BA%E7%A1%80"><span class="toc-number"></span> <span class="toc-text">1. 基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-Inky-%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">1.1 Inky 基础教程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E9%92%88%E8%84%9A-stitches"><span class="toc-number">2.</span> <span class="toc-text">1.2 针脚 stitches</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E7%82%B9%E5%8F%AF%E6%9C%89%E5%AD%90%E8%8A%82%E7%82%B9"><span class="toc-number">2.1.</span> <span class="toc-text">结点可有子节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%92%88%E8%84%9A%E6%9C%89%E5%94%AF%E4%B8%80%E7%9A%84%E5%90%8D%E7%A7%B0"><span class="toc-number">2.2.</span> <span class="toc-text">针脚有唯一的名称</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E4%B8%AA%E6%98%AF%E9%BB%98%E8%AE%A4%E9%92%88%E8%84%9A"><span class="toc-number">2.3.</span> <span class="toc-text">第一个是默认针脚</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E8%B7%B3%E8%BD%AC"><span class="toc-number">2.4.</span> <span class="toc-text">本地跳转</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E5%85%B6%E4%BB%96-INK-%E6%96%87%E4%BB%B6"><span class="toc-number">2.5.</span> <span class="toc-text">引用其他 INK 文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E9%80%89%E9%A1%B9-choices"><span class="toc-number">3.</span> <span class="toc-text">1.3 选项 choices</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8E%E5%A4%87%E9%80%89%E9%A1%B9-fallback-choices"><span class="toc-number">3.1.</span> <span class="toc-text">后备选项 fallback choices</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-%E5%8F%AF%E5%8F%98%E6%96%87%E6%9C%AC-variable-text"><span class="toc-number">4.</span> <span class="toc-text">1.4 可变文本 variable text</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%8F%E5%88%97"><span class="toc-number">4.1.</span> <span class="toc-text">序列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%A8%E6%9C%9F%EF%BC%8C%E4%B8%80%E6%AC%A1%E6%80%A7%EF%BC%8C%E9%9A%8F%E6%9C%BA"><span class="toc-number">4.2.</span> <span class="toc-text">周期，一次性，随机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E5%A4%9A%E6%8A%80%E5%B7%A7"><span class="toc-number">4.3.</span> <span class="toc-text">更多技巧</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-%E6%9F%A5%E8%AF%A2-queries"><span class="toc-number">5.</span> <span class="toc-text">1.5 查询 queries</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CHOICE-COUNT"><span class="toc-number">5.1.</span> <span class="toc-text">CHOICE_COUNT()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TURNS"><span class="toc-number">5.2.</span> <span class="toc-text">TURNS()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TURNS-SINCE-gt-knot"><span class="toc-number">5.3.</span> <span class="toc-text">TURNS_SINCE(-&gt; knot)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SEED-RANDOM"><span class="toc-number">5.4.</span> <span class="toc-text">SEED_RANDOM()</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E7%BC%96%E7%BB%87-weave"><span class="toc-number"></span> <span class="toc-text">2. 编织 weave</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E6%94%B6%E6%9D%9F-gathers"><span class="toc-number">1.</span> <span class="toc-text">2.1 收束 gathers</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E7%BB%87%E7%9A%84%E5%93%B2%E5%AD%A6"><span class="toc-number">1.1.</span> <span class="toc-text">编织的哲学</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%B5%8C%E5%A5%97"><span class="toc-number">2.</span> <span class="toc-text">2.2 嵌套</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E9%A1%B9%E6%94%B6%E6%9D%9F%E5%9D%87%E5%8F%AF"><span class="toc-number">2.1.</span> <span class="toc-text">选项收束均可</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B5%8C%E5%A5%97%E5%8F%AF%E4%BB%A5%E5%BE%88%E5%A4%9A%E5%B1%82"><span class="toc-number">2.2.</span> <span class="toc-text">嵌套可以很多层</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E7%BC%96%E7%BB%87%E5%AE%9A%E4%BD%8D"><span class="toc-number">3.</span> <span class="toc-text">2.3 编织定位</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%B4%E6%A0%87%E7%AD%BE-label-name"><span class="toc-number">3.1.</span> <span class="toc-text">贴标签 (label_name)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8C%83%E5%9B%B4"><span class="toc-number">3.2.</span> <span class="toc-text">范围</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E5%A4%9A%E6%8A%80%E5%B7%A7-1"><span class="toc-number">3.3.</span> <span class="toc-text">更多技巧</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E5%8F%98%E9%87%8F%E4%B8%8E%E9%80%BB%E8%BE%91"><span class="toc-number"></span> <span class="toc-text">3. 变量与逻辑</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F-global-variables"><span class="toc-number">1.</span> <span class="toc-text">3.1 全局变量 global variables</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97-logic"><span class="toc-number">2.</span> <span class="toc-text">3.2 逻辑运算 logic</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E6%9D%A1%E4%BB%B6%E5%9D%97-if-else"><span class="toc-number">3.</span> <span class="toc-text">3.3 条件块 if&#x2F;else</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E4%B8%B4%E6%97%B6%E5%8F%98%E9%87%8F-Temporary-Variables"><span class="toc-number">4.</span> <span class="toc-text">3.4 临时变量 Temporary Variables</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-5-%E5%87%BD%E6%95%B0-Functions"><span class="toc-number">5.</span> <span class="toc-text">3.5 函数 Functions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-6-%E5%B8%B8%E6%95%B0-Constants"><span class="toc-number">6.</span> <span class="toc-text">3.6 常数 Constants</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E9%9A%A7%E9%81%93%EF%BC%88%EF%BC%9F%EF%BC%89tunnels"><span class="toc-number">7.</span> <span class="toc-text">4.1 隧道（？）tunnels</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/07/03/Java%E5%85%AB%E8%82%A1/" title="Java八股"><img src="https://www.2008php.com/2014_Website_appreciate/2014-02-16/20140216234113ngqbIngqbI.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java八股"/></a><div class="content"><a class="title" href="/2023/07/03/Java%E5%85%AB%E8%82%A1/" title="Java八股">Java八股</a><time datetime="2023-07-03T05:53:18.000Z" title="发表于 2023-07-03 13:53:18">2023-07-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/06/05/JUC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="JUC学习笔记"><img src="https://www.2008php.com/2014_Website_appreciate/2014-02-16/20140216234113ngqbIngqbI.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JUC学习笔记"/></a><div class="content"><a class="title" href="/2023/06/05/JUC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="JUC学习笔记">JUC学习笔记</a><time datetime="2023-06-05T15:50:00.000Z" title="发表于 2023-06-05 23:50:00">2023-06-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/05/31/RabbitMQ%E6%93%8D%E4%BD%9C%E6%89%8B%E5%86%8C/" title="RabbitMQ操作手册"><img src="https://www.2008php.com/2014_Website_appreciate/2014-02-16/20140216234113ngqbIngqbI.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="RabbitMQ操作手册"/></a><div class="content"><a class="title" href="/2023/05/31/RabbitMQ%E6%93%8D%E4%BD%9C%E6%89%8B%E5%86%8C/" title="RabbitMQ操作手册">RabbitMQ操作手册</a><time datetime="2023-05-31T08:06:06.000Z" title="发表于 2023-05-31 16:06:06">2023-05-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/05/23/Docker%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="Docker使用手册"><img src="https://www.2008php.com/2014_Website_appreciate/2014-02-16/20140216234113ngqbIngqbI.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Docker使用手册"/></a><div class="content"><a class="title" href="/2023/05/23/Docker%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="Docker使用手册">Docker使用手册</a><time datetime="2023-05-23T03:49:26.000Z" title="发表于 2023-05-23 11:49:26">2023-05-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/05/16/Redis%E6%93%8D%E4%BD%9C%E6%89%8B%E5%86%8C/" title="Redis指令手册"><img src="https://www.2008php.com/2014_Website_appreciate/2014-02-16/20140216234113ngqbIngqbI.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Redis指令手册"/></a><div class="content"><a class="title" href="/2023/05/16/Redis%E6%93%8D%E4%BD%9C%E6%89%8B%E5%86%8C/" title="Redis指令手册">Redis指令手册</a><time datetime="2023-05-15T16:01:15.000Z" title="发表于 2023-05-16 00:01:15">2023-05-16</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By ELIX</div><p id="ghbdages"></p></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function addGitalkSource () {
+  const ele = document.createElement('link')
+  ele.rel = 'stylesheet'
+  ele.href= 'https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css'
+  document.getElementsByTagName('head')[0].appendChild(ele)
+}
+
+function loadGitalk () {
+  function initGitalk () {
+    var gitalk = new Gitalk(Object.assign({
+      clientID: '5044d1b78999ee51fbc3',
+      clientSecret: '01d3e90d4cb0a50aea55c262e2387c322840801c',
+      repo: 'ELIXsion.github.io',
+      owner: 'ELIXsion',
+      admin: ['ELIXsion'],
+      id: '5e5c69e17a15e40e3f605e2544f38ef4',
+      language: 'zh-CN',
+      perPage: 10,
+      distractionFreeMode: false,
+      pagerDirection: 'last',
+      createIssueManually: false,
+      updateCountCallback: commentCount
+    },null))
+
+    gitalk.render('gitalk-container')
+  }
+
+  if (typeof Gitalk === 'function') initGitalk()
+  else {
+    addGitalkSource()
+    getScript('https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js').then(initGitalk)
+  }
+}
+
+function commentCount(n){
+  let isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+  if (isCommentCount) {
+    isCommentCount.innerHTML= n
+  }
+}
+
+if ('Gitalk' === 'Gitalk' || !false) {
+  if (false) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+  else loadGitalk()
+} else {
+  function loadOtherComment () {
+    loadGitalk()
+  }
+}</script><script>(()=>{
+  const $countDom = document.getElementById('twikoo-count')
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-omega-six.vercel.app/',
+      region: ''
+    }, null))
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-omega-six.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      $countDom.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const loadTwikoo = (bool = false) => {
+    if (typeof twikoo === 'object') {
+      init()
+      bool && $countDom && setTimeout(getCount,0)
+    } else {
+      getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(()=> {
+        init()
+        bool && $countDom && setTimeout(getCount,0)
+      })
+    }
+  }
+
+  if ('Gitalk' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo(true)
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><div class="aplayer no-destroy" data-id="464289558" data-server="netease" data-type="playlist" data-fixed="true" data-mini="true" data-listFolded="false" data-order="random" data-preload="none" data-autoplay="true" muted></div><script async src="/js/diytitle.js"></script><script src="https://npm.elemecdn.com/vue@2.6.11"></script><script src="/js/botui.js"></script><script data-pjax src="/js/botui_init.js"></script><script src="//code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="false" data-text="预见,准备,承受,战胜" data-fontsize="15px" data-random="false" async="async"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  '#config-diff',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.removeEventListener('scroll', window.tocScrollFn)
+  window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // Analytics
+  if (false) {
+    MtaH5.pgv()
+  }
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v5.4.0" title=""><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" data-title="主题版本Butterfly_v3.8.4" title=""><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="https://www.jsdelivr.com/" style="margin-inline:5px" data-title="本站使用JsDelivr为静态资源提供CDN加速" title=""><img src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&amp;logo=jsDelivr" alt=""/></a><a class="github-badge" target="_blank" href="https://vercel.com/" style="margin-inline:5px" data-title="本站采用双线部署，默认线路托管于Vercel" title=""><img src="https://img.shields.io/badge/Hosted-Vercel-brightgreen?style=flat&amp;logo=Vercel" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Gtihub托管" title=""><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="https://icp.gov.moe/?keyword=20211228" style="margin-inline:5px" data-title="萌ICP备20211228号" title=""><img src="https://img.shields.io/badge/%E8%90%8CICP%E5%A4%87-20211228-fe1384?style-flat&amp;logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAABS2lUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDIgNzkuMTYwOTI0LCAyMDE3LzA3LzEzLTAxOjA2OjM5ICAgICAgICAiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIi8+CiA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgo8P3hwYWNrZXQgZW5kPSJyIj8+nhxg7wAAByxJREFUSInl1nlwVeUZx/HPuTckkD0kQFiCEEIUlNUCAqKoSBV1AIt1ikpVLFbLONjWGUXbmWrbweJMy7hUxbbTjsUq6KCiWEvr0kE2WVK2QCKBJCxJgEASsienfxwqMob+3Zm+f93z3vM+32f5vc9z+H9bwVcfOp/YQ+1prhhEZS1VDQzqQ1MjiQmIC5Liwm3lBWpqFimrulb/7A/067vM2IsOBZ2h8MhJQW6KMDNVsKeaizKEyUlsKueqgWJ39AMJF3QpDCNYr1SaEig/lWNX2Z1h6dH5/lVyGdVIZFf7MHo9bEfh9rCg/+8NyHlN77QTsnpQ0i2y08VK+BosfhbW0cHxqmSfFd9qW+l9Pi+5WltFdGTsOBbO5dJcdh3lN5+xff0Y2zuelXjRsyYUrjOu4BVJaavlpbWIJRBLOM+J81O95AAnTtM9vNHGknut3zdT48FutJE3koWTuG4oSXH+VsInX3B9IdcVUNfCuv08t4GjO6NspOa3BNcOXx1eOugVHQnrTMkTuyWrC/BjRZO9uPYTpw7HhTWkXcLd45l9GblpHD7NWzt5ZTMXZ/OdkTy+lvR07rmcmWffq6pn9W5e/oymfcT6kJbXHiydMyVYkL/x66n+ZMcctQfjhgxl6UIGZ3Ooltd2RIZqjqKRS0ew9cFIA1cO5urlLHuPZWsZPJiZw7gqn0VT2HCIR9+jvCQhfHPrLGyE2Hng2roBxHnmJoZnc9drbD3I6QaaWkjpSVoeu4+x5XB05qMDqCenHz37UHmcFRv54ZuMeoYrB/L0DPRgZ0WfrsXVKzPX3nYykrn3dUZl8+Q0Qox/gc/L6ZlKzxQefo+UROpa6Z4VCedkPd8YyJYHI3u5T/HAShZNQxsXZfR3pCtwRW066VEeOuIUVUf77+9jTw2pycTOJml7Je1t9EgiI5X2jkgyze1fCSSdtjhBiJCkpKyuI+5oTdAtkTCgVwrbKsl8ko6QjO40tZ67EpkpdIbRf20dkbPpPTjdwsSX6I5dJYy4hoQAaZQdDy4A1iEMI613T6LtBPXJpPakrjGqc1Y6CTFq62htJp5KRwPJKWSkU3WKiiPEEqO6xgM6oZmctJhDXYH7Z59xuCyKpK6R26ZE+ys3MWYoN1/Mc5uoqmbEQJ6fTc/ulJ3i/lUc+YIfzeKhKzjVHN31A3XRHddKSrf6/6DOV3VTcw1hVKfkxOhaPDAe1UwfwmNTqT1Drxw+nE9xNXetIjHG2vnoxoT+rNrN2Of58Rp6JZ+ldKes5kjX4G7dKuikpoERfaltYnQ/DOSS3hEAFk9lXQkLnmf7Ib65lPJT3HU1+46Tm8rYvgzKYVA2h+vQIMjvewHwdSN20MiOSmZczO4a1hSzYi77T7CiiPF5JMTZexjJ5OagkwNV9M+MnJ09nKU3smgyQ3PYWoEO4fUjii4QceJmevJuMeP6csUAln4atcbSGoqOUpjD30uZNwnpHNtN3lC+NZa1xeT34pGVTJ3PL9+Ohs6GQ8gVtHZs6VLVwZhBReGwoXvt3THM/hP0SWVnCR8f4PMjkffjB/DQS8waxpHFfFgaaeHZDRRtJn0yP5tF31ymFVJ2nN27GD66KBzca2/XEWdkUpD3Fmd4tYj0FMS54Q9UnuaDUv6yE/24ewWP/DU6N/d1fvousYEs28DyLVEvGDOAt/egmSkXv2VYn3NBfpXbua6J8hMFFvy2RHsL+57gmX+w/AN651PfEDWQzLRI+afqIqOxFDJT6Rbn9Bmad3PnTH5wIxOXkJTWGiz57hCDsyqDWVldRNzeyOh+paaPfpFKnvqQX88iZwDVx0lLJqUHbe3EkZ1Odm+yUqK2GHYKmhvIG8fyeTz9IY5x67jnFPapdPDkl6jzwEF9IDjZJlgwfbG+o2u8+g4rd7D/UYI41TXnevV5K4j2q6uESckUP8rvNrH6fUH/sRXB9AlPONMSDZ8uazwoi56JjEyvdftV88jinhf4uIzmJRQOoOYgja0RKAiIBZxpjvZH5tP0c97axcLlyBXOuWZemJTYFFbUCU+1dl3j8PGSyFhnJ7EkYcWh7/njqpep5xfzWTyZZ7dEg73xOJKiGqf3YenNLBjLTz7i539COg/OvSOYO2GFo/VRG0Zwe0YX4Ns3R7NXSCxBeM8IthXfZvGf3xCWc/kkXvg2vVP4YB/rDzC1gGlDo+50/xvs2khKPrNnzAzmTH5HbzR0fkkKro93Ab5vx9kfaGgT3lLA5EyWbRpoTdHbSreOppGJV/PwlRTksK+aZz5l6z+RLBgxaau5k2cJelTKzmRQMq0d51J8UxL+23d1TDTcj7WQllZu4YwxDo+eZc22X9mwd6gN65GIFmQzampxcMOoR1xeuMbpVoqromsXdG3+wmCiekNtfSSmiUNWu2zgap+WjlZW8X11TeNkpWwICvNfCm8u3Cmxg4PN0VdmEJw7/7+0/g32RaqCbhRecAAAAABJRU5ErkJggg==" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>
