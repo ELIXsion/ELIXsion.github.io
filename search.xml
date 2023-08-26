@@ -707,11 +707,12 @@
 <p>先从主存读数据，+1操作，写到缓存，刷到主存。volatile保证可见性和有序性，sycronized保证有序性。autointiger采用volatile+CAW实现原子操作。</p>
 <p><strong>volatile 关键字，他是如何保证可见性，有序性？</strong></p>
 <ol>
-<li><p>对于加了 volatile 关键字的成员变量，在对这个变量进行修改时，会直接将 CPU 高级缓存中的数据写回到主内存，对这个变量的读取也会直接从主内存中读取，从而保证了可见性。</p>
-</li>
-<li><p>在对 volatile 修饰的成员变量进行读写时，会插入内存屏障，而内存屏障可以达到禁止重排序的效果，从而可以保证有序性</p>
-</li>
+<li>对于加了 volatile 关键字的成员变量，在对这个变量进行修改时，会直接将 CPU 高级缓存中的数据写回到主内存，对这个变量的读取也会直接从主内存中读取，从而保证了可见性。</li>
+<li>在对 volatile 修饰的成员变量进行读写时，会插入内存屏障，而内存屏障可以达到禁止重排序的效果，从而可以保证有序性</li>
 </ol>
+<h2 id="Bean的创建过程"><a href="#Bean的创建过程" class="headerlink" title="Bean的创建过程"></a>Bean的创建过程</h2><p><strong>Spring框架中Bean的创建过程是怎样的？</strong><br>首先，简单来说，Spring框架中的Bean经过四个阶段：实例化—》属性赋值—》初始化—》销毁然后：具体来说，Spring中Bean经过了以下几个步骤：<br>1、实例化：new xxx（）；两个时机：1、当客户端向容器申请一个Bean时，2、当容器在初始化一个Bean时发现还需要依赖另一个Bean。BeanDefinition 对象保存。—到底是new一个对象还是创建一个动态代理？<br>2、设置对象属性（依赖注入）：Spring通过BeanDefinition找到对象依赖的其他对象，并将这些对象赋予当前对象。</p>
+<p>3、处理Aware接口：Spring会检测对象是否实现了xxxAware接口，如果实现了，就会调用对应的方法。<br>BeanNameAware、BeanClassLoaderAware、BeanFactoryAware、ApplicationContextAware </p>
+<p>4、BeanPostProcessor前置处理：调用BeanPostProcessor的postProcessBeforelnitialization方法<br>5、InitializingBean：Spring检测对象如果实现了这个接口，就会执行他的afterPropertiesSet（）方法，定制初始化逻辑。 6、init-method： ＜bean init-method＝xxx＞如果Spring发现Bean配置了这个属性，就会调用他的配置方法，执行初 始化逻辑。即使用＠PostConstruct注解。<br>7、BeanPostProcessor后置处理：调用BeanPostProcessor的postProcessAfterlnitialization方法<br>到这里，这个Bean的创建过程就完成了，Bean就可以正常使用了。<br>8 、销毁</p>
 ]]></content>
       <tags>
         <tag>记录</tag>
@@ -1175,6 +1176,46 @@
 <ul>
 <li>利用<strong>Ribbon</strong>维护了MicroServiceCloud-Dept的服务列表信息，并且通过轮询实现了客户端的负载均衡，而与<strong>Ribbon</strong>不同的是，通过<strong>Feign</strong>只需要定义服务绑定接口且以声明式的方法，优雅而简单的实现了服务调用。</li>
 </ul>
+<p><strong>负载均衡算法：</strong></p>
+<p>1、轮询法</p>
+<p>2、随机法</p>
+<p>3、源地址哈希法</p>
+<p>4、加权轮询法</p>
+<p>5、加权随机法</p>
+<p>6、最⼩连接数法</p>
+<h2 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h2><p><a href="https://blog.csdn.net/qq_37555071/article/details/114609145">史上最全的Zookeeper原理详解(万字长文)_雷恩Layne的博客-CSDN博客</a></p>
+<ol>
+<li><strong>层次命名空间：</strong> ZooKeeper 组织数据以类似于文件系统的层次命名空间结构，每个节点被称为 “znode”。这些 znode 可以包含数据和子节点，从而形成了一个层次结构。这种结构使得可以在整个分布式系统中创建有层次结构的数据节点。</li>
+<li><strong>原子性操作：</strong> ZooKeeper 支持原子性的读写操作，即要么操作全部成功，要么全部失败。这确保了分布式系统中的一致性和可靠性。</li>
+<li><strong>数据发布/订阅机制：</strong> 客户端可以监听 znode 的变化，一旦 znode 内容发生改变，ZooKeeper 会通知监听该节点的客户端。这种机制可以用于实现配置管理和状态变化的通知。</li>
+<li><strong>有序性：</strong> ZooKeeper 提供有序性保证，可以为 znode 添加序列号。这在实现分布式队列等场景中非常有用。</li>
+<li><strong>分布式锁：</strong> ZooKeeper 提供了基于临时有序节点的分布式锁机制。多个客户端可以创建相同路径下的临时有序节点，其中最小的节点获得锁，其他客户端通过监听上一个节点的删除事件来判断是否获取了锁。</li>
+<li><strong>集群架构：</strong> ZooKeeper 本身就是一个分布式应用，通常以集群形式运行，其中包括多个 ZooKeeper 服务器。它使用 Paxos 算法来实现数据一致性和容错性，确保在服务器故障时也能保持系统可用性。</li>
+<li><strong>高性能：</strong> ZooKeeper 的设计目标之一是提供高性能和低延迟，它采用内存数据库和快速存储引擎等技术来实现这一点。</li>
+</ol>
+<h2 id="Dubbo"><a href="#Dubbo" class="headerlink" title="Dubbo"></a>Dubbo</h2><h3 id="Dubbo是如何完成服务导出的？"><a href="#Dubbo是如何完成服务导出的？" class="headerlink" title="Dubbo是如何完成服务导出的？"></a>Dubbo是如何完成服务导出的？</h3><ol>
+<li>⾸先Dubbo会将程序员所使⽤的@DubboService注解或@Service注解进⾏解析得到程序员所定义的 </li>
+</ol>
+<p>服务参数，包括定义的服务名、服务接⼝、服务超时时间、服务协议等等，得到⼀个 </p>
+<p>ServiceBean。 </p>
+<ol>
+<li>然后调⽤ServiceBean的export⽅法进⾏服务导出 </li>
+<li>然后将服务信息注册到注册中⼼，如果有多个协议，多个注册中⼼，那就将服务按单个协议，单个 </li>
+</ol>
+<p>注册中⼼进⾏注册 </p>
+<ol>
+<li>将服务信息注册到注册中⼼后，还会绑定⼀些监听器，监听动态配置中⼼的变更 </li>
+<li>还会根据服务协议启动对应的Web服务器或⽹络框架，⽐如Tomcat、Netty等 </li>
+</ol>
+<h3 id="Dubbo是如何完成服务引⼊的？"><a href="#Dubbo是如何完成服务引⼊的？" class="headerlink" title="Dubbo是如何完成服务引⼊的？"></a>Dubbo是如何完成服务引⼊的？</h3><ol>
+<li>当程序员使⽤@Reference注解来引⼊⼀个服务时，Dubbo会将注解和服务的信息解析出来，得到 </li>
+</ol>
+<p>当前所引⽤的服务名、服务接⼝是什么 </p>
+<ol>
+<li>然后从注册中⼼进⾏查询服务信息，得到服务的提供者信息，并存在消费端的服务⽬录中 </li>
+<li>并绑定⼀些监听器⽤来监听动态配置中⼼的变更 </li>
+<li>然后根据查询得到的服务提供者信息⽣成⼀个服务接⼝的代理对象，并放⼊Spring容器中作为Bean </li>
+</ol>
 ]]></content>
       <tags>
         <tag>记录</tag>
