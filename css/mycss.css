@@ -1,0 +1,28 @@
+#welcome-info {
+  overflow: hidden;
+  --icat-card-welcome: #49b1f5;
+}
+#welcome-info .welcome-time {
+  width: 100%;
+  margin: 12px 0 0;
+  display: inline-flex;
+}
+#welcome-info .welcome-message {
+  width: 100%;
+  margin-bottom: 8px;
+  display: inline-flex;
+}
+#welcome-info .welcome-region {
+  border: var(--style-border);
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  margin: 6px 0;
+}
+
+/* 滑动栏*/
+div#catalog-list {
+    overflow: hidden;
+}
+
