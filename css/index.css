@@ -19649,6 +19649,9 @@ p.p.gray {
     background: #1f1f1f;
   }
 }
+[data-theme='dark'] .flink#article-container .flink-list > .flink-list-item {
+  background: #1e1e1e;
+}
 .read-mode {
   --font-color: #4c4948;
   --readmode-light-color: #fff;
