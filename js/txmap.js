@@ -1,24 +1,16 @@
-function welcometxmap() {
-    //请求数据
-    ipLoacation = window.saveToLocal.get('ipLocation');
-    if (ipLoacation) {
-        // 使用 ipLocation
-    } else {
-        // 数据已过期或不存在
-        var script = document.createElement('script');
-        var url = `https://apis.map.qq.com/ws/location/v1/ip?key=${txkey}&output=jsonp`;
-        script.src = url;
-        window.QQmap = function (data) {
-            ipLoacation = data;
-            // 将数据保存到 localStorage，过期时间设置为 1 天
-            window.saveToLocal.set('ipLocation', ipLoacation, 1);
-            document.body.removeChild(script);
-            delete window.QQmap;
-        };
-        document.body.appendChild(script);
+//get请求
+$.ajax({
+    type: 'get',
+    url: 'https://apis.map.qq.com/ws/location/v1/ip',
+    data: {
+        key: 'OV6BZ-JT63Q-NYV5T-2KK57-TITMV-36FTM',
+        output: 'jsonp',
+    },
+    dataType: 'jsonp',
+    success: function (res) {
+        ipLoacation = res;
     }
-    showWelcome();
-}
+})
 function getDistance(e1, n1, e2, n2) {
     const R = 6371
     const { sin, cos, asin, PI, hypot } = Math
@@ -37,7 +29,7 @@ function getDistance(e1, n1, e2, n2) {
 
 function showWelcome() {
 
-    let dist = getDistance(longitude, Latitude, ipLoacation.result.location.lng, ipLoacation.result.location.lat);
+    let dist = getDistance(120.133256, 36.302650, ipLoacation.result.location.lng, ipLoacation.result.location.lat); //这里换成自己的经纬度
     let pos = ipLoacation.result.ad_info.nation;
     let ip;
     let posdesc;
@@ -249,8 +241,11 @@ function showWelcome() {
     try {
         //自定义文本和需要放的位置
         document.getElementById("welcome-info").innerHTML =
-            `<span>🥂热烈欢迎来自~</span><br><span><span style="color: var(--icat-card-welcome);font-weight: bold;">${pos}</span> 的小伙伴</span><br><span class="welcome-message">${posdesc}</span><br>您当前位置距博主约 <b><span style="color: var(--icat-card-welcome);font-weight: bold;">${dist}</span></b> 公里！<br><span>您的IP地址为：${ip}</span><br>${timeChange}`;
+            `<span>热烈欢迎来自~</span><br><span><span style="color: var(--icat-card-welcome);font-weight: bold;">${pos}</span> 的喵友</span><br><span class="welcome-message">${posdesc}</span><br>您当前位置距博主约 <b><span style="color: var(--icat-card-welcome);font-weight: bold;">${dist}</span></b> 公里！<br><span>您的IP地址为：${ip}</span><br>${timeChange}`;
     } catch (err) {
         // console.log("Pjax无法获取#welcome-info元素🙄🙄🙄")
     }
 }
+window.onload = showWelcome;
+// 如果使用了pjax在加上下面这行代码
+document.addEventListener('pjax:complete', showWelcome);
