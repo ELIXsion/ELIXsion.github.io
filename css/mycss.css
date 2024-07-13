@@ -21,6 +21,10 @@
   margin: 6px 0;
 }
 
+strong {
+    color: black !important;
+}
+
 /* 滑动栏*/
 div#catalog-list {
     overflow: hidden;
