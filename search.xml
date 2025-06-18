@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>【学习】算法小记</title>
+      <link href="/2025/06/18/%E3%80%90%E5%AD%A6%E4%B9%A0%E3%80%91%E7%AE%97%E6%B3%95%E5%B0%8F%E8%AE%B0/"/>
+      <url>/2025/06/18/%E3%80%90%E5%AD%A6%E4%B9%A0%E3%80%91%E7%AE%97%E6%B3%95%E5%B0%8F%E8%AE%B0/</url>
+      
+        <content type="html"><![CDATA[<h3 id="使用最小花费爬楼梯"><a href="#使用最小花费爬楼梯" class="headerlink" title="使用最小花费爬楼梯"></a><mark class="hl-label green">简单</mark> 使用最小花费爬楼梯</h3><blockquote><p>给你一个整数数组 <code>cost</code> ，其中 <code>cost[i]</code> 是从楼梯第 <code>i</code> 个台阶向上爬需要支付的费用。一旦你支付此费用，即可选择向上爬一个或者两个台阶。</p><p>你可以选择从下标为 <code>0</code> 或下标为 <code>1</code> 的台阶开始爬楼梯。</p><p>请你计算并返回达到楼梯顶部的最低花费。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入：cost = [10,15,20]</span><br><span class="line">输出：15</span><br><span class="line">解释：你将从下标为 1 的台阶开始。</span><br><span class="line">- 支付 15 ，向上爬两个台阶，到达楼梯顶部。</span><br><span class="line">总花费为 15 。</span><br></pre></td></tr></table></figure></blockquote><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//虽然基础，也是很有代表性的一道动态规划题。</span></span><br><span class="line"><span class="comment">//在爬楼梯的基础上加一层判断，即每一层的最小花费是上一层和上上层最小花费加上当层费用。</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minCostClimbingStairs</span><span class="params">(<span class="type">int</span>[] cost)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] mincost = <span class="keyword">new</span> <span class="title class_">int</span>[cost.length+<span class="number">1</span>];</span><br><span class="line">        mincost[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        mincost[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">2</span>;i&lt;cost.length+<span class="number">1</span>;i++)&#123;</span><br><span class="line">            mincost[i] = mincost[i-<span class="number">1</span>]+cost[i-<span class="number">1</span>]&lt;mincost[i-<span class="number">2</span>]+cost[i-<span class="number">2</span>]?mincost[i-<span class="number">1</span>]+cost[i-<span class="number">1</span>]:mincost[i-<span class="number">2</span>]+cost[i-<span class="number">2</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> mincost[cost.length];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用这种解法需要记录每层的花费，但这是不必要的</span></span><br><span class="line"><span class="comment">//通过观察可知其实一层一层往后推，用到的只有最高三层的花费值</span></span><br><span class="line"><span class="comment">//那么只记录这三层的花费就行了呀，因此如下优化，空间复杂度优化为O（1）</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minCostClimbingStairs</span><span class="params">(<span class="type">int</span>[] cost)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> cost.length;</span><br><span class="line">        <span class="type">int</span> last=<span class="number">0</span>,prelast=<span class="number">0</span>,curcost=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">2</span>;i&lt;len+<span class="number">1</span>;i++)&#123;</span><br><span class="line">            curcost = Math.min(last+cost[i-<span class="number">1</span>],prelast+cost[i-<span class="number">2</span>]);</span><br><span class="line">            prelast = last;</span><br><span class="line">            last = curcost;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> curcost;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> 学习记录 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 记录 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>使用python提取网页中的文本信息</title>
       <link href="/2025/06/17/%E4%BD%BF%E7%94%A8python%E6%8F%90%E5%8F%96%E7%BD%91%E9%A1%B5%E4%B8%AD%E7%9A%84%E6%96%87%E6%9C%AC%E4%BF%A1%E6%81%AF/"/>
       <url>/2025/06/17/%E4%BD%BF%E7%94%A8python%E6%8F%90%E5%8F%96%E7%BD%91%E9%A1%B5%E4%B8%AD%E7%9A%84%E6%96%87%E6%9C%AC%E4%BF%A1%E6%81%AF/</url>
